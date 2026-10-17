@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta name="app-version" content="v7.1">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta name="app-version" content="v7.2">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#0b2a4a"><title>MAKEDONIA Airport Tycoon</title>
 <style>*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -178,6 +178,7 @@ html,body{overscroll-behavior:none;-webkit-touch-callout:none;-webkit-user-selec
 body.eink #w6bar button,body.eink #w6pill{background:#fff;color:#000;border:2px solid #000}
 @media (orientation:portrait){#w6pill{left:calc(env(safe-area-inset-left,0px) + 10px);transform:none;top:calc(env(safe-area-inset-top,0px) + 92px)}}
 .ft7{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:8px 0}.ft7 button{font-size:13px;min-height:44px}
+#f7{position:fixed;inset:0;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;font:700 20px system-ui;opacity:0;pointer-events:none;transition:opacity .6s;z-index:99}#f7.on{opacity:1}
 </style></head><body>
 <div id="app">
 <div id="hud"><div class="s">💶<b id="hMoney">0</b></div><div class="s">⭐ Rep<b id="hRep">0</b></div><div class="s">😊 Happy<b id="hSat">0</b></div><div class="s">🧳 Pax<b id="hPax">0</b></div></div>
@@ -1963,7 +1964,7 @@ function w3Render(){if(!REN)return;V1=V1||_v3();V2=V2||_v3();const P=W3.p,cab=W3
  const s=$('#w3say');const n=W.near;if(n){const p=_v3().set(n.x,n.k==='npc'?2.9:3.4,n.z).project(CAM);if(p.z<1){s.style.display='block';s.style.left=((p.x+1)/2*W.W)+'px';s.style.top=((1-p.y)/2*W.H)+'px';s.textContent=n.k==='npc'?n.n.req.ic+' '+n.n.req.say:'Ⓐ '+n.t}else s.style.display='none'}else s.style.display='none'}
 
 /* ===== v5.1: 3D looks like Dominik's pictures (ceilings, materials, props, collisions) ===== */
-const VER='v7.1';
+const VER='v7.2';
 let COL=[];function col(x,z,w,d){COL.push({x0:x-w/2,x1:x+w/2,z0:z-d/2,z1:z+d/2})}
 const _wk4=w3Walkable;w3Walkable=function(x,z){if(!_wk4(x,z))return false;if(W3.mode==='cab')return true;const ins=(a,b)=>COL.some(c=>a>c.x0-.28&&a<c.x1+.28&&b>c.z0-.28&&b<c.z1+.28);return !ins(x,z)||ins(W3.p.x,W3.p.z)};
 const INST={};function inst(key,geo,m,x,y,z,ry,sx,sy,sz,rz){(INST[key]=INST[key]||{geo,m,a:[]}).a.push([x,y,z,ry||0,sx||1,sy||1,sz||1,rz||0])}
@@ -2758,7 +2759,7 @@ function w6Focus(){const T=WT();if(!T.length)return null;let b=T[0],bd=1e9;T.for
 const VMAX={tug:7,follow:15,bag:10};
 function w6Drive(it){W3.drv={it,g:it.veh,kind:it.kind,v:0,ry:it.veh.rotation.y};W3.tgt=null;toast(`${it.ic} Driving the ${VNAME[it.kind]} · stick to steer, A to get out`);beep(300,.1,'sawtooth',.04)}
 function w6Leave(){const d=W3.drv;if(!d)return;const s=Math.cos(d.ry),c=Math.sin(d.ry);W3.p.x=d.g.position.x+s*1.8;W3.p.z=d.g.position.z-c*1.8;[W3.p.x,W3.p.z]=freeSpot(W3.p.x,W3.p.z,0);d.it.x=d.g.position.x;d.it.z=d.g.position.z;if(d.it.spr)d.it.spr.position.set(d.it.x,2.7,d.it.z);W3.drv=null;W3.dist=W.W<W.H?8.5:7.5}
-function driveTick(dt,inp){const d=W3.drv;if(!d)return;if(d.lock){d.v=0}else{let th=-(inp.my||0),st=inp.mx||0;const mx=VMAX[d.kind]||8;d.v+=th*(th*d.v<0?14:5)*dt;if(!th)d.v*=Math.exp(-dt*1.6);d.v=Math.max(-mx*.4,Math.min(mx,d.v));d.ry-=st*d.v*.32*dt/Math.max(1,Math.abs(d.v)*.08)}
+function driveTick(dt,inp){const d=W3.drv;if(!d)return;if(d.lock){d.v=0}else{let th=-(inp.my||0),st=inp.mx||0;const mx=VMAX[d.kind]||8;d.v+=th*(th*d.v<0?14:(ACC7[d.kind]||5))*dt;if(!th)d.v*=Math.exp(-dt*1.6);d.v=Math.max(-mx*.4,Math.min(mx,d.v));d.ry-=st*d.v*.32*dt/Math.max(1,Math.abs(d.v)*.08)}
  const nx=d.g.position.x+Math.sin(d.ry)*d.v*dt,nz=d.g.position.z+Math.cos(d.ry)*d.v*dt;const fx=nx+Math.sin(d.ry)*2.2*Math.sign(d.v||1),fz=nz+Math.cos(d.ry)*2.2*Math.sign(d.v||1);const r=regAt(fx,fz,0);
  if(r&&r.out&&!w3Blocked(fx,fz,0)){d.g.position.x=nx;d.g.position.z=nz}else if(Math.abs(d.v)>2){beep(90,.12,'square',.05);d.v=-d.v*.25;G.sat=Math.max(0,G.sat-.2)}else d.v=0;
  d.g.rotation.y=d.ry;W3.p.x=d.g.position.x;W3.p.z=d.g.position.z;W3.p.ry=d.ry;W3.curY=0;
@@ -3152,7 +3153,7 @@ function mergeMeshes7(list,inv){const mat=list[0].material;const uv=list.some(o=
  list.forEach((o,j)=>{const g=gs[j];m.multiplyMatrices(inv,o.matrixWorld);nm.getNormalMatrix(m);const p=g.attributes.position,nr=g.attributes.normal,u=g.attributes.uv,c=g.attributes.color;for(let i=0;i<p.count;i++){v.fromBufferAttribute(p,i).applyMatrix4(m);P[(o0+i)*3]=v.x;P[(o0+i)*3+1]=v.y;P[(o0+i)*3+2]=v.z;if(nr){v.fromBufferAttribute(nr,i).applyMatrix3(nm).normalize();N[(o0+i)*3]=v.x;N[(o0+i)*3+1]=v.y;N[(o0+i)*3+2]=v.z}if(U&&u){U[(o0+i)*2]=u.getX(i);U[(o0+i)*2+1]=u.getY(i)}if(C){if(c){C[(o0+i)*3]=c.getX(i);C[(o0+i)*3+1]=c.getY(i);C[(o0+i)*3+2]=c.getZ(i)}else C[(o0+i)*3]=C[(o0+i)*3+1]=C[(o0+i)*3+2]=1}}o0+=p.count});
  const g=new T3.BufferGeometry();g.setAttribute('position',new T3.BufferAttribute(P,3));g.setAttribute('normal',new T3.BufferAttribute(N,3));if(U)g.setAttribute('uv',new T3.BufferAttribute(U,2));if(C)g.setAttribute('color',new T3.BufferAttribute(C,3));g.computeBoundingSphere();const r=new T3.Mesh(g,mat);r.castShadow=list[0].castShadow;r.receiveShadow=list.some(o=>o.receiveShadow);r.renderOrder=list[0].renderOrder||0;r.userData.m7=1;return r}
 function dynSet7(){const S=new Set();const add=o=>{if(o&&o.isObject3D)S.add(o)};const scan=(v,d)=>{if(!v||d>3)return;if(v.isObject3D){S.add(v);return}if(Array.isArray(v))v.forEach(x=>scan(x,d+1));else if(typeof v==='object'&&!(v instanceof T3.Texture)&&!(v instanceof T3.Material)&&!(v instanceof T3.BufferGeometry))for(const k in v){if(k==='p'&&v.p&&v.p.isVector3)continue;scan(v[k],d+1)}};
- for(const k in W3){if(k==='items'){W3.items.forEach(i=>{add(i.veh);add(i.spr);add(i.mesh)});continue}scan(W3[k],0)}[PLAYER,DYN,CAB].forEach(add);[ROOFS,CULL,FACADE,LIGHTS,typeof LPOOL!=='undefined'?LPOOL:[],typeof gse!=='undefined'?gse:[],BOARDW.map(b=>b.g)].forEach(a=>scan(a,0));TERMS.forEach(T=>add(T.grp));return S}
+ for(const k in W3){if(k==='items'){W3.items.forEach(i=>{add(i.veh);add(i.spr);add(i.mesh)});continue}scan(W3[k],0)}[PLAYER,DYN,CAB].forEach(add);[ROOFS,CULL,FACADE,LIGHTS,typeof LPOOL!=='undefined'?LPOOL:[],typeof gse!=='undefined'?gse:[],BOARDW.map(b=>b.g)].forEach(a=>scan(a,0));TERMS.forEach(T=>add(T.grp));add(typeof C7!=='undefined'?C7.root:null);return S}
 function merge7(){if(!SCN||W3.merged7)return;W3.merged7=1;const t0=performance.now();const dyn=dynSet7();SCN.updateMatrixWorld(true);const CH=100;const groups=new Map();let cand=0;
  const visit=o=>{for(const c of o.children.slice()){if(dyn.has(c)||c.isLight||c.isSprite||c.isPoints||c.isInstancedMesh||c===CAM)continue;if(c.isMesh){if(!c.visible||Array.isArray(c.material)||c.isSkinnedMesh||c.matrixWorld.determinant()<0||!c.geometry.attributes.position||!c.geometry.attributes.normal)continue;c.geometry.computeBoundingSphere();const sp=c.geometry.boundingSphere.center.clone().applyMatrix4(c.matrixWorld);const k=c.material.uuid+'|'+c.castShadow+'|'+(c.renderOrder||0)+'|'+Math.floor(sp.x/CH)+','+Math.floor(sp.z/CH);if(!groups.has(k))groups.set(k,[]);groups.get(k).push(c);cand++}if(c.children&&c.children.length)visit(c)}};visit(SCN);
  const I=new T3.Matrix4();let made=0,gone=0;groups.forEach(list=>{if(list.length<2)return;const m=mergeMeshes7(list,I);if(!m)return;SCN.add(m);made++;list.forEach(o=>{o.parent&&o.parent.remove(o);gone++})});
@@ -3162,5 +3163,102 @@ const _plane3_7=plane3;plane3=function(a,b){const p=_plane3_7(a,b);const keep=ne
 const _veh6_7=vehicle6;vehicle6=function(k){const v=_veh6_7(k);const keep=new Set();const u=v.userData;for(const q in u){const x=u[q];if(Array.isArray(x))x.forEach(y=>y&&y.isObject3D&&keep.add(y));else if(x&&x.isObject3D)keep.add(x)}try{compact7(v,keep)}catch(e){}return v};
 /* ---------- UI: fast travel button, version ---------- */
 const _w6Ui7=w6Ui;w6Ui=function(){_w6Ui7();const b=$('#w6bar');if(b&&!$('#w7ft')){const x=document.createElement('button');x.id='w7ft';x.innerHTML='🗺️<small>TRAVEL</small>';x.onclick=e=>{e.stopPropagation();fastTravel()};b.insertBefore(x,b.firstChild)}};
+
+/* ===================== v7 STAGE 2: Thessaloniki city & EO16 highway ===================== */
+const ACC7={car:9,taxi:8,bus:3.5,tug:5,follow:7,bag:5};VMAX.car=36;VMAX.taxi=32;VNAME.car='car';VNAME.taxi='taxi';
+const CITY={x0:-2500,x1:-900,z0:140,z1:600,cx:-1700,cz:420};
+/* regions: highway (axis-aligned legs), city streets, waterfront, square, port */
+const _w3Reg72=w3Regions;w3Regions=function(){_w3Reg72();const R=[];const r=(a,x0,x1,z0,z1)=>R.push({a,x0,x1,z0,z1,y:0,h:0,out:1});
+ wa7('hwy','EO16 Airport road · Οδός Αεροδρομίου');wa7('city','Thessaloniki · Θεσσαλονίκη');wa7('prom','Nea Paralia waterfront · Νέα Παραλία');wa7('aris','Aristotelous Square · Πλατεία Αριστοτέλους');wa7('port','Port of Thessaloniki · Λιμάνι');wa7('wtower','White Tower · Λευκός Πύργος');
+ r('aris',-1845,-1755,420,600);r('wtower',-1480,-1420,590,650);r('port',-2500,-2200,560,740);r('prom',-2500,-900,596,652);r('city',-2500,-900,140,600);
+ r('hwy',-720,-10,86,108);r('hwy',-724,-676,86,455);r('hwy',-924,-676,413,455);REG=R.concat(REG)};w3Regions();
+MAPV={cx:-200,cz:0,w:4800,h:1500};
+/* ---------- textures ---------- */
+let TX7=null;function tx7(){if(TX7)return;TX7={};
+ TX7.fac=ctex(256,256,(g,W,H)=>{g.fillStyle='#fff';g.fillRect(0,0,W,H);for(let f=0;f<2;f++){const y=f*128;g.fillStyle='#f3f0ea';g.fillRect(0,y,W,128);for(let b=0;b<2;b++){const x=b*128;g.fillStyle='#2c3a48';g.fillRect(x+22,y+26,84,70);g.fillStyle='#55697d';g.fillRect(x+26,y+30,36,62);g.fillRect(x+66,y+30,36,62);g.fillStyle=b?'#d9822b':'#2e7d6b';g.globalAlpha=.85;g.fillRect(x+14,y+14,100,14);g.globalAlpha=1}
+  g.fillStyle='#b8b2a6';g.fillRect(0,y+100,W,10);g.strokeStyle='#333';g.lineWidth=2;for(let x=4;x<W;x+=9){g.beginPath();g.moveTo(x,y+100);g.lineTo(x,y+82);g.stroke()}g.fillStyle='#333';g.fillRect(0,y+81,W,3)}});
+ TX7.fac.wrapS=TX7.fac.wrapT=T3.RepeatWrapping;
+ // highway gantry signs (Greek over English, like real Greek motorway signs)
+ const S=[[['Θεσσαλονίκη','Thessaloniki','↑ 15'],['Κέντρο','Centre','↗ 16']],[['Περαία · Καλαμαριά','Perea · Kalamaria','↗ 2'],['Θεσσαλονίκη','Thessaloniki','↑ 13']],[['Κέντρο · Λιμάνι','Centre · Port','↑ 3'],['Λευκός Πύργος','White Tower','↑ 4']],[['Αεροδρόμιο ✈','Airport','↑ 4'],['Τερματικοί T1–T6','Terminals T1–T6','↑ 5']],[['Αεροδρόμιο ✈','Airport','↑ 1'],['Μακεδονία · T1–T6','Makedonia · T1–T6','→']],[['Καλώς ήρθατε','Welcome to Thessaloniki','Θεσσαλονίκη']],[['Αεροδρόμιο ✈','Airport','↑ 6'],['Ν. Μουδανιά','N. Moudania','↗ 58']]];
+ const J=['1','2','3','4','5','','6'];
+ TX7.signs=S.map((s,i)=>ctex(512,200,(g,W,H)=>{g.fillStyle='#0a6b3a';g.fillRect(0,0,W,H);g.strokeStyle='#fff';g.lineWidth=6;g.strokeRect(8,8,W-16,H-16);const n=s.length;s.forEach((l,k)=>{const x0=k*(W/n)+18,w=W/n-36;g.fillStyle='#fff';g.textAlign='left';g.font='bold 34px sans-serif';g.fillText(l[0],x0,64,w-50);g.font='28px sans-serif';g.fillText(l[1],x0,104,w-50);g.font='bold 40px sans-serif';g.textAlign='right';g.fillText(l[2],x0+w,160);if(k)g.fillRect(k*(W/n)-2,20,4,H-40)});
+  if(J[i]){g.fillStyle='#fff';g.fillRect(18,138,74,46);g.fillStyle='#0a6b3a';g.font='bold 34px sans-serif';g.textAlign='center';g.fillText(J[i],55,174)}}));
+ const L=[['Makedonia Palace','#0d2a4a','#e8c27a'],['Electra Palace','#5a1a1a','#fff'],['Hyatt Regency','#111','#fff'],['Μ  Metro · Μετρό','#c8102e','#fff'],['🚌 01X Airport · Αεροδρόμιο','#1e4fa3','#fff'],['Λευκός Πύργος · White Tower','#3b2f1e','#fff'],['Πλατεία Αριστοτέλους','#7a1b1b','#fff'],['Port · Λιμάνι','#0b3d5c','#fff'],['🚕 TAXI','#1e4fa3','#fff'],['Mediterranean Cosmos','#00838f','#fff'],['Ladadika · Λαδάδικα','#6d4c41','#fff'],['Ομπρέλες · Umbrellas','#263238','#fff']];
+ const idx={};TX7.cl=ctex(1024,512,(g)=>{L.forEach((b,i)=>{const x=(i%2)*512,y=Math.floor(i/2)*80;g.fillStyle=b[1];g.fillRect(x,y,512,80);g.fillStyle=b[2];g.font='bold 40px sans-serif';g.textAlign='center';g.textBaseline='middle';g.fillText(b[0],x+256,y+42,490);idx[b[0]]=[x/1024,1-(y+80)/512,(x+512)/1024,1-y/512]})});TX7.ci=idx;TX7.clm=new T3.MeshStandardMaterial({map:TX7.cl,emissive:'#fff',emissiveMap:TX7.cl,emissiveIntensity:.35,side:T3.DoubleSide})}
+function csign(q,k,x,y,z,w,ry){const u=TX7.ci[k];if(u)q.quad(x,y,z,w,w*80/512,ry,u[0],u[1],u[2],u[3])}
+/* box builder with uv + vertex colour (facades) */
+function FB(){const P=[],N=[],U=[],C=[];const c=new T3.Color();const f={};
+ const face=(a,b,cc,d,n,uw,vh,col)=>{c.set(col);[a,b,cc,a,cc,d].forEach(p=>P.push(...p));for(let i=0;i<6;i++){N.push(...n);C.push(c.r,c.g,c.b)}U.push(0,0,uw,0,uw,vh,0,0,uw,vh,0,vh)};
+ f.bld=(x,z,w,d,h,col,y0)=>{y0=y0||0;const x0=x-w/2,x1=x+w/2,z0=z-d/2,z1=z+d/2,y1=y0+h,v=h/6;face([x0,y0,z1],[x1,y0,z1],[x1,y1,z1],[x0,y1,z1],[0,0,1],w/8,v,col);face([x1,y0,z0],[x0,y0,z0],[x0,y1,z0],[x1,y1,z0],[0,0,-1],w/8,v,col);face([x1,y0,z1],[x1,y0,z0],[x1,y1,z0],[x1,y1,z1],[1,0,0],d/8,v,col);face([x0,y0,z0],[x0,y0,z1],[x0,y1,z1],[x0,y1,z0],[-1,0,0],d/8,v,col);c.set('#9a948a');[[x0,y1,z1],[x1,y1,z1],[x1,y1,z0],[x0,y1,z1],[x1,y1,z0],[x0,y1,z0]].forEach(p=>P.push(...p));for(let i=0;i<6;i++){N.push(0,1,0);C.push(c.r,c.g,c.b);U.push(.02,.98)}};
+ f.mesh=(mat,par)=>{if(!P.length)return null;const g=new T3.BufferGeometry();g.setAttribute('position',new T3.Float32BufferAttribute(P,3));g.setAttribute('normal',new T3.Float32BufferAttribute(N,3));g.setAttribute('uv',new T3.Float32BufferAttribute(U,2));g.setAttribute('color',new T3.Float32BufferAttribute(C,3));g.computeBoundingSphere();const m=new T3.Mesh(g,mat);m.matrixAutoUpdate=false;m.receiveShadow=true;par.add(m);return m};return f}
+/* ---------- the city ---------- */
+const C7={rings:[],walk:null,cars:null,path:[],L:0};
+function cityLevel(){return Math.min(6,2+Math.floor((G.totalPax||0)/4000)+(G.b?Math.floor(Object.values(G.b).reduce((a,b)=>a+(+b||0),0)/4):0))}
+function city7(){tx7();const root=new T3.Group();root.name='city7';SCN.add(root);C7.root=root;const fm=new T3.MeshStandardMaterial({map:TX7.fac,vertexColors:true,roughness:.8});const COLS=['#f3efe6','#efe4cf','#e8d8c0','#f5f1e8','#dfe6ea','#f0d9c4','#e9e1d3','#f7e7c9'];
+ const rings=[];const chunk=(ring)=>{if(!rings[ring])rings[ring]={F:FB(),S:PL(),Q:QL(),g:new T3.Group()};return rings[ring]};
+ const ground=PL();ground.box(1700,.06,560,'#8d8a84',-1700,.01,370);
+ for(let i=0;i<19;i++)for(let k=0;k<6;k++){const bx0=-2480+80*i,bz0=160+70*k,bx=bx0+33,bz=bz0+28;
+  if(bx>-1850&&bx<-1750&&bz>400)continue; if(bx<-2200&&bz>500)continue; if(bx>-1500&&bx<-1400&&bz>540)continue;
+  const ring=Math.min(6,Math.floor(Math.hypot(bx-CITY.cx,(bz-CITY.cz)*1.6)/260));const R=chunk(ring);ground.box(70,.2,60,'#c9c3b8',bx,.1,bz);
+  const sea=bz>480;[[-1,-1],[1,-1],[-1,1],[1,1]].forEach(([sx,sz])=>{const w=31,d=26,x=bx+sx*16.5,z=bz+sz*14;const fl=Math.floor(rnd(5,sea?10:8.5));const h=fl*3+1;R.F.bld(x,z,w,d,h-3.5,pick(COLS),3.5);R.S.box(w+.4,3.5,d+.4,pick(['#5d4037','#37474f','#263238','#4e342e']),x,1.75,z);R.S.box(w+1.6,.25,d+1.6,pick(['#c62828','#2e7d32','#f9a825','#1565c0','#6d4c41']),x,3.4,z);
+   if(Math.random()<.35){R.S.box(4,2.4,4,'#cfd5dc',x+rnd(-8,8),h+1.2,z+rnd(-6,6))}if(Math.random()<.5)R.S.box(w*.6,.15,d*.5,'#e0e0e0',x,h+.1,z)});
+  colY(bx0-1,bx0+67,bz0,bz0+56,0,40);
+  if(Math.random()<.4)for(let t=0;t<4;t++){R.S.cyl(.15,2.4,'#5d4037',bx0-4,1.2,bz0+t*15,6);R.S.cyl(1.4,2,'#2e7d32',bx0-4,3.2,bz0+t*15,8)}}
+ // Aristotelous square: arcaded neoclassical buildings framing the plaza, opening to the sea
+ const A=chunk(0);[-1,1].forEach(s=>{for(let k=0;k<3;k++){const z=440+k*50,x=-1800+s*52;A.S.box(24,22,44,'#d9a066',x,11,z);A.S.box(25,1,45,'#f1e3c6',x,22.4,z);for(let j=0;j<7;j++)A.S.box(1,7,1,'#f1e3c6',x-s*12.4,3.5,z-19+j*6.3);A.S.box(4,5.5,44,'#8b5a2b',x-s*10,2.7,z)}});
+ A.Q&&csign(A.Q,'Πλατεία Αριστοτέλους',-1800,8,423,14,0);for(let k=0;k<20;k++)A.S.cyl(.5,.3,'#ddd',-1800+rnd(-30,30),.15,rnd(440,590),8);A.S.box(80,.1,170,'#e6dccb',-1800,.12,510);
+ colY(-1864,-1836,418,602,0,30);colY(-1764,-1736,418,602,0,30);
+ // waterfront promenade (Nea Paralia), White Tower, Umbrellas, sea
+ const W=chunk(0);W.S.box(1620,.3,52,'#e9e2d3',-1700,.15,624);W.S.box(1620,1,1,'#9e9e9e',-1700,.5,650);for(let x=-2480;x<-920;x+=24){W.S.cyl(.15,3,'#5d4037',x,1.5,612,6);W.S.cyl(1.7,2.6,'#388e3c',x,4,612,8);W.S.cyl(.08,6,'#424242',x+12,3,640,6);W.S.box(.6,.3,.6,'#fff8e1',x+12,6,640)}
+ W.S.cyl(11,34,'#efe9dc',-1450,17,612,24);W.S.cyl(11.6,1.2,'#e3dccb',-1450,34.5,612,24);for(let a=0;a<16;a++)W.S.box(1.6,1.6,1.2,'#efe9dc',-1450+Math.sin(a/16*6.283)*11,35.8,612+Math.cos(a/16*6.283)*11);W.S.cyl(5,7,'#efe9dc',-1450,38,612,16);W.S.cyl(5.4,.8,'#e3dccb',-1450,41.8,612,16);for(let k=0;k<5;k++)W.S.box(1.3,2.2,.3,'#3a2f22',-1450+Math.sin(k*1.25)*11.05,8+k*5,612+Math.cos(k*1.25)*11.05);colY(-1462,-1438,600,624,0,45);W.Q&&csign(W.Q,'Λευκός Πύργος · White Tower',-1450,3,597,14,0);
+ for(let k=0;k<7;k++){const x=-1210+k*7,z=640;W.S.cyl(.12,9+k%3*2,'#cfd8dc',x,4.5+k%3,z,6);W.S.cyl(3,.5,'#eceff1',x,9.2+k%3*2,z,10)}W.Q&&csign(W.Q,'Ομπρέλες · Umbrellas',-1190,2,632,9,0);
+ // hotels & landmarks with rooftop signs
+ [['Makedonia Palace',-1100,560,46,0],['Electra Palace',-1780,404,28,0],['Hyatt Regency',-420,170,32,0],['Mediterranean Cosmos',-560,300,14,Math.PI/2],['Ladadika · Λαδάδικα',-2120,470,12,0]].forEach(([n,x,z,h,ry])=>{const R=chunk(0);if(n==='Mediterranean Cosmos'){R.S.box(70,14,40,'#b0bec5',x,7,z);colY(x-35,x+35,z-20,z+20,0,14)}else if(n.startsWith('Ladadika')){}else{R.S.box(30,h,20,'#eceff1',x,h/2,z);for(let y=3;y<h;y+=3)R.S.box(30.2,.6,20.2,'#78909c',x,y,z);colY(x-15,x+15,z-10,z+10,0,h)}csign(R.Q,n,x,h+3.5,z-10.5,22,ry)});
+ // port: cranes, containers, ferry
+ const P=chunk(1);P.S.box(300,.5,180,'#8c8c8c',-2350,.2,650);for(let k=0;k<60;k++){const x=-2480+(k%10)*14,z=600+Math.floor(k/10)*7;for(let l=0;l<1+(k%3);l++)P.S.box(12,2.6,2.6,pick(['#c62828','#1565c0','#2e7d32','#ef6c00','#6a1b9a','#00838f']),x,1.3+l*2.6,z)}
+ for(let k=0;k<3;k++){const x=-2450+k*60,z=725;P.S.box(1.4,40,1.4,'#f9a825',x-6,20,z);P.S.box(1.4,40,1.4,'#f9a825',x+6,20,z);P.S.box(16,2,60,'#f9a825',x,41,z+10)}
+ P.S.box(110,10,22,'#fafafa',-2330,3,775);P.S.box(80,8,18,'#fafafa',-2335,12,775);P.S.box(6,10,6,'#c62828',-2310,20,775);P.S.box(110,2,22.4,'#1565c0',-2330,0,775);csign(P.Q,'Port · Λιμάνι',-2350,6,559,12,0);
+ // metro entrances & bus stop
+ [[-1700,437],[-1450,507],[-2000,297]].forEach(([x,z])=>{const R=chunk(0);R.S.box(6,.8,3,'#424242',x,.4,z);R.S.box(.2,3.5,.2,'#c8102e',x+3.4,1.75,z);csign(R.Q,'Μ  Metro · Μετρό',x+3.4,4,z+.2,5,0);W3.items.push({k:'metro7',x:x+3.4,z:z+2,fy:0,t:'Ⓜ️ Metro · Μετρό',ic:'Ⓜ️',area3:'city'})});
+ [[-1790,574,'city'],[150,93,'fore'],[500,92,'t1f'],[1680,92,'t5f']].forEach(([x,z,a])=>{const R=chunk(0);R.S.box(.2,2.8,.2,'#1e4fa3',x,1.4,z);R.S.box(4,.2,1.6,'#90a4ae',x,2.8,z+.6);csign(R.Q,'🚌 01X Airport · Αεροδρόμιο',x,3.4,z-.1,5,0);W3.items.push({k:'bus7',x,z:z-1.5,fy:0,t:'🚌 Bus 01X '+(a==='city'?'to the Airport':'to Thessaloniki centre'),ic:'🚌',area3:a,city:a==='city'})});
+ // sea
+ const sea=new T3.Mesh(new T3.PlaneGeometry(30000,16000),new T3.MeshStandardMaterial({color:'#1f6f9a',roughness:.18,metalness:.25}));sea.rotation.x=-Math.PI/2;sea.position.set(-1000,-.25,652+8000);sea.receiveShadow=false;root.add(sea);C7.sea=sea;
+ // highway
+ hwy7(root);
+ plMesh(ground,root,false);rings.forEach((R,i)=>{if(!R)return;root.add(R.g);R.F.mesh(fm,R.g);const m=plMesh(R.S,R.g,true);R.Q.mesh(TX7.clm,R.g);R.ring=i});C7.rings=rings;
+ // city people (square + promenade)
+ const st=[];for(let k=0;k<160;k++)st.push([rnd(-2400,-1000),0,rnd(604,646),rnd(0,6.3)]);for(let k=0;k<90;k++)st.push([rnd(-1830,-1770),0,rnd(430,595),rnd(0,6.3)]);C7.crowd=crowd7(root,st,false);
+ // traffic
+ traffic7(root);
+ // drivable car and taxi at the airport forecourt + in the city
+ [[90,99,'car','#c62828','🚗 Your car'],[30,95,'taxi','#1e4fa3','🚕 Taxi'],[-1795,560,'taxi','#1e4fa3','🚕 Taxi'],[560,95,'car','#2e7d32','🚗 Rental car']].forEach(([x,z,kind,col,t])=>{const v=carMesh7(col,kind==='taxi');v.position.set(x,0,z);v.rotation.y=-Math.PI/2;SCN.add(v);W3.items.push({k:'drive',veh:v,kind,x,z,fy:0,t,ic:kind==='taxi'?'🚕':'🚗',area3:'fore'})});
+ cityGrow(true)}
+function cityGrow(force){const L=cityLevel();if(!force&&L===C7.lvl)return;const up=C7.lvl!=null&&L>C7.lvl;C7.lvl=L;C7.rings.forEach((R,i)=>{if(R)R.g.visible=i<=L});if(up)toast('🏙️ Thessaloniki is growing with your airport! New districts built.')}
+function hwy7(root){const S=PL(),Q=QL();const seg=(x0,z0,x1,z1)=>{const L=Math.hypot(x1-x0,z1-z0),cx=(x0+x1)/2,cz=(z0+z1)/2,ry=Math.atan2(x1-x0,z1-z0);S.box(22,.08,L,'#33373c',cx,.04,cz,ry);for(let s=0;s<L;s+=12){const t=(s+3)/L;const px=x0+(x1-x0)*t,pz=z0+(z1-z0)*t;[-5.5,-2,2,5.5].forEach((o,j)=>{if(j===1||j===2)return;});S.box(.25,.02,4,'#fff',px+Math.cos(ry)*3.5,.09,pz-Math.sin(ry)*3.5,ry);S.box(.25,.02,4,'#fff',px-Math.cos(ry)*3.5,.09,pz+Math.sin(ry)*3.5,ry)}S.box(.6,.9,L,'#bdbdbd',cx,.45,cz,ry);S.box(.25,.02,L,'#f2c200',cx+Math.cos(ry)*10.5,.09,cz-Math.sin(ry)*10.5,ry);S.box(.25,.02,L,'#f2c200',cx-Math.cos(ry)*10.5,.09,cz+Math.sin(ry)*10.5,ry);
+  for(let s=20;s<L;s+=40){const t=s/L,px=x0+(x1-x0)*t,pz=z0+(z1-z0)*t;S.cyl(.12,9,'#9e9e9e',px,4.5,pz,6);S.box(3,.2,.3,'#9e9e9e',px+Math.cos(ry)*1.5,9,pz-Math.sin(ry)*1.5,ry);S.box(3,.2,.3,'#9e9e9e',px-Math.cos(ry)*1.5,9,pz+Math.sin(ry)*1.5,ry)}};
+ seg(-10,97,-700,97);seg(-700,97,-700,433);seg(-700,433,-930,433);S.box(24,.08,24,'#33373c',-700,.045,97);S.box(24,.08,24,'#33373c',-700,.045,433);
+ const gantry=(i,x,z,ry)=>{const c=Math.cos(ry),s=Math.sin(ry);S.box(.5,8,.5,'#9e9e9e',x+c*11.5,4,z-s*11.5);S.box(.5,8,.5,'#9e9e9e',x-c*11.5,4,z+s*11.5);S.box(23.5,.5,.5,'#9e9e9e',x,8,z,ry);const m=new T3.Mesh(new T3.PlaneGeometry(10,3.9),new T3.MeshStandardMaterial({map:TX7.signs[i],emissive:'#fff',emissiveMap:TX7.signs[i],emissiveIntensity:.25}));m.position.set(x+s*.3,6.2,z+c*.3);m.rotation.y=ry;root.add(m)};
+ gantry(0,-150,97,Math.PI/2);gantry(1,-450,97,Math.PI/2);gantry(2,-700,260,Math.PI);gantry(3,-600,97,-Math.PI/2);gantry(4,-260,97,-Math.PI/2);gantry(5,-880,433,Math.PI/2);gantry(6,-700,320,0);
+ plMesh(S,root,true)}
+function carMesh7(col,taxi){const S=PL();S.box(1.8,.7,4.3,col,0,.65,0).box(1.6,.6,2.3,col,0,1.25,-.2).box(1.62,.45,2.1,'#1c2630',0,1.3,-.2).box(1.9,.5,.3,'#222',0,.45,2.1).box(1.9,.5,.3,'#222',0,.45,-2.1);[[-.85,1.3],[.85,1.3],[-.85,-1.3],[.85,-1.3]].forEach(([x,z])=>S.cyl(.36,.3,'#111',x,.36,z,12,0,Math.PI/2));S.box(.3,.12,.05,'#fff59d',-.6,.75,2.16).box(.3,.12,.05,'#fff59d',.6,.75,2.16).box(.3,.12,.05,'#e53935',-.6,.75,-2.16).box(.3,.12,.05,'#e53935',.6,.75,-2.16);if(taxi){S.box(1.82,.12,4.32,'#fff',0,1.02,0);S.box(.8,.3,.3,'#ffeb3b',0,1.72,-.2)}const m=new T3.Mesh(mergeC(S),vcm());m.castShadow=true;return m}
+/* ---------- traffic on a loop: airport ⇄ city ---------- */
+function traffic7(root){const pts=[[230,99.5],[-697,99.5],[-697,436],[-2007,436],[-2007,573],[-967,573],[-967,430],[-703,430],[-703,94.5],[230,94.5]];const seg=[];let L=0;for(let i=0;i<pts.length;i++){const a=pts[i],b=pts[(i+1)%pts.length];const l=Math.hypot(b[0]-a[0],b[1]-a[1]);seg.push(l);L+=l}C7.path={pts,seg,L};
+ const S=PL();S.box(1.8,.7,4.3,'#ffffff',0,.65,0).box(1.6,.6,2.3,'#ffffff',0,1.25,-.2).box(1.62,.45,2.1,'#202830',0,1.3,-.2);[[-.85,1.3],[.85,1.3],[-.85,-1.3],[.85,-1.3]].forEach(([x,z])=>S.cyl(.36,.3,'#111',x,.36,z,10,0,Math.PI/2));const g=mergeC(S);
+ const n=90,im=new T3.InstancedMesh(g,vcm(),n);im.frustumCulled=false;const c=new T3.Color();C7.cars=[];for(let i=0;i<n;i++){C7.cars.push({s:i/n*L+rnd(0,8),v:rnd(13,22)});im.setColorAt(i,c.set(pick(['#c62828','#1565c0','#fafafa','#212121','#9e9e9e','#2e7d32','#1e4fa3','#1e4fa3','#ffb300','#6d4c41'])))}root.add(im);C7.im=im;
+ C7.buses=[0,1,2].map(k=>{const B=PL();B.box(2.5,3,12,'#1e4fa3',0,1.8,0).box(2.52,1,11.6,'#9ad0ff',0,2.4,0).box(2.6,.4,12.1,'#fff',0,3.3,0);[[-1.1,4],[1.1,4],[-1.1,-4],[1.1,-4]].forEach(([x,z])=>B.cyl(.5,.35,'#111',x,.5,z,12,0,Math.PI/2));const m=new T3.Mesh(mergeC(B),vcm());m.castShadow=true;root.add(m);return{m,s:k*L/3,v:16}})}
+function posOn(s){const P=C7.path;s=((s%P.L)+P.L)%P.L;let i=0;while(s>P.seg[i]){s-=P.seg[i];i++}const a=P.pts[i],b=P.pts[(i+1)%P.pts.length],t=s/P.seg[i];return[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,Math.atan2(b[0]-a[0],b[1]-a[1])]}
+function tick72(dt){if(!C7.im)return;const P=W3.p;const near=P.x<200||W3.fly7;C7.root.visible=P.x<400||!!W3.fly7;
+ if(near){C7.cars.forEach((c,i)=>{c.s+=c.v*dt;const [x,z,ry]=posOn(c.s);_Q7.setFromEuler(_E7.set(0,ry,0));_M7.compose(_P7.set(x,0,z),_Q7,_S7);C7.im.setMatrixAt(i,_M7)});C7.im.instanceMatrix.needsUpdate=true;C7.buses.forEach(b=>{b.s+=b.v*dt;const [x,z,ry]=posOn(b.s);b.m.position.set(x,0,z);b.m.rotation.y=ry})}
+ W3.grow7=(W3.grow7||0)-dt;if(W3.grow7<=0){W3.grow7=5;cityGrow(false)}}
+/* ---------- bus 01X & metro rides (fade + travel) ---------- */
+function fade7(msg,fn){let f=$('#f7');if(!f){f=document.createElement('div');f.id='f7';document.body.appendChild(f)}f.innerHTML=`<div>${msg}</div>`;f.className='on';setTimeout(()=>{fn();setTimeout(()=>{f.className=''},700)},900)}
+function bus7(it){modal(`<div class="rep6"><h3>🚌 Bus 01X · Λεωφορείο</h3><p>${it.city?'Thessaloniki centre → Airport (Makedonia, T1–T6). 24/7, every 20 min.':'Airport → Thessaloniki centre (KTEL, Aristotelous, port). 24/7.'}</p><p class="muted">Ticket €1.80 · OASTH</p><button class="r" style="width:100%" onclick="close_();ride7(${it.city?1:0})">Board the bus</button><button class="ghost" style="width:100%" onclick="close_()">Not now</button></div>`)}
+function ride7(toAir){fade7(toAir?'🚌 01X · Next stop: Αεροδρόμιο / Airport':'🚌 01X · Next stop: Πλατεία Αριστοτέλους',()=>{if(toAir)w5Tp(150,96,0,'🚌 Arrived at the airport · Makedonia forecourt');else w5Tp(-1790,570,0,'🚌 Arrived: Aristotelous Square, Thessaloniki');W3.yaw=toAir?Math.PI:0;G.totalPax=(G.totalPax||0)+40})}
+function metro7(){modal(`<div class="rep6"><h3>Ⓜ️ Thessaloniki Metro · Μετρό</h3><div class="ft7">${[['Venizelou',-1700,445],['Aristotelous',-1790,560],['Sintrivani',-1450,515],['Lefkos Pyrgos',-1450,585],['Port · Λιμάνι',-2300,580],['Airport (extension) ✈',150,96]].map(([n,x,z])=>`<button class="ghost" onclick="close_();fade7('Ⓜ️ Next stop: ${n}',()=>w5Tp(${x},${z},0,'Ⓜ️ ${n}'))">${n}</button>`).join('')}</div><button class="r" style="width:100%" onclick="close_()">Close</button></div>`)}
+/* ---------- hooks ---------- */
+const _b7=build7;build7=function(){_b7();try{city7()}catch(e){console.warn('city7',e)}};
+const _t7=tick7;tick7=function(dt){_t7(dt);tick72(dt)};
+const _wAct72=wAct;wAct=function(){if(W3.on&&W3.mode!=='cab'&&!W3.drv){const i=W.near;if(i&&i.k==='bus7')return bus7(i);if(i&&i.k==='metro7')return metro7()}return _wAct72()};
+const _ft72=fastTravel;fastTravel=function(){_ft72();const d=document.querySelector('.ft7');if(d)d.insertAdjacentHTML('beforeend',[['🏙️ Aristotelous Sq.',-1790,560],['🗼 White Tower',-1450,585],['🌊 Nea Paralia',-1250,625],['🛣️ EO16 highway',-300,97],['⚓ Port',-2300,580]].map(([n,x,z])=>`<button class="ghost" onclick="close_();w5Tp(${x},${z},0,'📍 ${n}')">${n}</button>`).join(''))};
 
 </script></body></html>

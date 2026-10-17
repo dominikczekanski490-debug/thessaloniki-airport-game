@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta name="app-version" content="v7.2">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta name="app-version" content="v7.3">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#0b2a4a"><title>MAKEDONIA Airport Tycoon</title>
 <style>*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -179,6 +179,17 @@ body.eink #w6bar button,body.eink #w6pill{background:#fff;color:#000;border:2px 
 @media (orientation:portrait){#w6pill{left:calc(env(safe-area-inset-left,0px) + 10px);transform:none;top:calc(env(safe-area-inset-top,0px) + 92px)}}
 .ft7{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:8px 0}.ft7 button{font-size:13px;min-height:44px}
 #f7{position:fixed;inset:0;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;font:700 20px system-ui;opacity:0;pointer-events:none;transition:opacity .6s;z-index:99}#f7.on{opacity:1}
+body.fly7 #w6bar,body.fly7 .wbr,body.fly7 #w6pill,body.fly7 #w3say,body.fly7 #w3arr,body.fly7 #wObj{display:none!important}
+#fl7{position:fixed;inset:0;pointer-events:none;z-index:80;color:#9dff9d;font:700 15px ui-monospace,monospace;text-shadow:0 1px 2px #000}
+#fl7 .fr7{position:absolute;left:calc(env(safe-area-inset-left,0px) + 16px);top:42%;background:#0008;border:2px solid #9dff9d88;border-radius:8px;padding:4px 10px;text-align:center}#fl7 .fr7.r{left:auto;right:calc(env(safe-area-inset-right,0px) + 90px)}#fl7 .fr7 b{font-size:24px;display:block}#fl7 .fr7 small{font-size:10px;opacity:.8}
+#fl7 .fh7{position:absolute;top:calc(env(safe-area-inset-top,0px) + 8px);left:50%;transform:translateX(-50%);background:#0008;padding:4px 12px;border-radius:12px;white-space:nowrap;font-size:13px}
+#fAtt{position:absolute;top:calc(env(safe-area-inset-top,0px) + 40px);left:50%;transform:translateX(-50%);width:84px;height:84px;border-radius:50%;border:2px solid #fff8;opacity:.9}
+#fIls{position:absolute;left:50%;top:50%;width:120px;height:120px;transform:translate(-50%,-50%);border:1px dashed #ff4df888;display:none}#fIls i{position:absolute;width:12px;height:12px;background:#ff4df8;transform:translate(-50%,-50%) rotate(45deg)}#fLoc{bottom:-6px;left:50%}#fGs{right:-6px;top:50%}
+#fl7 .fthr{position:absolute;right:calc(env(safe-area-inset-right,0px) + 14px);bottom:calc(env(safe-area-inset-bottom,0px) + 70px);width:56px;height:200px;pointer-events:auto;display:flex;flex-direction:column;align-items:center}
+#fThr{writing-mode:vertical-lr;direction:rtl;width:48px;height:180px;accent-color:#ffb300}#fl7 .fthr small{color:#fff;font-size:10px}
+#fl7 .fb7{position:absolute;right:calc(env(safe-area-inset-right,0px) + 80px);bottom:calc(env(safe-area-inset-bottom,0px) + 12px);display:flex;gap:6px;pointer-events:auto;flex-wrap:wrap;justify-content:flex-end;max-width:70vw}
+#fl7 .fb7 button{min-width:64px;min-height:44px;border-radius:12px;border:1px solid #fff5;background:#0b1830d9;color:#fff;font:700 12px system-ui}
+body:has(#modal[style*="flex"]) #fl7{display:none}
 </style></head><body>
 <div id="app">
 <div id="hud"><div class="s">💶<b id="hMoney">0</b></div><div class="s">⭐ Rep<b id="hRep">0</b></div><div class="s">😊 Happy<b id="hSat">0</b></div><div class="s">🧳 Pax<b id="hPax">0</b></div></div>
@@ -1964,7 +1975,7 @@ function w3Render(){if(!REN)return;V1=V1||_v3();V2=V2||_v3();const P=W3.p,cab=W3
  const s=$('#w3say');const n=W.near;if(n){const p=_v3().set(n.x,n.k==='npc'?2.9:3.4,n.z).project(CAM);if(p.z<1){s.style.display='block';s.style.left=((p.x+1)/2*W.W)+'px';s.style.top=((1-p.y)/2*W.H)+'px';s.textContent=n.k==='npc'?n.n.req.ic+' '+n.n.req.say:'Ⓐ '+n.t}else s.style.display='none'}else s.style.display='none'}
 
 /* ===== v5.1: 3D looks like Dominik's pictures (ceilings, materials, props, collisions) ===== */
-const VER='v7.2';
+const VER='v7.3';
 let COL=[];function col(x,z,w,d){COL.push({x0:x-w/2,x1:x+w/2,z0:z-d/2,z1:z+d/2})}
 const _wk4=w3Walkable;w3Walkable=function(x,z){if(!_wk4(x,z))return false;if(W3.mode==='cab')return true;const ins=(a,b)=>COL.some(c=>a>c.x0-.28&&a<c.x1+.28&&b>c.z0-.28&&b<c.z1+.28);return !ins(x,z)||ins(W3.p.x,W3.p.z)};
 const INST={};function inst(key,geo,m,x,y,z,ry,sx,sy,sz,rz){(INST[key]=INST[key]||{geo,m,a:[]}).a.push([x,y,z,ry||0,sx||1,sy||1,sz||1,rz||0])}
@@ -3163,6 +3174,7 @@ const _plane3_7=plane3;plane3=function(a,b){const p=_plane3_7(a,b);const keep=ne
 const _veh6_7=vehicle6;vehicle6=function(k){const v=_veh6_7(k);const keep=new Set();const u=v.userData;for(const q in u){const x=u[q];if(Array.isArray(x))x.forEach(y=>y&&y.isObject3D&&keep.add(y));else if(x&&x.isObject3D)keep.add(x)}try{compact7(v,keep)}catch(e){}return v};
 /* ---------- UI: fast travel button, version ---------- */
 const _w6Ui7=w6Ui;w6Ui=function(){_w6Ui7();const b=$('#w6bar');if(b&&!$('#w7ft')){const x=document.createElement('button');x.id='w7ft';x.innerHTML='🗺️<small>TRAVEL</small>';x.onclick=e=>{e.stopPropagation();fastTravel()};b.insertBefore(x,b.firstChild)}};
+const _w3R7s=w3Render;w3Render=function(){if(W3.sky&&!W3.fly7&&CAM){W3.sky.position.set(CAM.position.x,0,CAM.position.z)}_w3R7s()};
 
 /* ===================== v7 STAGE 2: Thessaloniki city & EO16 highway ===================== */
 const ACC7={car:9,taxi:8,bus:3.5,tug:5,follow:7,bag:5};VMAX.car=36;VMAX.taxi=32;VNAME.car='car';VNAME.taxi='taxi';
@@ -3260,5 +3272,124 @@ const _b7=build7;build7=function(){_b7();try{city7()}catch(e){console.warn('city
 const _t7=tick7;tick7=function(dt){_t7(dt);tick72(dt)};
 const _wAct72=wAct;wAct=function(){if(W3.on&&W3.mode!=='cab'&&!W3.drv){const i=W.near;if(i&&i.k==='bus7')return bus7(i);if(i&&i.k==='metro7')return metro7()}return _wAct72()};
 const _ft72=fastTravel;fastTravel=function(){_ft72();const d=document.querySelector('.ft7');if(d)d.insertAdjacentHTML('beforeend',[['🏙️ Aristotelous Sq.',-1790,560],['🗼 White Tower',-1450,585],['🌊 Nea Paralia',-1250,625],['🛣️ EO16 highway',-300,97],['⚓ Port',-2300,580]].map(([n,x,z])=>`<button class="ghost" onclick="close_();w5Tp(${x},${z},0,'📍 ${n}')">${n}</button>`).join(''))};
+
+/* ===================== v7 STAGE 3: fly the planes ===================== */
+const RWY7=[{n:'28',m:'10',x0:-400,x1:2100,z:-290,name:'Runway 10/28'},{n:'28R',m:'10L',x0:-400,x1:2100,z:-560,name:'Runway 10L/28R'}];
+const DEST7=[{n:'Athens · Αθήνα',code:'ATH',x:0,z:-60000},{n:'Heraklion · Ηράκλειο',code:'HER',x:60000,z:20000},{n:'Manchester',code:'MAN',x:-60000,z:-30000},{n:'Mykonos · Μύκονος',code:'JMK',x:40000,z:50000}];
+let FW=null;
+/* ---------- big world for flying: land, gulf coast, Olympus, Halkidiki, clouds, destinations ---------- */
+function flyWorld(){if(FW)return FW;const g=new T3.Group();g.name='fly7';g.visible=false;SCN.add(g);const S=PL();
+ const land='#7d9459',land2='#6d8550',sand='#d8c99a';
+ S.box(80000,.4,40000,land,0,-.6,-19350);// mainland north of the coast (airport is on it)
+ S.box(32000,.4,40000,land2,-25000,-.3,20650);// Pieria coast (west of the gulf)
+ S.box(34000,.4,7400,land,23000,-.3,4350);// Halkidiki base
+ [[10000,'Kassandra'],[18000,'Sithonia'],[26000,'Athos']].forEach(([x],i)=>{S.box(3200-i*300,.4,20000,land2,x,-.3,18000);S.box(3400-i*300,.3,20200,sand,x,-.38,18000)});
+ const cone=(x,z,r,h,c,cap)=>{S.push([G6.cn7||(G6.cn7=new T3.ConeGeometry(.5,1,9).toNonIndexed()),c,MX(x,h/2-1,z,0,Math.random(),0,r*2,h,r*2*rnd(.8,1.1))]);if(cap)S.push([G6.cn7,'#f4f6f8',MX(x,h*.86-1,z,0,0,0,r*.56,h*.28,r*.56)])};
+ cone(-17000,21000,7000,2300,'#6f7d5a',1);cone(-12500,23500,4500,1500,'#76845e',1);cone(-21000,17000,5000,1300,'#7c8a62',0);// Olympus massif
+ cone(4000,-5200,3500,900,'#6d8550',0);cone(1000,-6500,4200,1100,'#71895a',0);cone(8000,-4800,3000,700,'#6d8550',0);// Hortiatis hills behind the airport
+ cone(26000,27000,1800,1500,'#7a7a6a',1);cone(18000,16000,2500,600,'#6d8550',0);cone(10000,14000,2600,450,'#6d8550',0);
+ for(let k=0;k<70;k++)cone(rnd(-38000,38000),rnd(-38000,-6000),rnd(1500,4500),rnd(200,900),pick(['#6d8550','#7d9459','#768a55']),0);
+ // destination airports: runway + terminal + name board
+ DEST7.forEach(d=>{S.box(2600,.05,45,'#3d4247',d.x,.03,d.z);for(let x=-1250;x<1250;x+=30)S.box(14,.02,.9,'#fff',d.x+x,.06,d.z);S.box(3000,.4,800,land,d.x,-.5,d.z-200);S.box(400,18,60,'#e3e7ec',d.x,9,d.z-200);S.box(400,4,62,'#1b3a6b',d.x,19,d.z-200);d.rw={x0:d.x-1250,x1:d.x+1250,z:d.z,n:'27'};
+  const t=ctex(512,128,(g2,W,H)=>{g2.fillStyle='#0b1a3a';g2.fillRect(0,0,W,H);g2.fillStyle='#ffd23f';g2.font='bold 56px sans-serif';g2.textAlign='center';g2.fillText(d.n,W/2,84)});const m=new T3.Mesh(new T3.PlaneGeometry(120,30),new T3.MeshBasicMaterial({map:t}));m.position.set(d.x,40,d.z-169);g.add(m)});
+ const m=new T3.Mesh(mergeC(S),vcm());m.receiveShadow=false;g.add(m);
+ // clouds: instanced flattened blobs
+ const cg=new T3.SphereGeometry(1,8,6),cm=new T3.MeshStandardMaterial({color:'#ffffff',roughness:1,transparent:true,opacity:.9}),N=140,cl=new T3.InstancedMesh(cg,cm,N);const M=new T3.Matrix4(),q=new T3.Quaternion(),P=new T3.Vector3(),Sc=new T3.Vector3();for(let i=0;i<N;i++){const s=rnd(120,420);M.compose(P.set(rnd(-30000,30000),rnd(900,2200),rnd(-30000,30000)),q,Sc.set(s*rnd(1.5,3),s*.35,s*rnd(1,2)));cl.setMatrixAt(i,M)}g.add(cl);
+ FW={g};return FW}
+/* ---------- state ---------- */
+function F(){return W3.fly7}
+function flyStart(opt){if(!W3.on){w3On();if(!W3.on)return}close_();if(W3.drv)w6Leave();flyWorld();const al=opt.al||pick(STANDAL);const p=plane3(al);SCN.add(p);
+ const f={p,al,type:p.userData.type||'A320',x:opt.x,y:opt.y||0,z:opt.z,yaw:opt.yaw,pitch:0,roll:0,v:opt.v||0,thr:opt.thr||0,flaps:opt.flaps!=null?opt.flaps:1,gear:1,cam:'chase',t:0,phase:opt.phase||'ground',push:opt.push||null,maxAlt:0,air:0,route:opt.route||null,dest:opt.dest||null,atc:{},cs:callsign7(al),hideInst:opt.hideInst||null,vy:0};
+ W3.fly7=f;FW.g.visible=true;SCN.fog.far=26000;SCN.fog.near=2000;CAM.far=60000;CAM.near=1.5;CAM.updateProjectionMatrix();W3.hid7=[];SCN.traverse(o=>{if(o.isSprite&&o.visible){o.visible=false;W3.hid7.push(o)}});(W3.npcs||[]).forEach(n=>{if(n.g&&n.g.visible){n.g.visible=false;W3.hid7.push(n.g)}});if(SUN){SUN.shadow.camera.left=-60;SUN.shadow.camera.right=60;SUN.shadow.camera.top=60;SUN.shadow.camera.bottom=-60;SUN.shadow.camera.far=400;SUN.shadow.camera.updateProjectionMatrix()}
+ document.body.classList.add('fly7');flyHud();PLAYER.visible=false;
+ if(f.phase==='ground')atc7(`${f.cs}, Makedonia Ground, ${f.push?'push back and start up approved, facing east':'taxi to holding point runway 28 via Alpha'}.`);else if(f.phase==='air')atc7(`${f.cs}, Makedonia Approach, cleared ILS approach runway ${opt.rwn||'28'}, wind 270 at 8 knots.`)}
+function callsign7(al){const c={aee:'Aegean',oly:'Olympic',ryr:'Ryanair',ezy:'Easy',wzz:'Wizz Air',jet2:'Channex',tui:'Tomson',dlh:'Lufthansa',baw:'Speedbird',sky:'Sky Express',vol:'Volotea',qtr:'Qatari',uae:'Emirates',thy:'Turkish',klm:'KLM',afr:'Air France',swr:'Swiss',ita:'Itarrow'}[al]||'Fraport';return c+' '+ri(100,989)}
+function flyEnd(msg){const f=F();if(!f)return;SCN.remove(f.p);if(f.hideInst)f.hideInst();W3.fly7=null;FW.g.visible=false;(W3.hid7||[]).forEach(o=>o.visible=true);W3.hid7=[];if(W3.sky){W3.sky.position.set(0,0,0);W3.sky.scale.setScalar(1)}SCN.fog.far=420;SCN.fog.near=Math.min(SCN.fog.near,60);CAM.far=400;CAM.near=.1;CAM.updateProjectionMatrix();if(SUN){const sc=SUN.shadow.camera;sc.left=-22;sc.right=22;sc.top=22;sc.bottom=-22;sc.far=90;sc.updateProjectionMatrix()}document.body.classList.remove('fly7');const h=$('#fl7');if(h)h.remove();PLAYER.visible=true;w5Tp(90,-8,0,msg||'✈️ Back in the terminal');W3.yaw=Math.PI-.4}
+/* start options */
+function flyFromRunway(rw){const R=RWY7[rw||0];flyStart({x:R.x1-60,z:R.z,yaw:-Math.PI/2,phase:'ground',thr:0});F().atc.lined=1;atc7(`${F().cs}, line up and wait runway ${R.n}.`)}
+function flyApproach(rw,dest){const R=dest?dest.rw:RWY7[rw||0];const d=7000;flyStart({x:R.x1+d,z:R.z,y:Math.tan(3*Math.PI/180)*d,yaw:-Math.PI/2,v:78,thr:.45,flaps:2,phase:'air',dest,rwn:dest?'27':R.n});const f=F();f.gear=0;f.air=1;toast('⬇️ Lower the gear (GEAR) and follow the glide path diamonds!')}
+function flyFromGate(g,T,idx){const al=g.al||pick(T.al);let x,z,yaw;if(g.ax==='x'){x=g.x+g.dir*(11+14.9);z=g.z;yaw=g.dir>0?-Math.PI/2:Math.PI/2}else{x=g.x;z=g.z+g.dir*(11+14.9);yaw=g.dir>0?Math.PI:0}
+ const inst=()=>{const M=new T3.Matrix4();const pb=T.grp.children.find(c=>c.isInstancedMesh&&c.geometry===G6.pl7),pt=T.grp.children.find(c=>c.isInstancedMesh&&c.geometry===G6.tl7);return{pb,pt}};const o=inst(),i=T.planes.indexOf(g);const M0=new T3.Matrix4(),Mz=new T3.Matrix4().makeScale(0,0,0);if(i>=0&&o.pb){o.pb.getMatrixAt(i,M0);o.pb.setMatrixAt(i,Mz);o.pt.setMatrixAt(i,Mz);o.pb.instanceMatrix.needsUpdate=o.pt.instanceMatrix.needsUpdate=true}
+ flyStart({al,x,z,yaw,phase:'ground',push:{t:0,ax:g.ax,dir:g.dir},hideInst:()=>{if(i>=0&&o.pb){o.pb.setMatrixAt(i,M0);o.pt.setMatrixAt(i,M0);o.pb.instanceMatrix.needsUpdate=o.pt.instanceMatrix.needsUpdate=true}}})}
+function flyFromParked(pk){const p=pk.p;const G_=GP[pk.g];const yaw=p.rotation.y;pk.p.visible=false;flyStart({al:pk.al,x:p.position.x,z:p.position.z,yaw,phase:'ground',push:{t:0,yaw0:yaw},hideInst:()=>{pk.p.visible=true}})}
+/* ---------- ATC voice ---------- */
+function atc7(t){toast('🎧 ATC: '+t);try{if(G.sound&&window.speechSynthesis){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.rate=1.08;u.pitch=.9;u.lang='en-GB';speechSynthesis.speak(u)}}catch(e){}}
+/* ---------- physics ---------- */
+const DEG=Math.PI/180;
+function flyTick(dt){const f=F();f.t+=dt;const j=W.joy||{dx:0,dy:0},k=W.keys;let sx=j.dx||0,sy=j.dy||0;if(k.a||k.arrowleft)sx=-1;if(k.d||k.arrowright)sx=1;if(k.w||k.arrowup)sy=-1;if(k.s||k.arrowdown)sy=1;if(GY.on){sx=GY.roll;sy=GY.pitch}if(V6().set.inv)sy=-sy;
+ if(f.push){const P=f.push;P.t+=dt;const b=Math.min(1,P.t/7);const back=4.5*dt*(P.t<7?1:0);f.x-=Math.sin(f.yaw)*back;f.z-=Math.cos(f.yaw)*back;if(P.t>3.5&&P.t<7)f.yaw+=dt*(Math.PI/2)/3.5*(P.dir>0?1:-1);if(P.t>7.6){f.push=null;atc7(`${f.cs}, pushback complete. Taxi to holding point runway 28 via Alpha.`)}}
+ else{
+  const vs=60-f.flaps*7;const onG=f.y<=0.01;
+  // throttle → thrust, drag (flaps, gear), gravity along the path
+  const drag=5.4e-5*(1+.35*f.flaps+(f.gear?.25:0))*f.v*f.v;let acc=f.thr*3.6-drag-9.81*Math.sin(f.pitch);
+  if(onG){acc-=f.thr<.05?(f.v>1?2.6:0):.15;if(f.v<0)f.v=0}f.v=Math.max(0,f.v+acc*dt);
+  if(onG){f.roll*=Math.exp(-dt*6);const steer=sx*(f.v<25?.55:.12);f.yaw-=steer*dt*Math.min(1,f.v/6+.2);
+   if(f.v>vs*.95&&sy>.2){f.pitch=Math.max(-12*DEG,f.pitch-.25*dt)}else f.pitch=Math.min(0,f.pitch+.3*dt);
+   if(f.pitch< -2*DEG&&f.v>vs){f.y=.05;f.phase='air';f.air=1;if(!f.atc.dep){f.atc.dep=1;setTimeout(()=>atc7(`${f.cs}, contact Thessaloniki Departure, good flight.`),2500)}}}
+  else{f.roll=Math.max(-60*DEG,Math.min(60*DEG,f.roll+sx*1.1*dt));if(Math.abs(sx)<.1)f.roll*=Math.exp(-dt*.7);f.pitch=Math.max(-30*DEG,Math.min(30*DEG,f.pitch-sy*.42*dt*(1-Math.abs(f.roll)*.3)));
+   const lift=Math.min(1,f.v/vs);f.yaw-=9.81*Math.tan(f.roll)/Math.max(f.v,35)*dt;let vy=f.v*Math.sin(-f.pitch);if(lift<1){vy-=(1-lift)*14;f.pitch=Math.min(25*DEG,f.pitch+(1-lift)*.35*dt);if(!f.stallW){f.stallW=1;toast('⚠️ STALL! Lower the nose and add power')}}else f.stallW=0;
+   f.vy=vy;f.y+=vy*dt;
+   if(f.y<=0){const sink=-vy;touch7(sink);if(!F())return}}
+  const hx=Math.sin(f.yaw)*Math.cos(f.pitch),hz=Math.cos(f.yaw)*Math.cos(f.pitch);f.x+=hx*f.v*dt;f.z+=hz*f.v*dt;
+  if(f.y<=.01){const r=regAt(f.x,f.z,0);if(r&&!r.out&&f.v>2){f.v=0;toast('🛑 Careful! That is a building.');beep(120,.2,'square',.05)}}
+  if(f.y>0){f.maxAlt=Math.max(f.maxAlt,f.y);if(hitTerrain(f)){crash7('💥 Terrain! Too low. Gentle reset…');return}}
+ }
+ f.p.position.set(f.x,f.y,f.z);f.p.rotation.set(0,0,0);f.p.rotation.order='YXZ';f.p.rotation.set(f.pitch,f.yaw,f.roll);if(f.p.userData.props)f.p.userData.props.forEach(r=>r.rotation.z+=dt*(5+f.thr*40));
+ W3.p.x=f.x;W3.p.z=f.z;
+ // ATC flow on the ground
+ if(f.phase==='ground'&&!f.push){const R=RWY7.find(R=>f.x>R.x0&&f.x<R.x1&&Math.abs(f.z-R.z)<22);if(R&&!f.atc.to){f.atc.to=1;atc7(`${f.cs}, wind 270 at 8, runway ${R.n}, cleared for take-off.`)}}
+ if(f.air&&f.y>500&&!f.atc.cr){f.atc.cr=1;atc7(`${f.cs}, radar contact, climb flight level 1-2-0. ${f.dest?'':'Enjoy the view of Thessaloniki and Mount Olympus.'}`)}
+ sndFly(f);flyHudTick(f)}
+function hitTerrain(f){if(f.y<1)return false;if(f.y<35&&f.x>CITY.x0&&f.x<CITY.x1&&f.z>CITY.z0&&f.z<CITY.z1)return true;if(f.y<15){const r=regAt(f.x,f.z,0);if(r&&!r.out)return true}
+ const C=[[-17000,21000,7000,2300],[-12500,23500,4500,1500],[-21000,17000,5000,1300],[26000,27000,1800,1500],[1000,-6500,4200,1100],[4000,-5200,3500,900]];for(const [x,z,r,h] of C){const d=Math.hypot(f.x-x,f.z-z);if(d<r&&f.y<h*(1-d/r))return true}return false}
+function onRunway7(f){const L=f.dest?[f.dest.rw]:RWY7;return L.find(R=>f.x>R.x0&&f.x<R.x1&&Math.abs(f.z-R.z)<23)}
+function touch7(sink){const f=F();const R=onRunway7(f);f.y=0;const roll=Math.abs(f.roll)/DEG;
+ if(!f.gear||sink>6.5||roll>14||(!R&&f.v>25)){crash7(!f.gear?'💥 Gear-up landing! Gentle reset…':sink>6.5?'💥 Too hard! Gentle reset…':'💥 Off the runway! Gentle reset…');return}
+ f.pitch=0;f.roll=0;f.phase='ground';const off=R?Math.abs(f.z-R.z):30;const thr=R?Math.abs(R.x1-f.x):9999;const sc=Math.max(0,Math.round(1000-sink*110-off*14-Math.max(0,thr-500)*.35));const stars=sc>820?3:sc>600?2:sc>300?1:0;f.land={sc,stars,sink,off};
+ const x=X7();x.landings=(x.landings||0)+1;x.bestLand=Math.max(x.bestLand||0,sc);atc7(`${f.cs}, welcome to ${f.dest?f.dest.n.split(' ·')[0]:'Thessaloniki'}. Vacate when able.`);beep(200,.2,'sawtooth',.05);
+ setTimeout(()=>{const ff=F();if(!ff||!ff.land)return;const L=ff.land;const xp=60+L.sc/5|0;V6().xp+=xp;G.money+=Math.round(L.sc*20);if(typeof daily==='function')daily('jobs',1);save();
+  modal(`<div class="rep6"><h3>🛬 Landing score</h3><div class="st6">${'⭐'.repeat(L.stars)+'☆'.repeat(3-L.stars)}</div><div class="sc6">${L.sc} / 1000</div><table><tr><td>Sink rate</td><td>${Math.round(L.sink*196.85)} ft/min</td></tr><tr><td>Centreline</td><td>${L.off.toFixed(1)} m</td></tr><tr><td>Airport</td><td>${ff.dest?ff.dest.n:'Thessaloniki SKG'}</td></tr><tr><td>Reward</td><td>${fmt(Math.round(L.sc*20))} · +${xp} XP</td></tr></table>
+  <button class="r" style="width:100%" onclick="close_();flyEnd('🛬 Nice flight, Captain!')">Park & leave the cockpit</button>${ff.dest?`<button class="ghost" style="width:100%" onclick="close_();flyApproach(0)">Fly back to Thessaloniki</button>`:''}<button class="ghost" style="width:100%" onclick="close_();flyFromRunway(${ff.dest?0:1})">Take off again</button></div>`)},2600)}
+function crash7(msg){const f=F();if(!f||f.crashing)return;f.crashing=1;beep(80,.5,'sawtooth',.08);fade7(msg,()=>{const ff=F();if(!ff)return;const dest=ff.dest;ff.crashing=0;const al=ff.al;flyEnd();flyApproach(0,dest)})}
+/* route flying: teleport to the destination's final approach */
+function flyRoute(){const f=F();if(!f||!f.air||f.y<300){toast('Climb above 1,000 ft first');return}modal(`<div class="rep6"><h3>🧭 Fly a route</h3><p class="muted">Cruise is skipped: you will be placed on a 7 km final at the destination.</p>${DEST7.map((d,i)=>`<button class="ghost" style="width:100%;text-align:left" onclick="close_();fade7('✈️ Cruising to ${d.code}…',()=>{const al=F().al;flyEnd();flyApproach(0,DEST7[${i}]);F().al=al})">✈️ ${d.n} (${d.code})</button>`).join('')}<button class="r" style="width:100%" onclick="close_()">Keep flying here</button></div>`)}
+/* ---------- gyro (optional, iPhone) ---------- */
+const GY={on:false,roll:0,pitch:0,b0:null,g0:null};
+function gyroToggle(){if(GY.on){GY.on=false;toast('📱 Gyro off');return}const go=()=>{GY.on=true;GY.b0=null;toast('📱 Gyro on: tilt to roll, tip to pitch')};if(typeof DeviceOrientationEvent!=='undefined'&&DeviceOrientationEvent.requestPermission){DeviceOrientationEvent.requestPermission().then(s=>{if(s==='granted')go();else toast('Gyro permission denied')}).catch(()=>toast('Gyro unavailable'))}else go()}
+addEventListener('deviceorientation',e=>{if(!GY.on)return;const ang=(screen.orientation&&screen.orientation.angle)||window.orientation||0;let r,p;if(Math.abs(ang)===90){r=(ang>0?1:-1)*(e.beta||0);p=(ang>0?-1:1)*(e.gamma||0)}else{r=e.gamma||0;p=e.beta||0}if(GY.b0==null){GY.b0=p}GY.roll=Math.max(-1,Math.min(1,r/30));GY.pitch=Math.max(-1,Math.min(1,(p-GY.b0)/25))});
+/* ---------- HUD ---------- */
+function flyHud(){let h=$('#fl7');if(h)h.remove();h=document.createElement('div');h.id='fl7';h.innerHTML=`<div class="fr7"><b id="fSpd">0</b><small>KT</small></div><div class="fr7 r"><b id="fAlt">0</b><small>FT</small></div><div class="fh7"><span id="fHdg">280°</span> · <span id="fVs">0</span> fpm · <span id="fInfo"></span></div><canvas id="fAtt" width="150" height="150"></canvas><div id="fIls"><i id="fLoc"></i><i id="fGs"></i></div>
+ <div class="fthr"><input id="fThr" type="range" min="0" max="100" value="0"><small>THR</small></div><div class="fb7"><button id="fFl">FLAPS 1</button><button id="fGr">GEAR ⬇</button><button id="fCam">🎥 CAM</button><button id="fGy">📱 GYRO</button><button id="fRt">🧭 ROUTE</button><button id="fEx">🚪 EXIT</button></div>`;document.body.appendChild(h);
+ ['pointerdown','touchstart'].forEach(ev=>h.querySelectorAll('button,input,.fthr').forEach(b=>b.addEventListener(ev,e=>e.stopPropagation(),{passive:true})));
+ $('#fThr').oninput=e=>{const f=F();if(f)f.thr=e.target.value/100};$('#fFl').onclick=()=>{const f=F();f.flaps=(f.flaps+1)%3;$('#fFl').textContent='FLAPS '+f.flaps;beep(500,.05)};$('#fGr').onclick=()=>{const f=F();if(f.y<=.01&&f.gear){toast('Not on the ground!');return}f.gear=!f.gear;$('#fGr').textContent=f.gear?'GEAR ⬇':'GEAR ⬆';beep(300,.2,'sawtooth',.03)};
+ $('#fCam').onclick=()=>{const f=F();f.cam=f.cam==='chase'?'cockpit':f.cam==='cockpit'?'tower':'chase';toast('🎥 '+f.cam+' camera')};$('#fGy').onclick=gyroToggle;$('#fRt').onclick=flyRoute;$('#fEx').onclick=()=>{const f=F();if(f.y>5){modal(`<div class="rep6"><h3>Leave the flight?</h3><button class="r" style="width:100%" onclick="close_();flyEnd()">Yes, back to the terminal</button><button class="ghost" style="width:100%" onclick="close_()">Keep flying</button></div>`)}else flyEnd()}}
+function flyHudTick(f){if(!$('#fSpd'))return;const kt=Math.round(f.v*1.944),ft=Math.round(f.y*3.281);$('#fSpd').textContent=kt;$('#fAlt').textContent=ft;let hd=Math.round(((Math.PI-f.yaw)/DEG+720)%360);$('#fHdg').textContent=String(hd).padStart(3,'0')+'°';$('#fVs').textContent=Math.round((f.vy||0)*196.85/10)*10;$('#fThr').value=Math.round(f.thr*100);$('#fFl').textContent='FLAPS '+f.flaps;$('#fGr').textContent=f.gear?'GEAR ⬇':'GEAR ⬆';
+ let info='';if(f.push)info='Pushback…';else if(f.phase==='ground'&&!f.air){const R=RWY7[0];const d=Math.hypot(f.x-(R.x1-60),f.z-R.z);info=onRunway7(f)?'Full throttle, rotate at '+Math.round((60-f.flaps*7)*1.944)+' kt (pull ⬇)':'Taxi to RWY 28 hold: '+(d/1000).toFixed(1)+' km'}else if(f.air)info=f.v<(60-f.flaps*7)*1.1?'⚠️ SLOW':f.y<300&&!f.gear?'GEAR UP':'';$('#fInfo').textContent=info;
+ const c=$('#fAtt').getContext('2d');c.save();c.clearRect(0,0,150,150);c.beginPath();c.arc(75,75,72,0,7);c.clip();c.translate(75,75);c.rotate(-f.roll);const py=-f.pitch/DEG*3;c.fillStyle='#3d7bd9';c.fillRect(-150,-300+py,300,300);c.fillStyle='#8a5a2b';c.fillRect(-150,py,300,300);c.strokeStyle='#fff';c.lineWidth=2;for(let a=-30;a<=30;a+=10){if(!a)continue;c.beginPath();c.moveTo(-18,py-a*3);c.lineTo(18,py-a*3);c.stroke()}c.beginPath();c.moveTo(-150,py);c.lineTo(150,py);c.stroke();c.restore();c.strokeStyle='#ffd400';c.lineWidth=4;c.beginPath();c.moveTo(35,75);c.lineTo(65,75);c.lineTo(75,85);c.lineTo(85,75);c.lineTo(115,75);c.stroke();
+ // ILS / glide path to the runway ahead
+ const L=f.dest?[f.dest.rw]:RWY7;let best=null;L.forEach(R=>{[[R.x1,-1],[R.x0,1]].forEach(([tx,dir])=>{const along=(f.x-tx)*-dir,cross=f.z-R.z;if(along>200&&along<16000&&Math.abs(cross)<along*.25){const hdOK=Math.cos(f.yaw-(dir>0?Math.PI/2:-Math.PI/2))>.7;if(hdOK&&(!best||along<best.along))best={along,cross,R}}})});
+ const il=$('#fIls');if(best&&f.air){il.style.display='block';const gs=Math.tan(3*DEG)*best.along,dv=(f.y-gs)/Math.max(30,best.along*.02),lv=best.cross/Math.max(40,best.along*.03);$('#fLoc').style.left=(50+Math.max(-45,Math.min(45,-lv*20)))+'%';$('#fGs').style.top=(50+Math.max(-45,Math.min(45,dv*20)))+'%'}else il.style.display='none'}
+function sndFly(f){if(!SND.ok||!AC)return;const t=AC.currentTime;SND.jet.g.gain.setTargetAtTime(G.sound?.05+f.thr*.12:0,t,.2);SND.jet.fl.frequency.setTargetAtTime(500+f.thr*900+f.v*3,t,.2);SND.hum.g.gain.setTargetAtTime(0,t,.2)}
+/* ---------- camera / render ---------- */
+const _w3R73=w3Render;w3Render=function(){const f=F();if(!f||!REN)return _w3R73();fpsTick();const p=f.p.position;const fw=new T3.Vector3(Math.sin(f.yaw)*Math.cos(f.pitch),-Math.sin(f.pitch),Math.cos(f.yaw)*Math.cos(f.pitch));
+ if(f.cam==='cockpit'){const D=f.p.userData.D||{L:30,r:1.5};const pos=p.clone().addScaledVector(fw,D.L*.42);pos.y+=D.r+1.9;CAM.position.copy(pos);CAM.up.set(0,1,0).applyAxisAngle(fw,f.roll);CAM.lookAt(pos.clone().add(fw.clone().multiplyScalar(50)));CAM.fov=70}
+ else if(f.cam==='tower'){CAM.up.set(0,1,0);CAM.position.set(188,40,-152);CAM.lookAt(p);CAM.fov=Math.max(8,Math.min(60,2400/Math.max(1,CAM.position.distanceTo(p))*6))}
+ else{CAM.up.set(0,1,0);const yawO=W3.flyO||0;const back=new T3.Vector3(Math.sin(f.yaw+yawO),0,Math.cos(f.yaw+yawO));const want=p.clone().addScaledVector(back,-46).add(new T3.Vector3(0,13+Math.max(0,-f.pitch)*20,0));if(want.y<1.5)want.y=1.5;CAM.position.lerp(want,f.t<.2?1:.12);CAM.lookAt(p.clone().addScaledVector(fw,25).add(new T3.Vector3(0,4,0)));CAM.fov=58}
+ if(f.cam==='chase'&&CAM.position.distanceTo(p)>400){CAM.position.copy(p).add(new T3.Vector3(-Math.sin(f.yaw)*46,14,-Math.cos(f.yaw)*46));CAM.lookAt(p)}if(W3.sky){W3.sky.position.copy(CAM.position);W3.sky.scale.setScalar(60)}CAM.updateProjectionMatrix();SUN.position.set(p.x+60,p.y+120,p.z+40);SUN.target.position.set(p.x,p.y,p.z);REN.render(SCN,CAM)};
+/* ---------- update hook, entry items ---------- */
+const _w3U73=w3Update;w3Update=function(dt){if(W3.on&&F()){if(!F().crashing)flyTick(dt);if(F())tick7(dt);return}_w3U73(dt)};
+// "fly" items at new-terminal gates with planes and at Makedonia parked planes
+const _b73=build7;build7=function(){_b73();TERMS.forEach((T,ti)=>{(T.planes||[]).forEach(g=>{let x,z;if(g.ax==='x'){x=g.x-g.dir*2.5;z=g.z+2}else{x=g.x+2;z=g.z-g.dir*2.5}W3.items.push({k:'fly7',g,T,x,z,fy:0,t:'✈️ Fly the '+((AL[g.al]||{}).name||'')+' plane (pilot)',ic:'✈️',area3:T.sat?'t6':'t'+T.id})})});
+ (W3.parked||[]).forEach(pk=>{if(!pk.g)return;const p=pk.p;W3.items.push({k:'fly7p',pk,x:p.position.x+Math.sin(p.rotation.y)*14+Math.cos(p.rotation.y)*4,z:p.position.z+Math.cos(p.rotation.y)*14-Math.sin(p.rotation.y)*4,fy:0,t:'✈️ Fly this plane (pilot)',ic:'✈️',area3:'apron'})})};
+const _wAct73=wAct;wAct=function(){if(W3.on&&W3.mode!=='cab'&&!W3.drv&&!F()){const i=W.near;if(i&&i.k==='fly7')return flyMenu(()=>flyFromGate(i.g,i.T));if(i&&i.k==='fly7p')return flyMenu(()=>flyFromParked(i.pk))}return _wAct73()};
+function flyMenu(go){W3.flyGo=go;modal(`<div class="rep6"><h3>✈️ Captain's seat</h3><p><b>Left stick:</b> roll & pitch (pull ⬇ to climb) · <b>THR slider</b> on the right · FLAPS · GEAR · 🎥 chase/cockpit/tower · 📱 iPhone gyro (optional).</p><p class="muted">Pushback, taxi along the yellow lines to runway 28, full power, rotate, then fly over Thessaloniki, the Thermaic Gulf, Mount Olympus and Halkidiki. Land on either runway for a score, or use 🧭 ROUTE to fly to another airport.</p><button class="r" style="width:100%" onclick="close_();W3.flyGo()">Start from the gate (pushback)</button><button class="ghost" style="width:100%" onclick="close_();flyFromRunway(0)">Skip to runway 28 line-up</button><button class="ghost" style="width:100%" onclick="close_();flyApproach(1)">Practice landing (7 km final, 28R)</button><button class="ghost" style="width:100%" onclick="close_()">Not now</button></div>`)}
+const _ft73=fastTravel;fastTravel=function(){_ft73();const d=document.querySelector('.ft7');if(d)d.insertAdjacentHTML('beforeend',`<button class="r" onclick="close_();flyMenu(()=>flyFromRunway(0))">✈️ Fly a plane</button>`)};
+/* screen-size culling while flying: tiny far objects are skipped (huge draw-call saver) */
+const SKIP7=new Set();function sizeCull7(on){const keep=o=>o===FW.g||o===W3.sky||(C7&&o===C7.root)||TERMS.some(T=>T.grp===o)||o.name==='world7'||(W3.fly7&&o===W3.fly7.p)||o.isLight;
+ if(!on){SKIP7.forEach(o=>o.layers.set(0));SKIP7.clear();return}const cp=CAM.position;const b=new T3.Box3(),s=new T3.Sphere();
+ SCN.children.forEach(o=>{if(keep(o)||!(o.isMesh||o.isGroup||o.isPoints))return;if(o.userData.r7==null||o.userData.dyn7){if(o.isMesh&&!o.isInstancedMesh&&o.geometry){o.geometry.boundingSphere||o.geometry.computeBoundingSphere();s.copy(o.geometry.boundingSphere).applyMatrix4(o.matrixWorld)}else{b.setFromObject(o);b.getBoundingSphere(s)}o.userData.r7=s.radius;o.userData.c7=s.center.clone();o.userData.dyn7=!o.matrixAutoUpdate?0:(o.isGroup?1:0)}
+  const d=cp.distanceTo(o.userData.c7);const hide=o.userData.r7/Math.max(1,d)<.025;if(hide){if(!SKIP7.has(o)){o.layers.set(1);SKIP7.add(o)}}else if(SKIP7.has(o)){o.layers.set(0);SKIP7.delete(o)}})}
+const _ft7c=flyTick;flyTick=function(dt){_ft7c(dt);W3.sc7=(W3.sc7||0)-dt;if(W3.sc7<=0){W3.sc7=.5;sizeCull7(true)}};
+const _fe7c=flyEnd;flyEnd=function(m){sizeCull7(false);_fe7c(m)};
 
 </script></body></html>

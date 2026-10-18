@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta name="app-version" content="v7.8">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta name="app-version" content="v7.8.1">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#0b2a4a"><title>MAKEDONIA Airport Tycoon</title>
 <style>*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -1979,7 +1979,7 @@ function w3Render(){if(!REN)return;V1=V1||_v3();V2=V2||_v3();const P=W3.p,cab=W3
  const s=$('#w3say');const n=W.near;if(n){const p=_v3().set(n.x,n.k==='npc'?2.9:3.4,n.z).project(CAM);if(p.z<1){s.style.display='block';s.style.left=((p.x+1)/2*W.W)+'px';s.style.top=((1-p.y)/2*W.H)+'px';s.textContent=n.k==='npc'?n.n.req.ic+' '+n.n.req.say:'Ⓐ '+n.t}else s.style.display='none'}else s.style.display='none'}
 
 /* ===== v5.1: 3D looks like Dominik's pictures (ceilings, materials, props, collisions) ===== */
-const VER='v7.8';
+const VER='v7.8.1';
 let COL=[];function col(x,z,w,d){COL.push({x0:x-w/2,x1:x+w/2,z0:z-d/2,z1:z+d/2})}
 const _wk4=w3Walkable;w3Walkable=function(x,z){if(!_wk4(x,z))return false;if(W3.mode==='cab')return true;const ins=(a,b)=>COL.some(c=>a>c.x0-.28&&a<c.x1+.28&&b>c.z0-.28&&b<c.z1+.28);return !ins(x,z)||ins(W3.p.x,W3.p.z)};
 const INST={};function inst(key,geo,m,x,y,z,ry,sx,sy,sz,rz){(INST[key]=INST[key]||{geo,m,a:[]}).a.push([x,y,z,ry||0,sx||1,sy||1,sz||1,rz||0])}
@@ -3844,5 +3844,16 @@ const _hub78=hub4;hub4=function(){_hub78();const d=document.querySelector('#shee
 const _dm8=drawMinimap;drawMinimap=function(cv,big){_dm8(cv,big);try{if(!cv||!W3.on)return;const g=cv.getContext('2d'),w=cv.width,h=cv.height;const P3=W3.mode!=='cab';let cx,cz,sc;if(P3&&!big){cx=W3.p.x;cz=W3.p.z;sc=w/140}else{cx=MAPV.cx;cz=MAPV.cz;sc=Math.min(w/MAPV.w,h/MAPV.h)}DOORS8.forEach(d=>{const X=w/2+(d.x-cx)*sc,Y=h/2+(d.z-cz)*sc;if(X<-10||Y<-10||X>w+10||Y>h+10)return;const r=big?9:5;g.fillStyle='#ffd21f';g.strokeStyle='#b71c1c';g.lineWidth=2;g.beginPath();g.arc(X,Y,r,0,7);g.fill();g.stroke();g.font=`${big?12:7}px sans-serif`;g.textAlign='center';g.textBaseline='middle';g.fillText('🔒',X,Y+1)})}catch(e){}};
 // link Makedonia boards into the editable board system
 const _bE78=brdEd7;brdEd7=function(T,tab){if(tab==='m'){const L=G.flights.filter(f=>!f.done).slice(0,24);return MD4('📋 Makedonia · flight boards',`<div class="row" style="gap:6px;margin-bottom:6px">${TERMS.map(t=>`<button class="ghost" onclick="brdEd7(TERMS[${t.id-1}],'d')">${t.name.replace('Terminal ','T')}</button>`).join('')}</div>${L.map(f=>`<button class="ghost" style="width:100%;text-align:left;margin:2px 0" onclick="editFlight(${f.id})"><b>${hm7(f.t+f.delay)}</b> ${f.fn} · ${(destOf(f)||[])[1]||f.dest} · ${f.gate||'—'} · ${f.st} ✏️</button>`).join('')}`)}_bE78(T,tab);const r=document.querySelector('#sheet .row');if(r)r.insertAdjacentHTML('beforeend',`<button class="ghost" onclick="brdEd7(null,'m')">🏛️ Makedonia</button>`)};
+
+/* v7.8.1 mobile memory + context loss */
+const MOB9=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)||(navigator.maxTouchPoints>1&&/Mac/.test(navigator.platform));
+const _w3B9=w3Build;w3Build=function(){if(REN&&!REN.__9){REN.__9=1;if(MOB9){REN.capabilities.maxTextureSize=Math.min(REN.capabilities.maxTextureSize,2048);}
+ const c=REN.domElement;c.addEventListener('webglcontextlost',e=>{e.preventDefault();W3.lost9=1;toast('🧊 3D graphics paused — restoring…')},false);
+ c.addEventListener('webglcontextrestored',()=>{W3.lost9=0;try{if(MOB9){REN.capabilities.maxTextureSize=Math.min(REN.capabilities.maxTextureSize,2048)}w6Res&&w6Res(true)}catch(e){}toast('🧊 3D restored')},false)}
+ const r=_w3B9.apply(this,arguments);if(MOB9)try{if(SUN&&SUN.shadow){SUN.shadow.mapSize.set(1024,1024)}}catch(e){}return r};
+const _pr9=prCap;prCap=function(){const v=_pr9();return MOB9?Math.min(v,1.5):v};
+const _rn9=w3Render;w3Render=function(){if(W3.lost9)return;return _rn9.apply(this,arguments)};
+/* iOS Safari caps total canvas memory (~384MB); draw big canvases at reduced resolution */
+if(MOB9){ctex=function(w,h,fn){let s=1;if(w*h>=512*256)s=.5;s=Math.min(s,1024/Math.max(w,h));const c=document.createElement('canvas');c.width=Math.max(1,Math.round(w*s));c.height=Math.max(1,Math.round(h*s));const g=c.getContext('2d');if(!g)throw new Error('canvas');if(s<1)g.scale(c.width/w,c.height/h);fn(g,w,h);const t=new T3.CanvasTexture(c);t.colorSpace=T3.SRGBColorSpace;t.anisotropy=4;t.cv=s<1?{width:w,height:h,getContext:()=>g,real:c}:c;return t}}
 
 </script></body></html>

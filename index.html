@@ -4084,5 +4084,30 @@ NEW4.push(['🚧','v8.1: 11 drivable apron jobs (fuel, catering, bags, follow-me
 (function(){try{const b=document.createElement('button');b.id='hb12';b.className='wbtn';b.textContent='🧰';b.title='v8.1 features';b.onclick=e=>{e.stopPropagation();hub12()};const w=$('#w3b');w.parentNode.insertBefore(b,w)}catch(e){}})();
 const _b12=build7;build7=function(){_b12();[stations12,robots12].forEach(f=>{try{f()}catch(e){console.warn('v81',f.name,e)}})};
 const _t12=tick7;tick7=function(dt0){_t12(dt0);const now=performance.now();const dt=Math.min(1,(now-(J12.lt||now))/1000);J12.lt=now;try{jobTick12(dt);robTick12(dt);asTick12(dt);petTick12(dt);J12.h=(J12.h||0)+dt;if(J12.h>5){J12.h=0;hist12()}}catch(e){if(!J12.err){J12.err=1;console.warn('v81t',e)}}};
+/* PA announcement rooms: two per terminal (T1-T6 + Makedonia) */
+const PAR13=[];
+function paRooms13(){const S=PL(),q=QL(),Lt=[];const room=(x,z0,dir,tn,tid)=>{const W=6,D=5.5,H=3.2,z1=z0+dir*D,zc=(z0+z1)/2,zb=Math.min(z0,z1),zt=Math.max(z0,z1);
+  S.box(W,H,.2,'#d8d3c8',x,H/2,z1).box(.2,H,D,'#d8d3c8',x-W/2,H/2,zc).box(.2,H,D,'#d8d3c8',x+W/2,H/2,zc).box(2,H,.2,'#d8d3c8',x-2,H/2,z0).box(2,H,.2,'#d8d3c8',x+2,H/2,z0).box(2,.6,.2,'#d8d3c8',x,H-.3,z0).box(W,.15,D,'#455a64',x,H,zc);
+  colY(x-W/2-.1,x+W/2+.1,z1-.1,z1+.1,0,4);colY(x-W/2-.1,x-W/2+.1,zb,zt,0,4);colY(x+W/2-.1,x+W/2+.1,zb,zt,0,4);colY(x-3,x-1,z0-.1,z0+.1,0,4);colY(x+1,x+3,z0-.1,z0+.1,0,4);
+  const dz=z1-dir*1.1;S.box(3.2,.85,1,'#37474f',x,.43,dz).box(3.3,.06,1.05,'#263238',x,.88,dz).box(.06,.45,.06,'#999',x,1.15,dz-dir*.2).cyl(.07,.16,'#222',x,1.42,dz-dir*.2,8).box(1,.5,.05,'#111',x-1,1.2,dz+dir*.4).box(.5,.9,.5,'#1565c0',x,.45,dz-dir*1.2);Lt.push([UB7(),'#4fc3f7',MX(x-1,1.2,dz+dir*.37,0,0,0,.9,.42,.02)]);Lt.push([UB7(),'#ff1744',MX(x,H+.25,z0-dir*.15,0,0,0,1.2,.25,.06)]);
+  tq7(q,'staff',x,H+.75,z0-dir*.12,2.6,.65,dir>0?Math.PI:0);
+  const it={k:'pa13',tid,tn,x,z:dz-dir*1.6,fy:0,y:2.6,t:'📢 PA room · Ανακοινώσεις ('+tn+')',ic:'📢',area3:''};W3.items.push(it);PAR13.push(it)};
+ TERMS.forEach(T=>{if(T.sat){room(T.x0+40,-396,-1,T.name,T.id);room(T.x1-40,-396,-1,T.name,T.id)}else{room(T.x0+16,76,1,T.name,T.id);room(T.x1-16,76,1,T.name,T.id)}});
+ room(48,-2,-1,'Makedonia',0);room(122,-2,-1,'Makedonia',0);
+ plMesh(S,SCN,false);q.mesh(ta7().mat,SCN);SCN.add(new T3.Mesh(mergeC(Lt),litm6()))}
+const PAT13={boarding:['📣 Boarding',(f)=>[`Η πτήση ${f.fn} προς ${f.gr} επιβιβάζεται τώρα από την έξοδο ${f.g}.`,`Flight ${f.fn} to ${f.en} is now boarding at gate ${f.g}.`]],final:['⏰ Final call',(f)=>[`Τελευταία πρόσκληση για την πτήση ${f.fn} προς ${f.gr}, έξοδος ${f.g}.`,`Final call for flight ${f.fn} to ${f.en}. Please proceed immediately to gate ${f.g}.`]],gate:['🔀 Gate change',(f,g2)=>[`Αλλαγή εξόδου: η πτήση ${f.fn} αναχωρεί από την έξοδο ${g2}.`,`Gate change: flight ${f.fn} to ${f.en} will now depart from gate ${g2}.`]],delay:['🕒 Delay',(f)=>[`Η πτήση ${f.fn} προς ${f.gr} έχει καθυστέρηση. Ζητούμε συγγνώμη.`,`Flight ${f.fn} to ${f.en} is delayed. We apologise for the inconvenience.`]],child:['🧒 Lost child',()=>[`Ένα παιδί αναζητά τους γονείς του στο γραφείο πληροφοριών.`,`A child is waiting for their parents at the information desk.`]],security:['🛡️ Security',()=>[`Παρακαλούμε μην αφήνετε τις αποσκευές σας αφύλακτες.`,`Please do not leave your baggage unattended. Unattended items will be removed.`]]};
+function pa13(it){const tid=it.tid;const L=(tid?FL7().d[tid]:null)||[];const f=L[Math.floor(Math.random()*Math.min(8,L.length||1))]||{fn:'A3 7401',gr:'Αθήνα',en:'Athens',g:'A4'};J12.pa13={tid,tn:it.tn,f};MD4('📢 PA room · '+it.tn,`<p>Flight: <b>${f.fn}</b> → ${f.en} · gate ${f.g}</p><div class="ft7">${Object.entries(PAT13).map(([k,v])=>`<button class="ghost" onclick="paSay13('${k}')">${v[0]}</button>`).join('')}</div><p><small>Plays in Greek then English across ${it.tn}, with subtitles.</small></p>`)}
+function inTerm13(tid){const P=W3.p;if(tid===0)return P.x<240;const T=TERMS[tid-1];return P.x>=T.x0-25&&P.x<=T.x1+25&&(T.sat?P.z<-380:P.z>-215)}
+function paSay13(k){const c=J12.pa13;if(!c)return;const g2=((c.f.g||'A1').replace(/\d+/,n=>+n+2));const [gr,en]=PAT13[k][1](c.f,g2);close_();cnt4('pa12');cnt4('pa13');
+ let b=$('#pa13');if(!b){b=document.createElement('div');b.id='pa13';b.style.cssText='position:fixed;left:50%;bottom:120px;transform:translateX(-50%);max-width:90vw;background:#000c;color:#fff;padding:8px 14px;border-radius:10px;font:600 15px system-ui;z-index:47;text-align:center;pointer-events:none';document.body.appendChild(b)}
+ b.innerHTML=`🔊 <b>${c.tn}</b><br>🇬🇷 ${gr}<br>🇬🇧 ${en}`;b.style.display='block';clearTimeout(J12.pt);J12.pt=setTimeout(()=>b.style.display='none',14000);
+ if(k==='gate'&&c.tid){const fl=(FL7().d[c.tid]||[]).find(x=>x.fn===c.f.fn);if(fl){fl.g=g2;try{brdDraw7(TERMS[c.tid-1])}catch(e){}}}
+ beep(660,.12);setTimeout(()=>beep(880,.12),180);setTimeout(()=>beep(1100,.18),360);
+ try{if(inTerm13(c.tid)&&window.speechSynthesis){speechSynthesis.cancel();const a=new SpeechSynthesisUtterance(gr);a.lang='el-GR';a.rate=.95;const e=new SpeechSynthesisUtterance(en);e.lang='en-GB';e.rate=.95;setTimeout(()=>{speechSynthesis.speak(a);speechSynthesis.speak(e)},700)}}catch(e){}
+ // nearby walkers glance: small satisfaction boost for useful calls
+ if(k!=='security')G.sat=Math.min(100,G.sat+.5);rew4(250,5,'📢 Announcement made')}
+const _wAct13=wAct;wAct=function(){const it=W3.on&&W3.mode!=='cab'&&!W3.drv?W.near:null;if(it&&it.k==='pa13'){pa13(it);return}return _wAct13.apply(this,arguments)};
+const _b13=build7;build7=function(){_b13();try{paRooms13()}catch(e){console.warn('pa13',e)}};
+MP5.push(['pa13','📢 Make 2 announcements from a PA room',2,2500]);
 
 </script></body></html>

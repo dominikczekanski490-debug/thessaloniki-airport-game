@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta name="app-version" content="v7.9">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta name="app-version" content="v8.0">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#0b2a4a"><title>MAKEDONIA Airport Tycoon</title>
 <style>*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -1979,7 +1979,7 @@ function w3Render(){if(!REN)return;V1=V1||_v3();V2=V2||_v3();const P=W3.p,cab=W3
  const s=$('#w3say');const n=W.near;if(n){const p=_v3().set(n.x,n.k==='npc'?2.9:3.4,n.z).project(CAM);if(p.z<1){s.style.display='block';s.style.left=((p.x+1)/2*W.W)+'px';s.style.top=((1-p.y)/2*W.H)+'px';s.textContent=n.k==='npc'?n.n.req.ic+' '+n.n.req.say:'Ⓐ '+n.t}else s.style.display='none'}else s.style.display='none'}
 
 /* ===== v5.1: 3D looks like Dominik's pictures (ceilings, materials, props, collisions) ===== */
-const VER='v7.9';
+const VER='v8.0';
 let COL=[];function col(x,z,w,d){COL.push({x0:x-w/2,x1:x+w/2,z0:z-d/2,z1:z+d/2})}
 const _wk4=w3Walkable;w3Walkable=function(x,z){if(!_wk4(x,z))return false;if(W3.mode==='cab')return true;const ins=(a,b)=>COL.some(c=>a>c.x0-.28&&a<c.x1+.28&&b>c.z0-.28&&b<c.z1+.28);return !ins(x,z)||ins(W3.p.x,W3.p.z)};
 const INST={};function inst(key,geo,m,x,y,z,ry,sx,sy,sz,rz){(INST[key]=INST[key]||{geo,m,a:[]}).a.push([x,y,z,ry||0,sx||1,sy||1,sz||1,rz||0])}
@@ -3931,5 +3931,64 @@ function boards2D10(tid){const F=FL7();const t=tid||1;const T=TERMS[t-1];const r
 const _wAct10=wAct;wAct=function(){const it=W3.on&&W3.mode!=='cab'&&!W3.drv?W.near:null;if(it&&it.k==='coach10'){fade7('🚌 '+it.nm+' coach · departing for the hotel…',()=>{w5Tp(-1790,570,0,'🏨 Arrived near '+it.nm+' · Thessaloniki');G.totalPax=(G.totalPax||0)+30});return}return _wAct10.apply(this,arguments)};
 const _b10=build7;build7=function(){_b10();v10();[bigBoards10,roads10,fcTraffic10,coaches10,mezz10].forEach(f=>{try{f()}catch(e){console.warn('v79',f.name,e)}})};
 const _t10=tick7;tick7=function(dt){_t10(dt);try{fcTick10(dt);coTick10(dt)}catch(e){if(!FC10.err){FC10.err=1;console.warn('v79t',e)}}};
+
+/* v8.0: photo-style terminal signs, continuous day/night, wayfinding, walkable mezzanines, drivable cars */
+const SG11={};
+function sgTex11(){if(SG11.t)return SG11.t;const labels=['AIRPORT MAKEDONIA','TERMINAL 1','TERMINAL 2','TERMINAL 3','TERMINAL 4','TERMINAL 5','TERMINAL 6'];
+ SG11.t=ctex(2048,1024,g=>{g.clearRect(0,0,2048,1024);g.fillStyle='#fff';g.shadowColor='rgba(255,255,255,.9)';g.shadowBlur=22;g.textAlign='center';g.textBaseline='middle';g.font='600 190px "Helvetica Neue",Arial,sans-serif';g.fillText('THESSALONIKI',1024,128);
+  g.font='600 70px "Helvetica Neue",Arial,sans-serif';labels.forEach((l,i)=>{const x=(i%2)*1024+512,y=256+Math.floor(i/2)*96+48;g.fillText(l,x,y)});
+  // star / flower logo in the lower-right 512x512 block
+  g.save();g.translate(1536,768);g.shadowBlur=26;for(let k=0;k<6;k++){g.save();g.rotate(k*Math.PI/3);g.beginPath();g.arc(0,-150,95,Math.PI*.95,Math.PI*1.95,false);g.arc(28,-168,80,Math.PI*1.9,Math.PI*1.02,true);g.closePath();g.fill();g.fillRect(-3,-70,6,40);g.restore()}g.restore()});
+ SG11.t.anisotropy=8;SG11.m=new T3.MeshBasicMaterial({map:SG11.t,transparent:true,depthWrite:false,toneMapped:false,side:T3.DoubleSide});return SG11.t}
+function signs11(){sgTex11();const S=PL(),Lt=[],q=QL();
+ const B=[{x0:-10,x1:235,land:86,air:-30,yl:12.5,ya:10.5,lab:0}].concat(TERMS.map(T=>T.sat?{x0:T.x0,x1:T.x1,land:null,air:-425,ya:10,lab:6,sat:1}:{x0:T.x0,x1:T.x1,land:86,air:-30,yl:15,ya:11,lab:T.id}));
+ const lab=i=>{const u0=(i%2)*.5,v1=1-(256+Math.floor(i/2)*96)/1024;return[u0,v1-96/1024,u0+.5,v1]};
+ B.forEach(b=>{const W=b.x1-b.x0,cx=(b.x0+b.x1)/2;[[b.land,1,b.yl],[b.air,-1,b.ya]].forEach(([z0,sd,y])=>{if(z0===null||z0===undefined)return;if(MOB9&&sd<0&&b.sat)return;const D=13,zc=z0+sd*D/2;
+   S.push([UB7(),'#20232b',MX(cx,y+.7,zc,-sd*.11,0,0,W+8,.7,D)]);S.push([UB7(),'#2a2e38',MX(cx,y+1.4,z0+sd*D,0,0,0,W+8,1.5,.5)]);
+   for(let k=1;k<=4;k++)Lt.push([UB7(),k%2?'#5a4fe0':'#7d6bff',MX(cx,y+.3+k*.12,z0+sd*k*D/5,-sd*.11,0,0,W+6,.04,.6)]);Lt.push([UB7(),'#3d3a9c',MX(cx,y+.28,zc,-sd*.11,0,0,W+6,.02,D-1)]);
+   for(let x=b.x0+10;x<b.x1-5;x+=W/6)S.push([UB7(),'#3a3f4a',MX(x,y/2,z0+sd*(D-1),0,0,0,.6,y,.6)]);
+   const ry=sd>0?0:Math.PI,zf=z0+sd*(D-.6),Wt=Math.min(46,W*.32);q.quad(cx+sd*(W*.05),y-1.6,zf,Wt,Wt/8,ry,0,1-256/1024,1,1);const L=lab(b.lab);q.quad(cx+sd*(W*.05+Wt*.5+5),y-3.6,zf,Wt*.36,Wt*.36/10.7,ry,L[0],L[1],L[2],L[3]);
+   q.quad(cx-sd*(W*.33),y-5,z0+sd*(D*.55),12,12,ry,.5,0,1,.5)})});
+ plMesh(S,SCN,false);SG11.lit=new T3.Mesh(mergeC(Lt),litm6());SCN.add(SG11.lit);SG11.mesh=q.mesh(SG11.m,SCN)}
+/* wayfinding: road gantries + pedestrian blades (own atlas) */
+const WF11=[['Terminals 1–5  →','#0b6e3a'],['←  Makedonia','#0b6e3a'],['T6 Satellite · train  →','#0b6e3a'],['P  Parking · Στάθμευση','#1565c0'],['🚗 Rent a car · Ενοικίαση','#1565c0'],['📦 Cargo · Φορτία  →','#0b6e3a'],['🏨 Hotels · Coaches','#6a1b9a'],['City · Πόλη  ←','#0b6e3a'],['T1  ↓','#0e1a3a'],['T2  ↓','#0e1a3a'],['T3  ↓','#0e1a3a'],['T4  ↓','#0e1a3a'],['T5  ↓','#0e1a3a'],['Makedonia  ↓','#0e1a3a'],['Exit · Έξοδος  →','#0b6e3a'],['🚆 Train · Τρένο','#0e1a3a']];
+function wfTex11(){if(SG11.w)return SG11.w;SG11.w=ctex(1024,1024,g=>{WF11.forEach(([t,c],i)=>{const x=(i%2)*512,y=Math.floor(i/2)*128;g.fillStyle=c;g.fillRect(x+4,y+4,504,120);g.strokeStyle='#fff';g.lineWidth=5;g.strokeRect(x+12,y+12,488,104);g.fillStyle='#fff';g.font='bold 46px Arial,sans-serif';g.textAlign='center';g.textBaseline='middle';g.fillText(t,x+256,y+66)})});SG11.wm=new T3.MeshBasicMaterial({map:SG11.w,toneMapped:false,side:T3.DoubleSide});return SG11.w}
+function wf11(){wfTex11();const S=PL(),q=QL();const uv=i=>{const u0=(i%2)*.5,v1=1-Math.floor(i/2)/8;return[u0,v1-1/8,u0+.5,v1]};const Q=(i,x,y,z,w,ry)=>{const u=uv(i);q.quad(x,y,z,w,w/4,ry,u[0],u[1],u[2],u[3])};
+ const gan=(x,z0,z1,face,list)=>{S.box(.5,8,.5,'#8d969e',x,4,z0).box(.5,8,.5,'#8d969e',x,4,z1).box(.6,.6,Math.abs(z1-z0),'#8d969e',x,7.6,(z0+z1)/2);const n=list.length,span=Math.abs(z1-z0)-1;list.forEach((k,j)=>Q(k,x+face*.4,6.2,Math.min(z0,z1)+.5+span*(j+.5)/n,Math.min(6,span/n-.2),face>0?-Math.PI/2:Math.PI/2))};
+ // forecourt eastbound (drivers face +x -> sign faces -x)
+ gan(250,90.6,103,-1,[0,3,4]);TERMS.filter(T=>!T.sat).forEach(T=>gan(T.x0+6,90.6,103,-1,[7+T.id,6]));gan(1890,90.6,103,-1,[5,2]);
+ // westbound
+ gan(1895,104,117.2,1,[1,7]);TERMS.filter(T=>!T.sat).forEach(T=>gan(T.x1-6,104,117.2,1,[1,14]));gan(-40,86.5,107.5,-1,[0,13]);gan(-300,86.5,107.5,1,[7,1]);
+ // pedestrian blades on the kerb
+ TERMS.filter(T=>!T.sat).forEach(T=>[T.cx-60,T.cx+60].forEach((x,j)=>{S.cyl(.08,3.4,'#555',x,1.7,88.5,6);Q(j?0:1,x,3.1,88.5,2.4,Math.PI/2);Q(15,x,2.4,88.5,2.4,Math.PI/2);Q(3,x,1.7,88.5,2.4,Math.PI/2)}));
+ for(let x=20;x<230;x+=70){S.cyl(.08,3.4,'#555',x,1.7,88.5,6);Q(0,x,3.1,88.5,2.4,Math.PI/2);Q(6,x,2.4,88.5,2.4,Math.PI/2)}
+ plMesh(S,SCN,true);q.mesh(SG11.wm,SCN)}
+/* walkable mezzanine regions + escalator ramps (matches mezz10 decks) */
+function mezzReg11(){if(REG.some(r=>r.a==='t1mz0'))return;TERMS.filter(T=>!T.sat).forEach(T=>{[[T.x0+.5,T.x0+9.8,1],[T.x1-9.8,T.x1-.5,-1]].forEach(([a,b,sd],j)=>{const k='t'+T.id+'mz'+j;wa7(k,T.name+' · Mezzanine cafés · Καφέ');REG.unshift({a:k,x0:a,x1:b,z0:38.5,z1:83.5,y:6.4,h:7});
+  const e0=sd>0?b:a,e1=sd>0?b+12:a-12;REG.unshift({a:k+'e',x0:Math.min(e0,e1),x1:Math.max(e0,e1),z0:39.4,z1:41.4,y:0,h:4,ramp:{ax:'x',a:e1,b:e0,ya:0,yb:6.4}});wa7(k+'e',T.name+' · Escalator');
+  const ex=sd>0?b:a;colY(ex-.15,ex+.15,38.5,39.2,5.9,8);colY(ex-.15,ex+.15,41.6,83.5,5.9,8);colY(Math.min(e0,e1),Math.max(e0,e1),38.9,39.3,0,8);colY(Math.min(e0,e1),Math.max(e0,e1),41.5,41.9,0,8)})})}
+function esc11(){const S=PL();TERMS.filter(T=>!T.sat).forEach(T=>[[T.x0+9.8,1],[T.x1-9.8,-1]].forEach(([e0,sd])=>{const cx=e0+sd*6,ang=Math.atan2(6.4,12),L=Math.hypot(12,6.4);S.push([UB7(),'#90a4ae',MX(cx,3.1,40.4,0,0,sd*ang,L,.25,2)]);S.push([UB7(),'#37474f',MX(cx,3.6,39.2,0,0,sd*ang,L,1,.12)]);S.push([UB7(),'#37474f',MX(cx,3.6,41.6,0,0,sd*ang,L,1,.12)])}));plMesh(S,SCN,false)}
+/* drivable cars at every terminal */
+function cars11(){const cols=['#c62828','#1565c0','#fafafa','#212121','#2e7d32'];TERMS.filter(T=>!T.sat).forEach((T,i)=>{const x=T.cx+12,z=129;const v=carMesh7(cols[i%5],false);v.position.set(x,0,z);v.rotation.y=-Math.PI/2;SCN.add(v);W3.items.push({k:'drive',veh:v,kind:'car',x,z,fy:0,y:2.6,t:'🚗 Drive this car · Οδήγηση',ic:'🚗',area3:''})})}
+/* continuous day/night */
+const DN11={};
+function dn11(){if(!SUN||!HEMI||!SCN)return;const m=G.min%1440;const rise=390,set=1170;let el,az;if(m>=rise&&m<=set){const t=(m-rise)/(set-rise);el=Math.sin(t*Math.PI);az=Math.PI*(t-.5)}else{const t=((m-set+1440)%1440)/(1440-(set-rise));el=-Math.sin(t*Math.PI);az=Math.PI*(t-.5)}
+ DN11.dir=[Math.sin(az)*Math.cos(Math.asin(Math.max(-1,Math.min(1,el))))*1,Math.max(.12,Math.abs(el)),-Math.cos(az)*.6+.4];
+ const day=Math.max(0,Math.min(1,el*3+.15)),gold=Math.max(0,1-Math.abs(el)*4)*(el>-.15?1:0);
+ const c=DN11.c||(DN11.c={a:new T3.Color(),n:new T3.Color('#0b1630'),d:new T3.Color('#9cc9ee'),g:new T3.Color('#f29a5c'),w:new T3.Color(),s:new T3.Color()});
+ c.a.copy(c.n).lerp(c.d,day).lerp(c.g,gold*.55);if(SCN.background&&SCN.background.isColor)SCN.background.copy(c.a);if(SCN.fog)SCN.fog.color.copy(c.a);
+ if(W3.sky&&W3.sky.material){c.w.setRGB(.25+.75*day,.28+.72*day-.15*gold,.45+.55*day-.35*gold);W3.sky.material.color.copy(c.w)}
+ const pw=X().crisis&&X().crisis.t==='power';SUN.intensity=pw?.1:(.25+2.45*day);SUN.color.copy(c.s.set('#fff1dc').lerp(c.g,gold*.8));if(day<.05)SUN.color.set('#8fa8ff');HEMI.intensity=.55+.35*day;
+ if(REN)REN.toneMappingExposure=.95+.12*(1-day);
+ if(DN11.moon){DN11.moon.visible=el<.05;DN11.moon.material.opacity=Math.min(1,(.05-el)*6)}
+ if(SG11.m){const nt=1-day;SG11.m.color.setScalar(.9+.6*nt);if(SG11.lit)SG11.lit.material&&0}}
+const _w3L11=w3Light;w3Light=function(f){_w3L11(f);try{dn11()}catch(e){}};
+function moon11(){const t=ctex(128,128,g=>{const gr=g.createRadialGradient(64,64,10,64,64,62);gr.addColorStop(0,'#fffef0');gr.addColorStop(.45,'#f3f1e0');gr.addColorStop(.5,'rgba(255,255,230,.35)');gr.addColorStop(1,'rgba(255,255,230,0)');g.fillStyle=gr;g.fillRect(0,0,128,128)});DN11.moon=new T3.Sprite(new T3.SpriteMaterial({map:t,transparent:true,depthWrite:false,fog:false}));DN11.moon.scale.set(60,60,1);DN11.moon.renderOrder=-1;SCN.add(DN11.moon)}
+function hookSun11(){if(!SUN||SUN.__11)return;SUN.__11=1;const tp=SUN.target.position,os=tp.set.bind(tp);tp.set=function(x,y,z){os(x,y,z);const d=DN11.dir;if(d){const R=60;SUN.position.x=x+d[0]*R;SUN.position.y=y+d[1]*R;SUN.position.z=z+d[2]*R;if(DN11.moon){DN11.moon.position.set(CAM.position.x-d[0]*900,CAM.position.y+Math.max(150,d[1]*700),CAM.position.z-d[2]*900)}}return tp}}
+function timeUI11(){const sp=G.speed;MD4('🕒 Time · Ώρα',`<p>Now <b>${String(Math.floor(G.min/60)).padStart(2,'0')}:${String(Math.floor(G.min%60)).padStart(2,'0')}</b> · the sun, sky and lights follow the game clock.</p><div class="row" style="flex-wrap:wrap;gap:6px">${[['🌅 Sunrise',380],['☀️ Noon',720],['🌇 Sunset',1140],['🌙 Night',1320]].map(([n,v])=>`<button class="ghost" onclick="G.min=${v};W3.lk='';w3Light(true);toast('${n}')">${n}</button>`).join('')}</div><p style="margin-top:8px">Clock speed</p><div class="row" style="gap:6px">${[[0,'⏸'],[1,'1×'],[4,'4×'],[16,'16×'],[60,'60×']].map(([v,n])=>`<button class="${sp===v?'g':'ghost'}" onclick="G.speed=${v};timeUI11()">${n}</button>`).join('')}</div>`)}
+(function(){try{const b=document.createElement('button');b.id='tm11';b.className='wbtn';b.textContent='🕒';b.title='Time of day';b.onclick=e=>{e.stopPropagation();timeUI11()};const w=$('#w3b');w.parentNode.insertBefore(b,w)}catch(e){}})();
+const _b11=build7;build7=function(){_b11();[mezzReg11,signs11,wf11,esc11,cars11,moon11,hookSun11].forEach(f=>{try{f()}catch(e){console.warn('v80',f.name,e)}})};
+const _wr11=w3Regions;w3Regions=function(){_wr11();try{mezzReg11()}catch(e){console.warn('mz11',e)}};
+const _t11=tick7;tick7=function(dt){_t11(dt);try{DN11.k=(DN11.k||0)+dt;if(DN11.k>.25){DN11.k=0;dn11()}}catch(e){}};
 
 </script></body></html>

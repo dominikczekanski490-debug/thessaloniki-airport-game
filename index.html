@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta name="app-version" content="v8.2">
+<!DOCTYPE html><html lang="en"><head><link rel="icon" href="data:,"><meta charset="utf-8"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta name="app-version" content="v8.3">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#0b2a4a"><title>MAKEDONIA Airport Tycoon</title>
 <style>*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -1979,7 +1979,7 @@ function w3Render(){if(!REN)return;V1=V1||_v3();V2=V2||_v3();const P=W3.p,cab=W3
  const s=$('#w3say');const n=W.near;if(n){const p=_v3().set(n.x,n.k==='npc'?2.9:3.4,n.z).project(CAM);if(p.z<1){s.style.display='block';s.style.left=((p.x+1)/2*W.W)+'px';s.style.top=((1-p.y)/2*W.H)+'px';s.textContent=n.k==='npc'?n.n.req.ic+' '+n.n.req.say:'Ⓐ '+n.t}else s.style.display='none'}else s.style.display='none'}
 
 /* ===== v5.1: 3D looks like Dominik's pictures (ceilings, materials, props, collisions) ===== */
-const VER='v8.2';
+const VER='v8.3';
 let COL=[];function col(x,z,w,d){COL.push({x0:x-w/2,x1:x+w/2,z0:z-d/2,z1:z+d/2})}
 const _wk4=w3Walkable;w3Walkable=function(x,z){if(!_wk4(x,z))return false;if(W3.mode==='cab')return true;const ins=(a,b)=>COL.some(c=>a>c.x0-.28&&a<c.x1+.28&&b>c.z0-.28&&b<c.z1+.28);return !ins(x,z)||ins(W3.p.x,W3.p.z)};
 const INST={};function inst(key,geo,m,x,y,z,ry,sx,sy,sz,rz){(INST[key]=INST[key]||{geo,m,a:[]}).a.push([x,y,z,ry||0,sx||1,sy||1,sz||1,rz||0])}
@@ -4203,5 +4203,81 @@ function tint14(g){if(G.eink)return;const m=G.min%1440;let c=null;if(m>=1080&&m<
 const _wPaint14=wPaint;wPaint=function(a){const b=band14();if(wPC.__b!==b){for(const k in wPC)if(k!=='__b')delete wPC[k];wPC.__b=b}const k='__t'+a;if(wPC[k])return wPC[k];const src=_wPaint14(a);const c=document.createElement('canvas');c.width=1024;c.height=576;c.complete=true;c.naturalWidth=1024;const g=c.getContext('2d');g.drawImage(src,0,0);tint14(g);wPC[k]=c;return c};
 try{build14()}catch(e){console.warn('v82 2D',e)}
 NEW4.push(['🗺️','v8.2: 2D mode now has T1–T6, duty free, staff zones, PA rooms, forecourt, hotel & top-down driving']);
+
+/* v8.3: realistic PA sound chain, hold-to-talk mic, transcription, EN→GR translation, typed fallback. Works in 2D + 3D (pa13 is shared). */
+const PA15={};
+function ac15(){if(!PA15.ac){const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;const a=new C();PA15.ac=a;
+ const hp=a.createBiquadFilter();hp.type='highpass';hp.frequency.value=300;hp.Q.value=.7;const lp=a.createBiquadFilter();lp.type='lowpass';lp.frequency.value=3500;lp.Q.value=.9;const pk=a.createBiquadFilter();pk.type='peaking';pk.frequency.value=1800;pk.gain.value=5;
+ const ws=a.createWaveShaper();const cv=new Float32Array(1024);for(let i=0;i<1024;i++){const x=i/511.5-1;cv[i]=Math.tanh(2.2*x)/Math.tanh(2.2)}ws.curve=cv;ws.oversample='2x';
+ const cp=a.createDynamicsCompressor();cp.threshold.value=-26;cp.knee.value=6;cp.ratio.value=8;cp.attack.value=.004;cp.release.value=.2;
+ // generated big-hall impulse response (2.8s, stereo, early reflections + exp decay)
+ const len=Math.round(a.sampleRate*2.8),ir=a.createBuffer(2,len,a.sampleRate);for(let c=0;c<2;c++){const d=ir.getChannelData(c);for(let i=0;i<len;i++){const t=i/a.sampleRate;d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2.2)*Math.exp(-t*1.6)*.6}[.021,.037,.055,.08,.11].forEach((e,k)=>{const j=Math.round((e+c*.004)*a.sampleRate);if(j<len)d[j]+=.5/(k+1)})}
+ const rv=a.createConvolver();rv.buffer=ir;const wet=a.createGain();wet.gain.value=.55;const dry=a.createGain();dry.gain.value=.8;
+ const mix=a.createGain();const out=a.createGain();const muf=a.createBiquadFilter();muf.type='lowpass';muf.frequency.value=20000;
+ hp.connect(lp);lp.connect(pk);pk.connect(ws);ws.connect(cp);cp.connect(dry);dry.connect(mix);cp.connect(rv);rv.connect(wet);wet.connect(mix);
+ // echoes from distant ceiling speakers (each delayed + panned + duller)
+ [[.07,.35,-.6],[.13,.26,.7],[.21,.18,-.3],[.32,.12,.4]].forEach(([dl,gn,pn])=>{const d=a.createDelay(1);d.delayTime.value=dl;const g=a.createGain();g.gain.value=gn;const f=a.createBiquadFilter();f.type='lowpass';f.frequency.value=2400;cp.connect(d);d.connect(f);f.connect(g);if(a.createStereoPanner){const p=a.createStereoPanner();p.pan.value=pn;g.connect(p);p.connect(rv);p.connect(mix)}else{g.connect(rv);g.connect(mix)}});
+ mix.connect(muf);muf.connect(out);out.connect(a.destination);Object.assign(PA15,{inp:hp,out,muf})}
+ if(PA15.ac.state==='suspended')PA15.ac.resume();return PA15.ac}
+function staff15(){try{if(W3.on){const r=regAt(W3.p.x,W3.p.z,W3.p.y||0);return !!(r&&/^(bo|st|staff|pa|bhs|tower|crew)/i.test(r.a||''))}return /(boh|srm|bag|sof|pa\d|stM)$/.test(W.area)||(typeof BOH!=='undefined'&&BOH.includes(W.area))}catch(e){return false}}
+function lvl15(tid){const inT=(()=>{try{return inTerm13(tid)}catch(e){return true}})();return{v:inT?1:.12,muf:staff15()||!inT}}
+function env15(tid){const a=ac15();if(!a)return null;const L=lvl15(tid),t=a.currentTime;PA15.out.gain.setTargetAtTime(L.v*(G.sound===false?0:1),t,.05);PA15.muf.frequency.setTargetAtTime(L.muf?700:20000,t,.05);return L}
+function chime15(tid){const a=ac15();if(!a)return 0;env15(tid);const t=a.currentTime+.05;[[659.3,0],[523.3,.62]].forEach(([f,d])=>{[1,2.01,3.02].forEach((h,k)=>{const o=a.createOscillator(),g=a.createGain();o.type='sine';o.frequency.value=f*h;g.gain.setValueAtTime(0,t+d);g.gain.linearRampToValueAtTime(.35/(k*2+1),t+d+.01);g.gain.exponentialRampToValueAtTime(.0005,t+d+1.6);o.connect(g);g.connect(PA15.inp);o.start(t+d);o.stop(t+d+1.7)})});return 1300}
+// faint hall tone through the chain while the TTS voice speaks (keeps reverb tail / PA feel around speechSynthesis)
+function hum15(ms){const a=PA15.ac;if(!a)return;const n=a.createBufferSource(),b=a.createBuffer(1,a.sampleRate,a.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*.012;n.buffer=b;n.loop=true;const g=a.createGain();g.gain.value=1;n.connect(g);g.connect(PA15.inp);n.start();setTimeout(()=>{g.gain.setTargetAtTime(0,a.currentTime,.4);setTimeout(()=>n.stop(),1500)},ms)}
+function voice15(l){const V=speechSynthesis.getVoices();return V.find(v=>v.lang.replace('_','-').toLowerCase().startsWith(l))||null}
+function say15(txt,lang,tid){return new Promise(res=>{try{if(!window.speechSynthesis)return res();const u=new SpeechSynthesisUtterance(txt);u.lang=lang;const v=voice15(lang.slice(0,2));if(v)u.voice=v;u.rate=.9;u.pitch=.92;u.volume=lvl15(tid).v*(staff15()?.5:1);let done=0;const fin=()=>{if(!done){done=1;res()}};u.onend=fin;u.onerror=fin;setTimeout(fin,1500+txt.length*110);hum15(txt.length*75);speechSynthesis.speak(u)}catch(e){res()}})}
+function sub15(tn,gr,en,note){let b=$('#pa13');if(!b){b=document.createElement('div');b.id='pa13';b.style.cssText='position:fixed;left:50%;bottom:120px;transform:translateX(-50%);max-width:90vw;background:#000c;color:#fff;padding:8px 14px;border-radius:10px;font:600 15px system-ui;z-index:47;text-align:center;pointer-events:none';document.body.appendChild(b)}b.innerHTML=`🔊 <b>${tn}</b>${en?'<br>🇬🇧 '+en:''}${gr?'<br>🇬🇷 '+gr:''}${note?'<br><small>'+note+'</small>':''}`;b.style.display='block';clearTimeout(J12.pt);J12.pt=setTimeout(()=>b.style.display='none',16000)}
+/* full announcement: chime → English (recording or TTS) → Greek TTS */
+async function annc15(c,en,gr,buf){const tid=c.tid;const hasEl=!!voice15('el');sub15(c.tn,gr,en,hasEl?'':'(no Greek voice on this device · Greek shown as subtitles)');try{speechSynthesis.cancel()}catch(e){}
+ const ms=chime15(tid);await new Promise(r=>setTimeout(r,ms||400));env15(tid);
+ if(buf&&PA15.ac){await new Promise(r=>{const s=PA15.ac.createBufferSource();s.buffer=buf;const g=PA15.ac.createGain();g.gain.value=1.6;s.connect(g);g.connect(PA15.inp);s.onended=r;s.start();setTimeout(r,buf.duration*1000+300)})}else if(en)await say15(en,'en-GB',tid);
+ await new Promise(r=>setTimeout(r,500));if(gr){env15(tid);await say15(gr,'el-GR',tid)}}
+/* presets → new sound */
+paSay13=function(k){const c=J12.pa13;if(!c)return;const g2=((c.f.g||'A1').replace(/\d+/,n=>+n+2));const [gr,en]=PAT13[k][1](c.f,g2);close_();cnt4('pa12');cnt4('pa13');
+ if(k==='gate'&&c.tid){const fl=(FL7().d[c.tid]||[]).find(x=>x.fn===c.f.fn);if(fl){fl.g=g2;try{brdDraw7(TERMS[c.tid-1])}catch(e){}}}
+ annc15(c,en,gr);if(k!=='security')G.sat=Math.min(100,G.sat+.5);rew4(250,5,'📢 Announcement made')};
+/* English → Greek */
+const CITY15={};function cities15(){if(CITY15._)return;CITY15._=1;try{Object.values(FL7().d).concat(Object.values(FL7().a)).forEach(L=>(L||[]).forEach(f=>{if(f.en&&f.gr)CITY15[f.en.toLowerCase()]=f.gr}))}catch(e){}Object.assign(CITY15,{athens:'Αθήνα',london:'Λονδίνο',paris:'Παρίσι',berlin:'Βερολίνο',rome:'Ρώμη',munich:'Μόναχο',frankfurt:'Φρανκφούρτη',vienna:'Βιέννη',zurich:'Ζυρίχη',amsterdam:'Άμστερνταμ',brussels:'Βρυξέλλες',istanbul:'Κωνσταντινούπολη',cyprus:'Κύπρο',larnaca:'Λάρνακα',heraklion:'Ηράκλειο',rhodes:'Ρόδο',corfu:'Κέρκυρα',chania:'Χανιά',stuttgart:'Στουτγάρδη',dusseldorf:'Ντίσελντορφ',milan:'Μιλάνο',warsaw:'Βαρσοβία',krakow:'Κρακοβία',manchester:'Μάντσεστερ',edinburgh:'Εδιμβούργο',dubai:'Ντουμπάι',belgrade:'Βελιγράδι',sofia:'Σόφια',bucharest:'Βουκουρέστι',budapest:'Βουδαπέστη',prague:'Πράγα',madrid:'Μαδρίτη',barcelona:'Βαρκελώνη',lisbon:'Λισαβόνα',copenhagen:'Κοπεγχάγη',stockholm:'Στοκχόλμη',oslo:'Όσλο',hamburg:'Αμβούργο',cologne:'Κολωνία',tel:'Τελ Αβίβ'})}
+function tpl15(en){cities15();const s=en.replace(/\s+/g,' ').trim(),L=s.toLowerCase();
+ const fn=(s.match(/\b([A-Z0-9]{2}|[A-Z]{3})\s?-?(\d{1,4})\b/)||[])[0];const fl=fn?' '+fn.toUpperCase().replace(/\s|-/g,' '):'';
+ const gm=s.match(/gates?\s+(?:number\s+)?([A-Za-z]?\s?\d+[A-Za-z]?)/i),g=gm?gm[1].replace(/\s/g,'').toUpperCase():'';
+ let to='';const tm=s.match(/\bto\s+([A-Z][a-zA-Z]+(?:\s[A-Z][a-z]+)?)/);if(tm){const k=tm[1].toLowerCase();to=CITY15[k]||CITY15[k.split(' ')[0]]||tm[1]}
+ const pr=to?` προς ${to}`:'',ga=g?` από την έξοδο ${g}`:'',dm=s.match(/(\d+)\s*(minutes|mins|hours?)/i),dl=dm?` περίπου ${dm[1]} ${/hour/i.test(dm[2])?'ώρες':'λεπτά'}`:'';
+ const pm=s.match(/passengers?\s+(?:named\s+)?((?:Mr|Mrs|Ms|Miss)\.?\s)?([A-Z][a-z]+(?:\s[A-Z][a-z]+)?)/);const pas=pm?pm[2]:'';
+ if(/final call/.test(L))return `Τελευταία πρόσκληση για την πτήση${fl}${pr}. Παρακαλούνται οι επιβάτες να προσέλθουν αμέσως${g?' στην έξοδο '+g:''}.`;
+ if(/gate change|(moved|changed|now depart\w*) (to|from) gate/.test(L))return `Αλλαγή εξόδου: η πτήση${fl}${pr} θα αναχωρήσει${ga}.`;
+ if(/cancel/.test(L))return `Η πτήση${fl}${pr} ακυρώθηκε. Παρακαλούμε απευθυνθείτε στο γκισέ της εταιρείας.`;
+ if(/delay/.test(L))return `Η πτήση${fl}${pr} έχει καθυστέρηση${dl}. Ζητούμε συγγνώμη για την ταλαιπωρία.`;
+ if(/boarding|now board/.test(L))return `Η πτήση${fl}${pr} επιβιβάζεται τώρα${ga}.`;
+ if(/lost child|child|parents/.test(L))return `Ένα παιδί αναζητά τους γονείς του. Παρακαλούμε απευθυνθείτε στο γραφείο πληροφοριών.`;
+ if(/unattended|baggage|luggage|security/.test(L))return `Για λόγους ασφαλείας, παρακαλούμε μην αφήνετε τις αποσκευές σας αφύλακτες.`;
+ if(pas&&/(paging|passenger|please (come|proceed|contact))/.test(L))return `Παρακαλείται ο επιβάτης ${pas} να προσέλθει${g?' στην έξοδο '+g:' στο γραφείο πληροφοριών'}.`;
+ if(/welcome/.test(L))return `Καλώς ήρθατε στον Αερολιμένα Θεσσαλονίκης «Μακεδονία». Σας ευχόμαστε καλό ταξίδι.`;
+ if(/smok/.test(L))return `Υπενθυμίζεται ότι το κάπνισμα απαγορεύεται σε όλους τους χώρους του αεροδρομίου.`;
+ return null}
+async function tr15(en){const t=tpl15(en);if(t)return{gr:t,how:'template'};try{const ctl=new AbortController();setTimeout(()=>ctl.abort(),5000);const r=await fetch('https://api.mymemory.translated.net/get?langpair=en|el&q='+encodeURIComponent(en.slice(0,450)),{signal:ctl.signal});const j=await r.json();const g=j&&j.responseData&&j.responseData.translatedText;if(g&&/[α-ωΑ-Ω]/.test(g)&&!/MYMEMORY WARNING/i.test(g))return{gr:g,how:'MyMemory'}}catch(e){}return{gr:'Ανακοίνωση: παρακαλούμε ακούστε την ανακοίνωση στα αγγλικά ή απευθυνθείτε στο γραφείο πληροφοριών.',how:'fallback'}}
+/* PA room modal: presets + hold-to-talk + typed */
+const _pa13o=pa13;pa13=function(it){_pa13o(it);const m=$('#modal .ft7');if(!m)return;const d=document.createElement('div');d.innerHTML=`<hr><p style="margin:4px 0"><b>🎙️ Your own announcement</b> (English → automatic Greek)</p><button id="mic15" class="r" style="width:100%;min-height:58px;font-size:18px;touch-action:none;user-select:none;-webkit-user-select:none">🎙️ Hold to talk · Κρατήστε πατημένο</button><div id="st15" style="font:600 13px system-ui;margin:4px 0;min-height:18px"></div><textarea id="tx15" rows="2" style="width:100%;font-size:16px" placeholder="…or type English, e.g. Flight A3 7401 to Athens is now boarding at gate A4"></textarea><button class="ghost" style="width:100%" onclick="typed15()">📢 Announce typed text</button>`;m.after(d);mic15ui()};
+function mic15ui(){const b=$('#mic15');if(!b)return;const dn=e=>{e.preventDefault();rec15()},up=e=>{e.preventDefault();stop15()};b.addEventListener('pointerdown',dn);b.addEventListener('pointerup',up);b.addEventListener('pointercancel',up);b.addEventListener('contextmenu',e=>e.preventDefault())}
+function st15(t){const s=$('#st15');if(s)s.textContent=t}
+async function rec15(){ac15();if(PA15.rec)return;PA15.hold=1;PA15.txt='';PA15.chunks=[];
+ if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia||!window.MediaRecorder){st15('⚠️ Mic not available here · type your text below');return}
+ try{st15('🔐 Asking for microphone…');const s=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}});PA15.stream=s;
+  if(!PA15.hold){s.getTracks().forEach(t=>t.stop());st15('✅ Mic allowed · now HOLD the button while you speak');return}
+  const mt=['audio/mp4','audio/webm;codecs=opus','audio/webm'].find(t=>MediaRecorder.isTypeSupported&&MediaRecorder.isTypeSupported(t));const r=new MediaRecorder(s,mt?{mimeType:mt}:undefined);PA15.rec=r;r.ondataavailable=e=>{if(e.data&&e.data.size)PA15.chunks.push(e.data)};r.onstop=()=>done15(r.mimeType||mt);r.start(250);PA15.t0=Date.now();st15('🔴 Recording… speak English, release to broadcast');
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(SR){try{const sr=new SR();sr.lang='en-GB';sr.interimResults=true;sr.continuous=true;sr.onresult=e=>{let t='';for(let i=0;i<e.results.length;i++)t+=e.results[i][0].transcript;PA15.txt=t;st15('🔴 '+t)};sr.onerror=()=>{};sr.start();PA15.sr=sr}catch(e){}}}
+ catch(e){st15('🚫 Microphone blocked ('+(e.name||'error')+') · allow it in Safari ⓐ/aA → Website settings, or type below');PA15.rec=null}}
+function stop15(){PA15.hold=0;const r=PA15.rec;if(!r)return;setTimeout(()=>{try{r.state!=='inactive'&&r.stop()}catch(e){}try{PA15.sr&&PA15.sr.stop()}catch(e){}},250)}
+async function done15(mt){const s=PA15.stream;PA15.rec=null;if(s)s.getTracks().forEach(t=>t.stop());const dur=(Date.now()-PA15.t0)/1000;if(dur<.6){st15('Hold the button longer while speaking');return}
+ st15('⏳ Processing…');await new Promise(r=>setTimeout(r,700));const blob=new Blob(PA15.chunks,{type:mt||'audio/mp4'});let buf=null;try{buf=await PA15.ac.decodeAudioData(await blob.arrayBuffer())}catch(e){}
+ const en=(PA15.txt||'').trim();const c=J12.pa13;if(!c)return;let gr='';if(en){st15('🌐 Translating…');gr=(await tr15(en)).gr}
+ close_();cnt4('pa13');cnt4('pa15');rew4(400,8,'🎙️ Live announcement');if(!en)toast('ℹ️ No transcript (speech recognition unavailable) · Greek repeat needs typed text');annc15(c,en||'(live announcement)',gr,buf)}
+async function typed15(){const en=($('#tx15')||{}).value||'';if(!en.trim())return st15('Type something first');ac15();const c=J12.pa13;st15('🌐 Translating…');const r=await tr15(en.trim());close_();cnt4('pa13');rew4(300,6,'📢 Announcement ('+r.how+')');annc15(c,en.trim(),r.gr)}
+try{speechSynthesis.getVoices();speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices()}catch(e){}
+/* 2D check-in: airline desks instead of food counters */
+const _wProp15=wProp;wProp=function(g,p,a,R,night){if(p==='ckdesk'){const HZ=380,als=Object.keys(AL);for(let k=0;k<4;k++){const al=AL[als[(k+a.length*3)%als.length]]||{},x=20+k*256,w=220;g.fillStyle='#b0bec5';g.fillRect(x,HZ-10,w,70);g.fillStyle='#eceff1';g.fillRect(x,HZ-20,w,14);g.fillStyle=al.col||'#14305e';g.fillRect(x+10,HZ-130,w-20,40);g.fillStyle=al.fg||'#fff';g.font='bold 18px sans-serif';g.textAlign='center';g.fillText((al.name||'Check-in').slice(0,16),x+w/2,HZ-104);g.fillStyle='#0e1a3a';g.fillRect(x+70,HZ-86,80,26);g.fillStyle='#ffd21f';g.font='bold 13px sans-serif';g.fillText('CHECK-IN '+(k*2+1)+'–'+(k*2+2),x+110,HZ-68);g.textAlign='left';g.fillStyle='#455a64';g.fillRect(x+20,HZ+18,60,10);g.fillRect(x+140,HZ+18,60,10)}return}return _wProp15(g,p,a,R,night)};
+Object.keys(NA).forEach(k=>{if(/^t\dck$/.test(k))NA[k].props=NA[k].props.map(p=>p==='counters'?'ckdesk':p)});
+NEW4.push(['🎙️','v8.3: real PA sound (chime, reverb, echoes), hold-to-talk mic with auto Greek, typed announcements']);
 
 </script></body></html>

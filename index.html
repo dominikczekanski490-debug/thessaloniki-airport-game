@@ -3043,7 +3043,7 @@ function term7(T){const grp=new T3.Group();grp.name='T'+T.id;SCN.add(grp);T.grp=
   for(let s=-1;s<=1;s+=2){for(let k=0;k<13;k++){const z=48+k*2.4;S.box(1.1,1.05,1.8,'#e6e9ee',ix+s*1.25,.53,z);S.box(.08,.5,.7,A.col,ix+s*1.6,1.55,z);T7.deskN++;T.desks.push([ix+s*2.2,z])}
    for(let r=0;r<5;r++)for(let k=0;k<30;k++)if(Math.random()<.68)st.push([ix+s*(3.4+r*.95)+rnd(-.15,.15),0,48.5+k*.98,s>0?-Math.PI/2:Math.PI/2]);
    for(let r=0;r<=5;r++){S.box(.06,.95,30,'#9aa0a8',ix+s*(2.95+r*.95),.48,63.2);}}
-  S.box(2.4,1.8,.3,A.col,ix,3.4,45.6);sign7(Q,'al:'+al,ix,5.2,45.4,7,Math.PI);sign7(Q,'al:'+al,ix,5.2,78.6,7,0);S.box(.2,4,.2,'#555',ix,7,45.5);
+  S.box(2.4,1.8,.3,A.col,ix,3.4,45.6);sign7(Q,'al:'+al,ix,5.2,45.4,7,Math.PI);sign7(Q,'al:'+al,ix,5.2,78.6,7,0);sign7(Q,'al:'+al,ix,5.2,45.75,7,0);sign7(Q,'al:'+al,ix,5.2,78.25,7,Math.PI);S.box(.2,4,.2,'#555',ix,7,45.5);
   colY(ix-1.9,ix+1.9,46.6,77.6,0,3);items.push({k:'desk7',al,x:ix+2.4,z:62,fy:0,t:'🧾 '+A.name+' check-in',ic:'🧾',area3:'t'+T.id+'ck'})}
  for(let k=0;k<70;k++)st.push([rnd(x0+6,x1-6),0,rnd(80,84.5),rnd(0,6.3)]);
  // security lanes
@@ -4655,5 +4655,24 @@ NEW4.push(['✨','SKG app: dark mode, flight timeline, gate route, live planes, 
 
 // 3D gate screens: estimated time strip when delayed
 const _bd20=brdDraw7;brdDraw7=function(T){_bd20(T);try{const C=T.c7;if(!C||!C.g)return;const g=C.g.cv.getContext('2d'),F=FL7();(T.gates||[]).forEach((G_,i)=>{const x=(i%8)*256,y=Math.floor(i/8)*128,f=(F.d[T.id]||[]).find(f=>f.g===G_.n);if(!f)return;const d=et20(f)!==f.t;g.fillStyle=d?'#ef6c00':'#132a52';g.fillRect(x+136,y+100,118,26);g.fillStyle='#fff';g.font='bold 16px system-ui';g.fillText((d?'Est ':'Sched ')+hm7(et20(f)),x+142,y+119)});C.g.needsUpdate=true}catch(e){}};
+
+// v8.7b: richer airside — carpet, gate lounges, seat rows, gate desks, apron window mullions, ceiling lights, shop interiors
+function air21(){if(!window.T3||!SCN)return;const S=PL(),Lt=[],P=['#d4af37','#b71c1c','#263238','#f8bbd0','#90caf9','#fff','#6d4c41','#2e7d32','#ff7043'];
+ TERMS.filter(T=>!T.sat).forEach(T=>{const A=REG.find(r=>r.a===`t${T.id}air`);if(!A)return;const cx=(A.x0+A.x1)/2;
+  // carpet + plaza seating + lights
+  S.box(A.x1-A.x0-30,.04,A.z1-A.z0-6,'#34495e',cx,.03,(A.z0+A.z1)/2);
+  for(let k=0;k<5;k++){const bx=A.x0+40+k*(A.x1-A.x0-80)/4;for(let r=0;r<2;r++){S.box(8,.42,.55,'#263238',bx,.42,A.z0+12+r*2.2).box(8,.55,.12,'#37474f',bx,.85,A.z0+12.25+r*2.2)}S.cyl(1.2,.9,'#795548',bx,.45,A.z0+20,10).box(1.4,2,1.4,'#388e3c',bx,1.9,A.z0+20)}
+  for(let x=A.x0+12;x<A.x1-6;x+=16)for(let z=A.z0+6;z<A.z1;z+=12)Lt.push([UB7(),'#fffbe8',MX(x,8.4,z,0,0,0,6,.08,1.2)]);
+  // shop interiors behind the shop fronts
+  W3.items.filter(i=>i.k==='shop7'&&Math.abs(i.x-cx)<(A.x1-A.x0)/2+20).forEach((s,k)=>{const d=s.x<cx?-1:1,ix=s.x+d*4;for(let r=0;r<2;r++){const zz=s.z-2+r*3.2;S.box(.6,1.8,2.6,'#eceff1',ix+d*r*1.6,.9,zz);for(let q=0;q<4;q++)for(let lv=0;lv<3;lv++)S.box(.3,.35,.45,P[(q+lv+r+k)%9],ix+d*r*1.6-d*.35,.45+lv*.55,zz-1+q*.62)}S.box(1.2,1,2.2,'#37474f',s.x+d*1.2,.5,s.z+3.6).box(.4,.9,.3,'#263238',s.x+d*2.2,.45,s.z+3.6).box(.5,.7,.35,'#00897b',s.x+d*2.2,1.25,s.z+3.6).box(.3,.3,.3,'#e0b48c',s.x+d*2.2,1.8,s.z+3.6);Lt.push([UB7(),'#fff3c4',MX(ix,4.5,s.z,0,0,0,3,.06,5)])});
+  // piers: gate lounges
+  REG.filter(r=>new RegExp(`^t${T.id}p\\d+$`).test(r.a)).forEach(R=>{const px=(R.x0+R.x1)/2,pw=R.x1-R.x0;S.box(pw-1,.04,R.z1-R.z0,'#3b4a63',px,.03,(R.z0+R.z1)/2);
+   for(let z=R.z0+2;z<R.z1;z+=4)[R.x0+.15,R.x1-.15].forEach(x=>S.box(.18,6,.18,'#263238',x,3,z));
+   for(let z=R.z0+6;z<R.z1;z+=10)Lt.push([UB7(),'#fffbe8',MX(px,6.2,z,0,0,0,pw*.5,.06,1.2)]);
+   for(let gz=R.z1-13;gz>R.z0+8;gz-=30)[-1,1].forEach(sd=>{const wx=sd<0?R.x0:R.x1;for(let r=0;r<3;r++){const sx=wx-sd*(3+r*1.6);S.box(.55,.42,9,'#1e3a5f',sx,.42,gz-6).box(.12,.55,9,'#274b7a',sx-sd*.25,.85,gz-6);for(let a=-4;a<=4;a+=2)S.box(.6,.08,.08,'#90a4ae',sx,.66,gz-6+a)}
+     S.box(1,1.05,2.4,'#eceff1',wx-sd*6.5,.52,gz+1.5).box(1.05,.1,2.5,'#1565c0',wx-sd*6.5,1.08,gz+1.5).box(.4,.9,.3,'#263238',wx-sd*7.3,.45,gz+1.5).box(.5,.7,.35,'#0d47a1',wx-sd*7.3,1.25,gz+1.5).box(.3,.3,.3,'#e0b48c',wx-sd*7.3,1.8,gz+1.5)})});
+ });
+ plMesh(S,SCN,false);SCN.add(new T3.Mesh(mergeC(Lt),litm6()))}
+const _b21=build7;build7=function(){const r=_b21.apply(this,arguments);try{air21()}catch(e){console.warn('air21',e)}return r};
 
 </script></body></html>

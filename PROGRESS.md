@@ -151,3 +151,10 @@ Greek translates actual transcript (fuzzy script match ≥ threshold, protected 
 - Planes: curved taxi, pushback, rotation/climb, banked approach, flare. Cars: rounded loops, crossing stops, kerb stops, vehicle types, smoother player handling.
 - SKG app: status pills, tails, flight detail progress/timeline/gate route, live map planes, banners, dark mode, pull-to-refresh.
 - Estimated / Εκτιμώμενη column on 3D boards, gate screens, 2D boards, PA board, SKG app; delay field in board editor + staff delay.
+
+## v8.8 (Part A)
+- Greek PA reliability: built-in Greek voice (meSpeak buffer → Web Audio PA chain) by default, Melina optional; robust iOS speech queue (chunks, kept refs, cancel/resume, onstart retry, watchdog); audio session handling after mic; Greek always available (MyMemory → Google → template → generic); stricter script match (≥85%); on-screen PA log.
+- T1A domestic/Balkans terminal (6 gates D1–D6, own boards/gate screens/app), 2D + 3D.
+- T7 finished: 12 gates, planes at all gates, Fraport look (dark canopy/purple soffit, star logo, letters, yellow wayfinding), crowds/queues, shops; grand opening event; monorail "Terminal 7".
+- City rebuild overlay: balconies, shopfronts/awnings, neoclassical fronts on Egnatia, lane markings, lamps, signs, ferries, moving cranes, instanced traffic with lights, sidewalk crowds; full city shown.
+- Fixes: What's new popup, duplicate banner, airline check-in desks in 2D, board layout, livery details, smoothed flight controls.

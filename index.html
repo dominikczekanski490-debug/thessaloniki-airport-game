@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><link rel="icon" href="data:,"><meta charset="utf-8"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta name="app-version" content="v8.3">
+<!DOCTYPE html><html lang="en"><head><link rel="icon" href="data:,"><meta charset="utf-8"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta name="app-version" content="v8.4">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#0b2a4a"><title>MAKEDONIA Airport Tycoon</title>
 <style>*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -1979,7 +1979,7 @@ function w3Render(){if(!REN)return;V1=V1||_v3();V2=V2||_v3();const P=W3.p,cab=W3
  const s=$('#w3say');const n=W.near;if(n){const p=_v3().set(n.x,n.k==='npc'?2.9:3.4,n.z).project(CAM);if(p.z<1){s.style.display='block';s.style.left=((p.x+1)/2*W.W)+'px';s.style.top=((1-p.y)/2*W.H)+'px';s.textContent=n.k==='npc'?n.n.req.ic+' '+n.n.req.say:'Ⓐ '+n.t}else s.style.display='none'}else s.style.display='none'}
 
 /* ===== v5.1: 3D looks like Dominik's pictures (ceilings, materials, props, collisions) ===== */
-const VER='v8.3';
+const VER='v8.4';
 let COL=[];function col(x,z,w,d){COL.push({x0:x-w/2,x1:x+w/2,z0:z-d/2,z1:z+d/2})}
 const _wk4=w3Walkable;w3Walkable=function(x,z){if(!_wk4(x,z))return false;if(W3.mode==='cab')return true;const ins=(a,b)=>COL.some(c=>a>c.x0-.28&&a<c.x1+.28&&b>c.z0-.28&&b<c.z1+.28);return !ins(x,z)||ins(W3.p.x,W3.p.z)};
 const INST={};function inst(key,geo,m,x,y,z,ry,sx,sy,sz,rz){(INST[key]=INST[key]||{geo,m,a:[]}).a.push([x,y,z,ry||0,sx||1,sy||1,sz||1,rz||0])}
@@ -4279,5 +4279,31 @@ try{speechSynthesis.getVoices();speechSynthesis.onvoiceschanged=()=>speechSynthe
 const _wProp15=wProp;wProp=function(g,p,a,R,night){if(p==='ckdesk'){const HZ=380,als=Object.keys(AL);for(let k=0;k<4;k++){const al=AL[als[(k+a.length*3)%als.length]]||{},x=20+k*256,w=220;g.fillStyle='#b0bec5';g.fillRect(x,HZ-10,w,70);g.fillStyle='#eceff1';g.fillRect(x,HZ-20,w,14);g.fillStyle=al.col||'#14305e';g.fillRect(x+10,HZ-130,w-20,40);g.fillStyle=al.fg||'#fff';g.font='bold 18px sans-serif';g.textAlign='center';g.fillText((al.name||'Check-in').slice(0,16),x+w/2,HZ-104);g.fillStyle='#0e1a3a';g.fillRect(x+70,HZ-86,80,26);g.fillStyle='#ffd21f';g.font='bold 13px sans-serif';g.fillText('CHECK-IN '+(k*2+1)+'–'+(k*2+2),x+110,HZ-68);g.textAlign='left';g.fillStyle='#455a64';g.fillRect(x+20,HZ+18,60,10);g.fillRect(x+140,HZ+18,60,10)}return}return _wProp15(g,p,a,R,night)};
 Object.keys(NA).forEach(k=>{if(/^t\dck$/.test(k))NA[k].props=NA[k].props.map(p=>p==='counters'?'ckdesk':p)});
 NEW4.push(['🎙️','v8.3: real PA sound (chime, reverb, echoes), hold-to-talk mic with auto Greek, typed announcements']);
+
+/* v8.4: jump (2D hop + 3D gravity arc) and 📢 teleport to PA rooms (2D + 3D) */
+const JP16={y:0,v:0};
+function canJ16(){if(W3.on)return !W3.drv&&!W3.fly&&W3.mode!=='cab';const r=$('#wRun');return !!(r&&r.offsetParent)&&!W3.drv}
+function jump16(){if(!canJ16()||JP16.y>0.001||JP16.v>0)return;JP16.v=W3.on?5.2:4.2;JP16.y=0.0001;beep(520,.04);cnt4('jump16')}
+function jTick16(dt){if(JP16.y<=0&&JP16.v<=0)return;dt=Math.min(.12,dt);if(dt>.05){jTick16(dt/2);jTick16(dt/2);return}JP16.v-=(W3.on?13:12)*dt;JP16.y+=JP16.v*dt;if(JP16.y<=0){JP16.y=0;JP16.v=0}}
+let _jl16=performance.now();function jLoop16(){const n=performance.now();jTick16((n-_jl16)/1000);_jl16=n;const b=$('#jmp16'),p=$('#pa16');const ok=canJ16();if(b)b.style.display=ok?'flex':'none';if(p)p.style.display=ok?'flex':'none';requestAnimationFrame(jLoop16)}
+// 3D: offset player + camera only at render time; floor tracking (curY via w3FY) stays authoritative, so you always land on the floor/upper level under you
+const _r16=w3Render;w3Render=function(){const j=W3.on&&!W3.drv?JP16.y:0;if(j&&typeof PLAYER!=='undefined'&&PLAYER){PLAYER.position.y+=j;CAM.position.y+=j*.6}const o=_r16.apply(this,arguments);if(j&&typeof PLAYER!=='undefined'&&PLAYER){PLAYER.position.y-=j;CAM.position.y-=j*.6}return o};
+// 2D: hop the hero sprite (squash on landing skipped in e-ink to keep it calm)
+const _dh16=drawHero;drawHero=function(x,cx,fy,h,...r){if(!W3.on&&JP16.y>0)fy-=JP16.y/4.2*h*.55;return _dh16.call(this,x,cx,fy,h,...r)};
+addEventListener('keydown',e=>{if(e.code==='Space'&&!/INPUT|TEXTAREA|SELECT|BUTTON/.test((document.activeElement||{}).tagName||'')&&$('#modal').style.display!=='flex'){if(canJ16()){e.preventDefault();jump16()}}});
+/* PA teleport */
+function curT16(){if(W3.on){for(const T of TERMS)try{if(inTerm13(T.id))return T.id}catch(e){}return W3.p.x<240?0:null}const t=A14[W.area];return t===undefined?0:t}
+function paGo16(tid,r){if(!V74().key){V74().key=1;save();toast('🔑 Staff keycard issued for the PA room')}const tn=tid?(TERMS.find(T=>T.id===tid)||{}).name:'Makedonia';close_();
+ if(W3.on){const L=PAR13.filter(i=>i.tid===tid);if(!L.length)return;let it=L[r===undefined?0:r]||L[0];if(r===undefined){let bd=1e9;L.forEach(i=>{const d=Math.hypot(i.x-W3.p.x,i.z-W3.p.z);if(d<bd){bd=d;it=i}})}w5Tp(it.x,it.z,0,'📢 '+it.t);setTimeout(()=>pa13(it),400)}
+ else{wEnter((tid?'t'+tid:'m')+'pa'+((r||0)+1));setTimeout(()=>pa13({tid,tn}),500)}cnt4('patp16')}
+function paPick16(){const t=curT16();MD4('📢 Teleport to a PA room',`${t!==null?`<button class="r" style="width:100%" onclick="paGo16(${t})">📢 Nearest PA room · ${t?'Terminal '+t:'Makedonia'}</button>`:''}<div class="ft7">${[0,...TERMS.map(T=>T.id)].map(id=>[0,1].map(r=>`<button class="ghost" onclick="paGo16(${id},${r})">${id?'T'+id:'Makedonia'} · room ${r+1}</button>`).join('')).join('')}</div><p><small>Teleporting gives you a staff keycard if you don't have one.</small></p>`)}
+function ui16(){const mk=(id,t,css,f)=>{const b=document.createElement('button');b.id=id;b.innerHTML=t;b.style.cssText='position:fixed;z-index:46;border-radius:50%;border:2px solid #fff;color:#fff;font:700 12px system-ui;display:none;flex-direction:column;align-items:center;justify-content:center;touch-action:manipulation;-webkit-user-select:none;user-select:none;box-shadow:0 2px 8px #0005;'+css;b.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();f()});document.body.appendChild(b)};
+ mk('jmp16','<span style="font-size:22px">⤴️</span>JUMP','right:max(196px,calc(env(safe-area-inset-right) + 196px));bottom:calc(env(safe-area-inset-bottom) + 20px);width:64px;height:64px;background:#7e57c2',jump16);
+ mk('pa16','<span style="font-size:20px">📢</span>PA','right:max(268px,calc(env(safe-area-inset-right) + 268px));bottom:calc(env(safe-area-inset-bottom) + 26px);width:54px;height:54px;background:#c62828',paPick16);
+ if(document.body.classList.contains('eink')||G.eink){['jmp16','pa16'].forEach(i=>{const b=$('#'+i);b.style.background='#fff';b.style.color='#000';b.style.borderColor='#000'})}requestAnimationFrame(jLoop16)}
+const _m16=map14;map14=function(){_m16();const m=$('#modal .ft7');if(m)m.insertAdjacentHTML('afterbegin','<button class="r" onclick="paPick16()">📢 PA rooms</button>')};
+try{ui16()}catch(e){console.warn(e)}
+NEW4.push(['⤴️','v8.4: jump button (Space) in 2D + 3D, 📢 teleport to any PA room']);
+const _ft16=fastTravel;fastTravel=function(){const r=_ft16.apply(this,arguments);setTimeout(()=>{const m=$('#modal');if(m&&m.style.display==='flex'&&!$('#ft16')){const b=document.createElement('button');b.id='ft16';b.className='r';b.style.cssText='width:100%;margin:4px 0';b.textContent='📢 Teleport to a PA room';b.onclick=()=>paPick16();const h=m.querySelector('h3');(h?h.after(b):m.firstElementChild.prepend(b))}},30);return r};
 
 </script></body></html>

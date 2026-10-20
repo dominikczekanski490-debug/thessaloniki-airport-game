@@ -158,3 +158,10 @@ Greek translates actual transcript (fuzzy script match ≥ threshold, protected 
 - T7 finished: 12 gates, planes at all gates, Fraport look (dark canopy/purple soffit, star logo, letters, yellow wayfinding), crowds/queues, shops; grand opening event; monorail "Terminal 7".
 - City rebuild overlay: balconies, shopfronts/awnings, neoclassical fronts on Egnatia, lane markings, lamps, signs, ferries, moving cranes, instanced traffic with lights, sidewalk crowds; full city shown.
 - Fixes: What's new popup, duplicate banner, airline check-in desks in 2D, board layout, livery details, smoothed flight controls.
+
+## v8.9 – Part B: 15 gameplay features (LIVE)
+- 🎮 Ops centre hub (HUD button, or the door from T1 check-in in 2D): career, ATC, events/strikes/storms, build mode, airline negotiations, night shift, hangar, customs, VIP, lost passengers, weather radar, passenger flow, museum and deck, story mode, spotting book (📷).
+- The hangar, museum and customs interiors are built when you enter and freed when you leave. Mobile texture memory: 143MB.
+- T7/T1A teleport buttons in travel and the map; PA rooms: T7 ×4, T1A ×1 (picker and nearest-room logic, in 2D and 3D).
+- Signs never show mirrored text (unmirrored back faces). Gate screens and flight boards can be read from both sides (seating and walkway).
+- T7 gate lounges filled: 6 seat rows, carpet, gate desk, screens, seated and standing passengers.

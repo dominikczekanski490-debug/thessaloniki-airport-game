@@ -5276,7 +5276,7 @@ const EVTXT26={drill:['Προσοχή παρακαλώ. Αυτή είναι άσ
 async function alarmPA26(kind,tid,scope){const [gr,en]=EVTXT26[kind];sub15&&sub15(tname26(tid),gr,en,'🚨 '+(scope==='all'?'ALL terminals':tname26(tid)));const t0=new Date();plog22({step:'🚨 '+kind.toUpperCase()+' alarm · '+(scope==='all'?'📡 ALL terminals (synced)':'📍 '+tname26(tid)),tr:en,gr,note:'Greek first, then English · start '+t0.toTimeString().slice(0,8),ok:true});
  unlock17();await acUp22();chime15(tid);await new Promise(r=>setTimeout(r,900));const v=await grSpeak24(gr,tid);await new Promise(r=>setTimeout(r,400));const r=await say22(en,'en-GB',1);plog22({step:'🚨 alarm PA done',note:'GR: '+(v||'failed')+' · EN: '+(r.ok?'ok':'failed'),ok:!!v})}
 function evMenu26(){MD4('🚨 Άσκηση / Εκκένωση · Drill / Evacuation',`<p>Choose the type. You'll then be asked <b>All terminals</b> or <b>Only this terminal</b>.</p><div class="ft7"><button class="y" onclick="close_();evStart26('drill')">🟡 Άσκηση · DRILL</button><button class="r" onclick="close_();evStart26('real')">🔴 Πραγματική · REAL</button>${EV26.on?'<button class="ghost" onclick="close_();evClear26()">✅ Λήξη · All clear</button>':''}</div>`)}
-async function evStart26(kind){const A_=WA[W.area]||{};const tid=W3.on?curT16():(A_.tn||A_.tid||(/^t7/.test(W.area)?7:/^t8/.test(W.area)?8:0));const sc=await scope26(tid,'🚨 '+(kind==='real'?'Εκκένωση · REAL evacuation':'Άσκηση · Evacuation DRILL'));if(!sc)return toast('Cancelled');
+async function evStart26(kind){const A_=WA[W.area]||{};const tid=W3.on?curT16():tid2D27(W.area);const sc=await scope26(tid,'🚨 '+(kind==='real'?'Εκκένωση · REAL evacuation':'Άσκηση · Evacuation DRILL'));if(!sc)return toast('Cancelled');
  const list=sc==='all'?allT26():[tid];Object.assign(EV26,{on:1,kind,list,sc,t:0,out:0,tot:0,tid});
  $('#ev26')||document.body.insertAdjacentHTML('beforeend','<div id="ev26"></div>');$('#ev26').classList.add('on');siren26(1);evFx3D26(list);
  // 3D crowds + walking NPCs head for the exits / assembly point (landside, +z)
@@ -5298,10 +5298,118 @@ async function evClear26(){if(!EV26.on)return;const sc=await scope26(EV26.tid,'�
 {const _u=w3Update;w3Update=function(dt){const r=_u.apply(this,arguments);try{evTick26(dt||0)}catch(e){}return r}}
 setInterval(()=>{if(EV26.on&&!W3.on)try{evTick26(.5)}catch(e){}},500);
 // 2D: exit arrows in every area during an evacuation
-setInterval(()=>{let a=$('#ex26');if(EV26.on&&!W3.on){const A=WA[W.area]||{};const inT=EV26.list.includes(A.tn||0)||EV26.sc==='all';if(!a){a=document.createElement('div');a.id='ex26';a.style.cssText='position:fixed;left:12px;top:50%;z-index:57;background:#0b8f3a;color:#fff;font:800 20px system-ui;padding:10px 14px;border-radius:12px;border:3px solid #fff;pointer-events:none';document.body.appendChild(a)}a.style.display=inT?'':'none';a.innerHTML='🏃 ΕΞΟΔΟΣ ΚΙΝΔΥΝΟΥ<br><small style="font-size:13px">◀ EMERGENCY EXIT · '+(A.Lt||'exit')+'</small>'}else if(a)a.remove()},600);
+setInterval(()=>{let a=$('#ex26');if(EV26.on&&!W3.on){const A=WA[W.area]||{};const inT=EV26.list.includes(tid2D27(W.area))||EV26.sc==='all';if(!a){a=document.createElement('div');a.id='ex26';a.style.cssText='position:fixed;left:12px;top:50%;z-index:57;background:#0b8f3a;color:#fff;font:800 20px system-ui;padding:10px 14px;border-radius:12px;border:3px solid #fff;pointer-events:none';document.body.appendChild(a)}a.style.display=inT?'':'none';a.innerHTML='🏃 ΕΞΟΔΟΣ ΚΙΝΔΥΝΟΥ<br><small style="font-size:13px">◀ EMERGENCY EXIT · '+(A.Lt||'exit')+'</small>'}else if(a)a.remove()},600);
 // entry points: Ops centre, PA room modal, SKG app
 OPS23.push(['🚨 Drill / evacuation','close_();evMenu26()'],['📡 Broadcast · all terminals','close_();pa16Open26()']);
 {const _p26=pa13;pa13=function(it){_p26.apply(this,arguments);const m=$('#modal .ft7');if(m)m.insertAdjacentHTML('afterbegin','<button class="r" onclick="close_();evMenu26()">🚨 Drill / evacuation</button>')}}
 NEW4.push(['🚨','v9.0 B1: every announcement asks All terminals / Only this terminal · synced broadcast · drills & real evacuations with sirens, lights, exit signs, Greek-first alarm PA']);
+
+/* v9.0 Part B2: Level 2 in every terminal (bigger), Makedonia Palace hotel interiors, SKG app tabs; evacuation via nearest doors; 2D walkers; objective pill folded */
+// 2D Greek names into the status bar
+setInterval(()=>{try{Object.keys(NA).forEach(k=>{if(WA[k]&&!WA[k].gr&&NA[k].gr)WA[k].gr=NA[k].gr})}catch(e){}},2000);
+// ---------- 1) bigger terminals: walkable Level 2 lounges over the airside plaza (T1–T5, T1A) ----------
+const L2N27=[['Σαλόνι · Lounge','#0a1f44'],['Εστιατόρια · Food hall','#0a1f44'],['Παιδότοπος · Kids zone','#0a1f44'],['Βιβλιοπωλείο · Books','#0a1f44']];
+function l2zones27(){const L=TERMS.filter(T=>!T.sat).map(T=>({id:T.id,x0:T.x0,x1:T.x1,z0:-28,z1:-8,gz:4,nm:T.name}));const A=XT22&&XT22[0];if(A)L.push({id:8,x0:A.x0,x1:A.x1,z0:A.z0+16,z1:A.z0+34,gz:A.z0+46,nm:A.name});return L}
+const L227={r:[],built:0};
+function l2build27(){if(L227.built||!W3.on||typeof SCN==='undefined')return;L227.built=1;const S=PL(),grp=new T3.Group();grp.name='l2_27';SCN.add(grp);const st=[],se=[];
+ l2zones27().forEach(Z=>{const y=6.5,W=Z.x1-Z.x0-16,cx=(Z.x0+Z.x1)/2,cz=(Z.z0+Z.z1)/2,D=Z.z1-Z.z0;
+  S.box(W,.4,D,'#eceff1',cx,y-.2,cz).box(W,1.1,.08,'#b3e5fc',cx,y+.55,Z.z1).box(W,.08,.12,'#9e9e9e',cx,y+1.12,Z.z1);
+  for(let x=Z.x0+16;x<Z.x1-12;x+=24)S.box(.6,y,.6,'#cfd8dc',x,y/2,Z.z1-.5);
+  const esc=[Z.x0+30,Z.x1-30];esc.forEach(ex=>{S.box(3.2,.3,Math.hypot(Z.gz-Z.z1,y),'#90a4ae',ex,y/2,(Z.gz+Z.z1)/2,0);const m=S;m.box(.15,1,Z.gz-Z.z1,'#37474f',ex-1.7,y/2+.7,(Z.gz+Z.z1)/2).box(.15,1,Z.gz-Z.z1,'#37474f',ex+1.7,y/2+.7,(Z.gz+Z.z1)/2);
+   L227.r.push({a:'l2r27',x0:ex-1.5,x1:ex+1.5,z0:Z.z1,z1:Z.gz,y:0,h:8,ramp:{ax:'z',a:Z.gz,b:Z.z1,ya:0,yb:y}})});
+  L227.r.push({a:'l2_'+Z.id,x0:Z.x0+9,x1:Z.x1-9,z0:Z.z0+.5,z1:Z.z1-.3,y,h:4});wa7('l2_'+Z.id,Z.nm+' · Level 2 lounges');
+  // shops/lounges along the back, seating, planters
+  const n=4,sw=W/n;for(let i=0;i<n;i++){const sx=Z.x0+8+sw*(i+.5),c=['#0d4f8b','#c62828','#f9a825','#37474f'][i];S.box(sw-6,3.2,.3,'#fafafa',sx,y+1.6,Z.z0+.6).box(sw-8,.5,1.4,c,sx,y+.25,Z.z0+3);const sg=sg22(L2N27[i][0],'',Math.min(12,sw-8),1.4,L2N27[i][1],'#ffd21f');sg.position.set(sx,y+2.6,Z.z0+.8);grp.add(sg);
+   W3.items.push({k:'shop19',s:L2N27[i][0].split(' · ')[1],sk:i===1?'cafe':'sh',x:sx,z:Z.z0+4.5,fy:y,y:y+2.4,t:(i===1?'🍽️ ':'🛍️ ')+L2N27[i][0],ic:i===1?'🍽️':'🛍️',area3:''});
+   for(let r=0;r<2;r++){S.box(Math.min(10,sw-10),.42,.55,'#1e3a5f',sx,y+.42,Z.z0+9+r*3);for(let q=0;q<7;q++)if(Math.random()<.6)se.push([sx-4+q*1.3,y,Z.z0+9+r*3,0])}
+   S.box(2.4,.9,2.4,'#8d6e63',sx+sw/2-3,y+.45,Z.z1-3).box(2,1.6,2,'#2e7d32',sx+sw/2-3,y+1.7,Z.z1-3);for(let q=0;q<(MOB9?4:8);q++)st.push([rnd(Z.x0+12,Z.x1-12),y,rnd(Z.z0+13,Z.z1-2),rnd(0,6.3)])}
+  W3.items.push({k:'l2i27',x:esc[0],z:Z.gz+2,fy:0,y:2.4,t:'⬆️ Επίπεδο 2 · Level 2 lounges (walk up the escalator)',ic:'⬆️',Z,area3:''})});
+ plMesh(S,grp,false);try{crowd7(grp,st,false);crowd7(grp,se,true)}catch(e){}L227.g=grp;reg27()}
+function reg27(){L227.r.forEach(r=>{if(!REG.includes(r))REG.unshift(r)})}
+ACT23.l2i27=it=>{w5Tp(it.Z.x0+40,(it.Z.z0+it.Z.z1)/2,6.5,'⬆️ Level 2 · '+it.Z.nm)};
+{const _b27=build7;build7=function(){const r=_b27.apply(this,arguments);try{L227.built=0;L227.r=[];l2build27()}catch(e){console.warn('l2',e)}return r}}
+{const _u=w3Update;w3Update=function(dt){const r=_u.apply(this,arguments);try{if(L227.r.length&&!REG.includes(L227.r[0]))reg27();if(!L227.built)l2build27()}catch(e){}return r}}
+// 2D Level 2 areas
+try{TERMS.filter(T=>!T.sat).forEach(T=>{const k='t'+T.id+'l2',b='t'+T.id+'air';na14(k,{name:T.name+' · Level 2',gr:'Επίπεδο 2 · Σαλόνια',en:T.name+' · Level 2 lounges, food hall, kids zone',sty:'hall',win:'apron',L:b,R:b,Lt:'⬇ Airside',Rt:'⬇ Airside',props:['shop19','people','column']},[FN('🛋️ Lounge · Σαλόνι','🛋️',()=>shop19({s:'Lounge',sk:'cafe'}),.15),FN('🍽️ Food hall · Εστιατόρια','🍽️',()=>shop19({s:'Food hall',sk:'cafe'}),.4),FN('🧸 Kids zone · Παιδότοπος','🧸',()=>shop19({s:'Kids zone',sk:'sh'}),.65),FN('📚 Books · Βιβλιοπωλείο','📚',()=>shop19({s:'Books',sk:'sh'}),.88)],T.id);
+ if(WA[b]&&WA[b].it&&Array.isArray(WA[b].it))WA[b].it.push(DR(k,'⬆️ Level 2 · Επίπεδο 2',.5,'⬆️'))});
+ na14('t8l2',{name:'Terminal 1A · Level 2',gr:'Επίπεδο 2',en:'T1A · Level 2 lounges',sty:'hall',win:'apron',L:'t8g',R:'t8g',Lt:'⬇ Gates',Rt:'⬇ Gates',props:['shop19','people','column']},[FN('🛋️ Lounge · Σαλόνι','🛋️',()=>shop19({s:'Lounge',sk:'cafe'}),.2),FN('🍽️ Food hall','🍽️',()=>shop19({s:'Food hall',sk:'cafe'}),.5),FN('🧸 Kids zone','🧸',()=>shop19({s:'Kids zone',sk:'sh'}),.8)],8);
+ WA.t8g&&WA.t8g.it.push(DR('t8l2','⬆️ Level 2 · Επίπεδο 2',.5,'⬆️'))}catch(e){console.warn('l2 2D',e)}
+// ---------- 2) Makedonia Palace hotel: lobby, lifts, corridor, rooms, restaurant & bar ----------
+const HT27={fl:1,room:0};
+function hotel27(fl){if(!W3.on){wEnter('hot27');return}pocket23('hot27',3600,(g,x0)=>{const S=PL();
+ // zones: lobby (x0..x0+45, z -48..0), restaurant/bar (x0..x0+45, z 0..48), lifts (x0+45..55), corridor + rooms (x0+55..x0+100)
+ S.box(45,.05,48,'#d7ccc8',x0+22.5,.23,-24).box(45,.05,48,'#3e2723',x0+22.5,.23,24).box(45,.05,98,'#5d4037',x0+77.5,.23,0);
+ S.box(.4,6,40,'#efebe9',x0+45,3,-20).box(.4,6,40,'#efebe9',x0+45,3,20);colY(x0+44.8,x0+45.2,-48,-4,0,6);colY(x0+44.8,x0+45.2,4,48,0,6);
+ S.box(45,6,.4,'#efebe9',x0+22.5,3,0);colY(x0,x0+18,-.2,.2,0,6);colY(x0+27,x0+45,-.2,.2,0,6);
+ // reception desk + logo wall
+ S.box(14,1.2,2,'#4e342e',x0+20,.6,-38).box(14.4,.1,2.4,'#d4af37',x0+20,1.22,-38).box(20,5,.3,'#0a1f44',x0+20,3,-47.5);for(let i=0;i<3;i++)S.box(.5,.9,.3,'#263238',x0+15+i*5,.45,-40).box(.6,.75,.35,'#6a1b9a',x0+15+i*5,1.3,-40).box(.3,.3,.3,'#e0b48c',x0+15+i*5,1.85,-40);
+ const lg=sg22('MAKEDONIA PALACE','Ξενοδοχείο · Airport hotel',16,4,'#0a1f44','#d4af37');lg.position.set(x0+20,3.2,-47.2);g.add(lg);
+ // lobby sofas, plants, chandelier
+ for(let i=0;i<4;i++)S.box(4,.8,1.6,'#1a237e',x0+8+i*9,.4,-22).box(4,1,.4,'#283593',x0+8+i*9,.9,-22.8).box(1.6,.5,1.6,'#d4af37',x0+8+i*9,.25,-19.5);[x0+3,x0+41].forEach(x=>S.box(2,.9,2,'#8d6e63',x,.45,-44).box(1.6,2.4,1.6,'#2e7d32',x,2,-44));
+ // restaurant tables + bar
+ for(let i=0;i<4;i++)for(let j=0;j<3;j++){const tx=x0+6+i*8,tz=8+j*9;S.box(2.2,.1,2.2,'#fafafa',tx,.8,tz).box(.2,.8,.2,'#9e9e9e',tx,.4,tz);[[-1.4,0],[1.4,0]].forEach(([a])=>S.box(.7,.9,.7,'#6d4c41',tx+a,.45,tz))}
+ S.box(16,1.2,1.6,'#3e2723',x0+30,.6,42).box(16.4,.1,1.9,'#d4af37',x0+30,1.22,42).box(16,3,.3,'#4e342e',x0+30,2.6,47.5);for(let q=0;q<12;q++)S.box(.25,.6,.25,['#2e7d32','#c62828','#f9a825','#6a1b9a'][q%4],x0+23+q*1.3,2.4,47.2);
+ // lift lobby: 3 lift doors
+ for(let i=0;i<3;i++)S.box(2.6,3.4,.2,'#b0bec5',x0+50,1.7,-10+i*10).box(.1,3.4,.22,'#455a64',x0+50,1.7,-10+i*10);
+ // corridor x0+55..x0+100: rooms both sides, z -45..45 · partitions with doors
+ for(let k=0;k<6;k++){const z=-40+k*16;[x0+62,x0+93].forEach((rx,si)=>{const doorX=si?x0+86.5:x0+68.5;S.box(.3,4,14,'#efebe9',doorX,2,z+0);colY(doorX-.15,doorX+.15,z-7,z-1,0,4);colY(doorX-.15,doorX+.15,z+1.4,z+7,0,4);S.box(.32,2.4,1.4,'#6d4c41',doorX,1.2,z+.7);
+   S.box(12.6,4,.3,'#efebe9',rx+(si?0:0),2,z+7.8);colY(rx-6.3,rx+6.3,z+7.65,z+7.95,0,4);
+   S.box(3.6,.6,4.2,'#fafafa',rx+(si?2:-2),.3,z-2).box(3.6,.9,.3,'#5d4037',rx+(si?2:-2),.75,z-4.2).box(1,.6,1,'#8d6e63',rx+(si?4.4:-4.4),.3,z-4).box(1.6,1,.1,'#111',rx+(si?-1:1),1.6,z+7.6).box(.2,2.6,5,'#bbdefb',si?x0+99.5:x0+55.5,1.8,z)});}
+ S.box(.4,6,98,'#efebe9',x0+55,3,0);colY(x0+54.8,x0+55.2,-48,-14,0,6);colY(x0+54.8,x0+55.2,14,48,0,6);
+ plMesh(S,g,false);
+ it23({k:'hrc27',pk:'hot27',x:x0+20,z:-35,t:'🛎️ Υποδοχή · Reception · check in / book',ic:'🛎️'});
+ [-10,0,10].forEach(z=>it23({k:'hlf27',pk:'hot27',x:x0+48,z,t:'🛗 Ανελκυστήρας · Lift · choose a floor',ic:'🛗'}));
+ for(let k=0;k<6;k++){const z=-40+k*16;it23({k:'hrm27',pk:'hot27',x:x0+64,z:z-2,i:k*2+1,t:'🛏️ Room · rest until morning',ic:'🛏️'});it23({k:'hrm27',pk:'hot27',x:x0+91,z:z-2,i:k*2+2,t:'🛏️ Room · rest until morning',ic:'🛏️'})}
+ it23({k:'hrs27',pk:'hot27',x:x0+14,z:16,t:'🍽️ Εστιατόριο · Restaurant · order dinner',ic:'🍽️'});it23({k:'hbr27',pk:'hot27',x:x0+30,z:39.5,t:'🍸 Μπαρ · Bar · order a drink',ic:'🍸'});
+},'🏨 Makedonia Palace · Lobby');HT27.fl=fl||0}
+ACT23.hrc27=()=>hotelBook27();ACT23.hlf27=()=>liftUI27();ACT23.hrm27=it=>roomRest27(it.i);ACT23.hrs27=()=>{G.money+=180;toast('🍽️ Dinner served · μουσακάς & Greek salad · +€180')};ACT23.hbr27=()=>{G.money+=60;toast('🍸 Ouzo & mezedes · +€60')};
+function liftUI27(){MD4('🛗 Ανελκυστήρας · Lift',`<p>Floor now: <b>${HT27.fl===0?'Ισόγειο · Lobby':HT27.fl}</b></p><div class="ft7">${['G',1,2,3,4,5,6,7,8].map((f,i)=>`<button class="${i===HT27.fl?'y':'ghost'}" onclick="close_();lift27(${i})">${f===
+'G'?'G · Lobby, restaurant, bar':'Floor '+f+' · rooms '+f+'01–'+f+'12'}</button>`).join('')}</div>`)}
+function lift27(f){HT27.fl=f;fade7(f?'🛗 Floor '+f+' · rooms '+f+'01–'+f+'12':'🛗 Lobby · restaurant · bar',()=>{if(W3.on)w5Tp(3600+(f?78:40),f?0:-6,0);else wEnter(f?'hot27c':'hot27')})}
+function roomRest27(i){const f=HT27.fl||1;const n=f*100+(i||1);const bk=(X7().hb27||{})[n];if(!bk&&!X7().hb27any){toast('🔑 Book a room at reception first');return}G.min=Math.max(G.min,420);toast('😴 Room '+n+' · slept until '+hm(G.min)+' · rested!');cnt4('hotel_sleep')}
+function hotelBook27(){const x=X7();x.hb27=x.hb27||{};const R=[['🛏️ Standard',110],['🛏️🛏️ Double',150],['🌇 Sea-view suite',280],['👑 Presidential',650]];MD4('🏨 Makedonia Palace · Υποδοχή',`<p>Book a room (guests or crew). Price paid by guests → income.</p><div class="ft7">${R.map(([n,p],i)=>`<button class="ghost" onclick="book27(${i},${p})">${n} · €${p}</button>`).join('')}</div><p><small>Booked: ${Object.keys(x.hb27).length} rooms</small></p>`)}
+function book27(i,p){const x=X7();x.hb27=x.hb27||{};const f=1+Math.floor(Math.random()*8),n=f*100+1+Math.floor(Math.random()*12);x.hb27[n]={t:i,p};x.hb27any=1;G.money+=p;save();close_();toast('🔑 Room '+n+' booked · +€'+p+' · lift to floor '+f);cnt4('hotel_book')}
+// hotel entrance in 3D (tower at 305,160) and 2D areas
+{const _b=build7;build7=function(){const r=_b.apply(this,arguments);try{it23({k:'hen27',x:305,z:146,t:'🏨 Makedonia Palace · enter the hotel',ic:'🏨'})}catch(e){}return r}}
+ACT23.hen27=()=>hotel27(0);
+try{na14('hot27',{name:'Makedonia Palace · Lobby',gr:'Ξενοδοχείο · Υποδοχή',en:'Hotel lobby · reception · lifts',sty:'hall',L:'link7',R:'hot27r',Lt:'Airport',Rt:'Restaurant & bar',props:['ckdesk','people','column']},[FN('🛎️ Reception · book a room','🛎️',()=>hotelBook27(),.25),FN('🛗 Lifts','🛗',()=>liftUI27(),.6),DR('hot27c','🚪 Corridor & rooms →',.85,'🚪')],0);
+ na14('hot27c',{name:'Makedonia Palace · Corridor',gr:'Διάδρομος · Δωμάτια',en:'Rooms corridor',sty:'hall',L:'hot27',R:'hot27',Lt:'Lifts',Rt:'Lifts',props:['column','people']},[FN('🛏️ Room x01','🛏️',()=>roomRest27(1),.2),FN('🛏️ Room x02','🛏️',()=>roomRest27(2),.4),FN('🛏️ Room x03','🛏️',()=>roomRest27(3),.6),FN('🛗 Lift','🛗',()=>liftUI27(),.85)],0);
+ na14('hot27r',{name:'Makedonia Palace · Restaurant & bar',gr:'Εστιατόριο & μπαρ',en:'Restaurant & bar',sty:'hall',L:'hot27',R:'hot27',Lt:'Lobby',Rt:'Lobby',props:['shop19','people']},[FN('🍽️ Restaurant','🍽️',()=>ACT23.hrs27(),.3),FN('🍸 Bar','🍸',()=>ACT23.hbr27(),.7)],0);
+ WA.link7&&Array.isArray(WA.link7.it)&&WA.link7.it.push(DR('hot27','🏨 Makedonia Palace hotel',.5,'🏨'));WA.t1f&&Array.isArray(WA.t1f.it)&&WA.t1f.it.push(DR('hot27','🏨 Hotel →',.9,'🏨'))}catch(e){console.warn('hotel 2D',e)}
+// ---------- 3) SKG app: new tabs ----------
+const TAB27=[['alert','🚨 Alerts'],['hotel','🏨 Hotel'],['tmap','🗺️ Terminal maps'],['bcast','📡 PA control']];
+{const _ph27=phone17;phone17=function(tab){if(tab)PH17.tab=tab;const T=PH17.tab;if(TAB27.some(t=>t[0]===T)){_ph27('home');PH17.tab=T;ph27(T)}else _ph27(tab);tabs27()}}
+function tabs27(){const m=$('#modal');if(!m)return;const hd=m.querySelector('div[style*="overflow-x:auto"]');if(!hd||hd.dataset.t27)return;hd.dataset.t27=1;hd.style.flexWrap='wrap';hd.style.overflowX='visible';hd.insertAdjacentHTML('beforeend',TAB27.map(([k,t])=>`<button onclick="phone17('${k}')" style="white-space:nowrap;border:0;border-radius:14px;padding:6px 10px;min-height:36px;background:${PH17.tab===k?'#ffd21f':'#ffffff26'};color:${PH17.tab===k?'#0a1f44':'#fff'};font:600 12px system-ui">${t}</button>`).join(''))}
+function ph27(T){const box=[...document.querySelectorAll('#modal div')].find(d=>{const s=d.getAttribute('style')||'';return /flex: ?1/.test(s)&&/overflow: ?auto/.test(s)});if(!box)return;let h='';
+ if(T==='alert'){h=`<h3 style="margin:4px 0">🚨 Ζωντανές ειδοποιήσεις · Live alerts</h3>`+(EV26.on?`<div style="background:${EV26.kind==='real'?'#c62828':'#f9a825'};color:#fff;border-radius:12px;padding:8px"><b>${EV26.kind==='real'?'ΕΚΚΕΝΩΣΗ · EVACUATION':'ΑΣΚΗΣΗ · DRILL'}</b> · ${EV26.sc==='all'?'All terminals':tname26(EV26.tid)}<br>Evacuated ${Math.min(100,Math.round(EV26.out/EV26.tot*100))}% · ${Math.round(EV26.t)}s</div><button class="ghost" style="width:100%;margin-top:6px" onclick="evClear26()">✅ All clear</button>`:'<p>✅ Καμία ειδοποίηση · No active alerts</p>')+`<button class="r" style="width:100%;margin:6px 0" onclick="close_();evMenu26()">🚨 Start drill / evacuation (staff)</button><h4>📢 Latest announcements</h4>`+PL22.slice(0,8).map(l=>`<div style="border-bottom:1px solid #e3e7ee;padding:4px 0;font-size:12px"><b>${l.t} · ${l.step}</b><br>${l.gr&&l.gr!=='—'?'🇬🇷 '+l.gr+'<br>':''}${l.tr?'🇬🇧 '+l.tr:''}</div>`).join('')}
+ if(T==='hotel'){const x=X7();h=`<h3 style="margin:4px 0">🏨 Makedonia Palace</h3><p style="font-size:13px">Airport hotel · 8 floors · restaurant & bar · 2 min from T1</p>${[['🛏️ Standard',110],['🛏️🛏️ Double',150],['🌇 Sea-view suite',280],['👑 Presidential',650]].map(([n,p],i)=>`<button class="ghost" style="width:100%;margin:3px 0;min-height:44px" onclick="book27(${i},${p})">${n} · €${p}/night · Book</button>`).join('')}<p style="font-size:12px">Your bookings: ${Object.keys(x.hb27||{}).map(n=>'#'+n).join(', ')||'none'}</p><button class="y" style="width:100%;min-height:44px" onclick="close_();hotel27(0)">🚶 Go to the hotel</button>`}
+ if(T==='tmap'){const L=[...TERMS.filter(t=>!t.sat).map(t=>[t.id,t.name,t.col]),[8,'Terminal 1A','#0d4f8b'],[7,'Terminal 7','#00897b'],[6,'Terminal 6 Satellite','#5b2a86']];h=`<h3 style="margin:4px 0">🗺️ Χάρτες τερματικών · Terminal maps</h3>`+L.map(([id,n,c])=>`<div style="border:1px solid #dde3ea;border-radius:12px;padding:6px;margin:5px 0"><b style="color:${c}">${n}</b><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:3px;margin:5px 0;font-size:10px;text-align:center"><div style="background:#e3f2fd;padding:6px 2px;border-radius:6px">🚗 Forecourt</div><div style="background:#fff3e0;padding:6px 2px;border-radius:6px">🧾 Check-in</div><div style="background:#fce4ec;padding:6px 2px;border-radius:6px">🛂 Security</div><div style="background:#e8f5e9;padding:6px 2px;border-radius:6px">🛫 Gates${id===7||id===8||id<=5?' · L2 lounges':''}</div></div><button class="ghost" style="width:100%;min-height:40px" onclick="close_();phGo17(${id})">📍 Go to ${n}</button></div>`).join('')}
+ if(T==='bcast'){h=`<h3 style="margin:4px 0">📡 Έλεγχος PA · PA control (staff)</h3><textarea id="bc27" style="width:100%;height:70px;font-size:15px;border-radius:10px;padding:6px" placeholder="Type an announcement in English…"></textarea><button class="y" style="width:100%;min-height:48px;margin:4px 0" onclick="bcSend27()">📢 Announce (you'll pick All / Only this terminal)</button><div class="ft7"><button class="ghost" onclick="close_();evMenu26()">🚨 Drill / evacuation</button><button class="ghost" onclick="close_();paPick16()">🎙️ Go to a PA room</button></div><h4>PA log</h4>`+PL22.slice(0,6).map(l=>`<div style="font-size:12px;border-bottom:1px solid #eee">${l.t} · ${l.step}</div>`).join('')}
+ box.innerHTML=h}
+async function bcSend27(){const en=(($('#bc27')||{}).value||'').trim();if(!en)return toast('Type something first');PA24.n++;unl24();const r=await trFresh24(en);close_();const tid=W3.on?curT16():tid2D27(W.area);annc22({tid,tn:tname26(tid)},en,r?r.gr:null,null,r?'🌐 Greek = fresh translation ('+r.how+')':'⚠️ Translation offline — English only',{tr:en})}
+// ---------- 4) evacuation via the nearest doors (no walking through walls) + 2D walkers ----------
+function doors27(x,z){const X=XT22.find(T=>x>=T.x0-5&&x<=T.x1+5);if(X){const mid=(X.z0+X.z1)/2;const land=z>mid;const ez=land?X.z1:X.z0,az=land?X.z1+26:X.z0-14;const dx=Math.round((x-X.x0-10)/40)*40+X.x0+10;return [[Math.min(X.x1-6,Math.max(X.x0+6,dx)),land?ez-3:ez+3],[Math.min(X.x1-6,Math.max(X.x0+6,dx)),az]]}
+ const T=TERMS.find(T=>!T.sat&&x>=T.x0-5&&x<=T.x1+5);if(T){if(z>=20){const dx=Math.round((x-T.x0-20)/40)*40+T.x0+20;const cx=Math.min(T.x1-8,Math.max(T.x0+8,dx));return [[cx,Math.max(z,40)],[cx,83],[cx,110]]}if(z>=-30){const g=T.px.length?T.px.map(p=>[p-22,p+22]).flat():[T.cx];const gx=g.reduce((a,b)=>Math.abs(b-x)<Math.abs(a-x)?b:a);return [[gx,Math.min(z,-20)],[gx,-27],[gx,-48]]}const px=T.px.reduce((a,b)=>Math.abs(b-x)<Math.abs(a-x)?b:a,T.cx);return [[px,z],[px,-27],[px+(x<px?-22:22),-27],[px+(x<px?-22:22),-48]]}
+ return [[x,Math.max(z,0)],[x,56],[x,80]]}
+{const _s=evStart26;evStart26=async function(kind){await _s.apply(this,arguments);if(!EV26.on)return;EV26.crowds.forEach(c=>{if(!c.ev||!c.pos)return;c.wp=c.pos.map(p=>doors27(p[0],p[2]));c.wi=c.pos.map(()=>0)})}}
+// replace the straight-line mover with waypoint movement (runs after evTick26's own update is skipped)
+evTick26=(function(){let M,q,e,P,S;return function(dt){if(!M){M=new T3.Matrix4();q=new T3.Quaternion();e=new T3.Euler();P=new T3.Vector3();S=new T3.Vector3(1,1,1)}if(!EV26.on)return;EV26.t+=dt;EV26.ft=(EV26.ft||0)-dt;if(EV26.red)EV26.red.color.set(Math.floor(EV26.t*2.5)%2?'#ff1744':'#4a0000');if(EV26.ft>0)return;const st=.12;EV26.ft=st;let out=0,tot3=0;
+ EV26.crowds.forEach(c=>{if(!c.ev||!c.pos||!c.wp)return;const seated=c.b.geometry===G6.ps7;c.pos.forEach((p,i)=>{tot3++;const W=c.wp[i];let k=c.wi[i];if(k>=W.length){out++;return}const t=W[k],dx=t[0]-p[0],dz=t[1]-p[2],d=Math.hypot(dx,dz),sp=(3+(i%5)*.4)*st*(EV26.kind==='real'?1.3:1);if(d<=sp){p[0]=t[0]+((i%7)-3)*.5;p[2]=t[1];c.wi[i]=k+1}else{p[0]+=dx/d*sp;p[2]+=dz/d*sp;p[3]=Math.atan2(dx,dz)}if(c.wi[i]>=W.length-1)out++;
+  q.setFromEuler(e.set(0,p[3],0));M.compose(P.set(p[0],p[1]||0,p[2]),q,S);c.b.setMatrixAt(i,M);M.compose(P.set(p[0],(p[1]||0)+(seated?1.38:1.72),p[2]),q,S);c.h.setMatrixAt(i,M)});c.b.instanceMatrix.needsUpdate=c.h.instanceMatrix.needsUpdate=true});
+ if(W3.on)EV26.out=Math.max(EV26.out,out+Math.min(EV26.t/40,1)*Math.max(0,EV26.tot-tot3));else EV26.out=Math.min(EV26.tot,EV26.out+EV26.tot*st*.012);
+ evPanel26();walk2D27();if(EV26.kind==='drill'&&EV26.out>=EV26.tot&&!EV26.done){EV26.done=1;toast('✅ Drill: everyone out in '+Math.round(EV26.t)+'s · press All clear')}}})();
+function tid2D27(a){if(A14[a]!=null)return A14[a];const m=/^t(\d)/.exec(a||'');return m?+m[1]:0}
+// 2D: small figures walking out towards the exit
+function walk2D27(){let w=$('#wk27');if(!EV26.on||W3.on){if(w)w.remove();return}const A=WA[W.area]||{},tid=tid2D27(W.area);if(!(EV26.sc==='all'||EV26.list.includes(tid))){if(w)w.remove();return}
+ if(!w){w=document.createElement('div');w.id='wk27';w.style.cssText='position:fixed;left:0;right:0;bottom:120px;height:44px;z-index:56;pointer-events:none';for(let i=0;i<14;i++){const f=document.createElement('span');f.textContent=['🚶','🚶‍♀️','🧳','🚶‍♂️','🧑‍🦯','👨‍👩‍👧'][i%6];f.style.cssText='position:absolute;bottom:0;font-size:'+(22+(i%3)*4)+'px;transform:scaleX(-1)';f.dataset.o=String(Math.random());w.appendChild(f)}document.body.appendChild(w)}
+ const pc=Math.min(1,EV26.out/EV26.tot);[...w.children].forEach((f,i)=>{const o=+f.dataset.o;let x=(o+EV26.t*.03*(1+(i%4)*.2))%1;x=1-x;const hide=i/14<pc;f.style.left=(x*92+4)+'%';f.style.opacity=hide?'.0':'1'})}
+setInterval(()=>{if(EV26.on&&!W3.on)try{walk2D27()}catch(e){}},300);
+// exit signs at the real door positions
+{const _f=evFx3D26;evFx3D26=function(list){_f.apply(this,arguments)}}
+// ---------- 5) fold the objective pill (top-left) into the status bar ----------
+setInterval(()=>{try{const b=$('#ui25bar');if(!b)return;let ob='';document.querySelectorAll('body>*,#walk>*,#walk>*>*').forEach(e=>{if(e.closest('#ui25bar,#ui25dock,.ui25fly,#evp26,#sc26,#modal,#plg22,#pa13,#wk27,#ex26'))return;const s=getComputedStyle(e);if(s.position!=='fixed'&&s.position!=='absolute')return;const r=e.getBoundingClientRect();if(!r.width||r.x>innerWidth*.35||r.y<28||r.y>140||r.height>44||r.width>360)return;const t=(e.textContent||'').trim();if(!t||e.querySelector('canvas,button'))return;ob=t;e.classList.add('ui26h')});if(ob){const tk=b.querySelector('.tk');if(tk&&!tk.querySelector('.ob27')){tk.insertAdjacentHTML('beforeend','<div class="ob27"></div>')}const o=tk&&tk.querySelector('.ob27');if(o&&o.textContent!=='🎯 '+ob)o.textContent='🎯 '+ob}}catch(e){}},900);
+NEW4.push(['🏨','v9.0 B2: Level 2 lounges in every terminal · Makedonia Palace hotel interiors (lobby, lifts, rooms, restaurant, bar) · SKG app: Alerts, Hotel, Terminal maps, PA control · smarter evacuations']);
+// dock steps aside while a modal/app is open
+setInterval(()=>{const md=$('#modal'),d=$('#ui25dock');if(!d)return;const open=!!(md&&md.offsetParent!==null&&md.offsetHeight>0&&md.innerHTML.trim());d.style.display=open?'none':''},300);
 
 </script></body></html>

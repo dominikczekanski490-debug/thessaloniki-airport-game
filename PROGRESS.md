@@ -186,3 +186,9 @@ Greek translates actual transcript (fuzzy script match ≥ threshold, protected 
   - All clear restores everything. Drills are scored.
   - 2D: an exit arrow banner, a "Guide passengers" action and the same panel.
 - UI: the old info card and task pill are folded into the status bar. 👤 moved to the App flyout, flyout buttons have Greek and English labels, weather is shown in Greek and English, the old mini-map is hidden in 3D, and PA subtitles show Greek above English.
+
+## v9.0 Part B2 – bigger terminals, hotel interiors, SKG app tabs (LIVE)
+- Every terminal is bigger: walkable Level 2 lounges (Σαλόνι, food hall, kids zone, books) above the airside plaza in T1–T5 and T1A. In 3D you reach them by escalator ramps or the ⬆️ item; they have seating, crowds and plants. In 2D: areas t1l2–t5l2 and t8l2, with ⬆️ doors from the airside areas. T7 was expanded in Part A.
+- Makedonia Palace hotel interior (3D, built on entry and freed on exit; enter at the hotel tower door): lobby and reception, sofas, 3 lifts (floors G–8), a corridor with 12 rooms per floor (bed, TV, window, doors), restaurant and bar. 2D: hot27, hot27c, hot27r. Booking, resting and dining all work.
+- SKG app tabs: 🚨 Alerts (live evacuation status, start a drill, latest PA in GR/EN), 🏨 Hotel (book, go to the hotel), 🗺️ Terminal maps (per-terminal zones + go), 📡 PA control (type an announcement, then All/Only this terminal; drill; PA rooms; log).
+- Evacuation: crowds follow waypoints to the nearest doors. Landside goes out through the front doors to the forecourt; airside goes out to the apron between the piers. 2D shows small figures walking to the exit. The objective pill is folded into the status bar, and the dock hides while a modal or the app is open.

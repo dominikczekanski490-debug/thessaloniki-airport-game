@@ -1979,7 +1979,7 @@ function w3Render(){if(!REN)return;V1=V1||_v3();V2=V2||_v3();const P=W3.p,cab=W3
  const s=$('#w3say');const n=W.near;if(n){const p=_v3().set(n.x,n.k==='npc'?2.9:3.4,n.z).project(CAM);if(p.z<1){s.style.display='block';s.style.left=((p.x+1)/2*W.W)+'px';s.style.top=((1-p.y)/2*W.H)+'px';s.textContent=n.k==='npc'?n.n.req.ic+' '+n.n.req.say:'Ⓐ '+n.t}else s.style.display='none'}else s.style.display='none'}
 
 /* ===== v5.1: 3D looks like Dominik's pictures (ceilings, materials, props, collisions) ===== */
-const VER='v9.0';
+const VER='v9.0.1';
 let COL=[];function col(x,z,w,d){COL.push({x0:x-w/2,x1:x+w/2,z0:z-d/2,z1:z+d/2})}
 const _wk4=w3Walkable;w3Walkable=function(x,z){if(!_wk4(x,z))return false;if(W3.mode==='cab')return true;const ins=(a,b)=>COL.some(c=>a>c.x0-.28&&a<c.x1+.28&&b>c.z0-.28&&b<c.z1+.28);return !ins(x,z)||ins(W3.p.x,W3.p.z)};
 const INST={};function inst(key,geo,m,x,y,z,ry,sx,sy,sz,rz){(INST[key]=INST[key]||{geo,m,a:[]}).a.push([x,y,z,ry||0,sx||1,sy||1,sz||1,rz||0])}
@@ -5129,7 +5129,7 @@ async function grSpeak24(gr,tid){const b=elBest24();try{amb18(gr.length*85+2500)
 // light PA colour: less muffling, short chimes; keep hall reverb from the existing chain
 {const _e24=env15;env15=function(tid){const L=_e24(tid);try{PA15.muf.frequency.setTargetAtTime(L&&L.muf?3200:20000,PA15.ac.currentTime,.05)}catch(e){}return L}}
 annc22=async function(c,en,gr,buf,note,src){const tid=c.tid,id=PA24.n;const L={tr:src?src.tr:'',gr,note};
- sub15(c.tn,gr||'',en,note||'');unlock17();sess22('playback');await acUp22();const ms=chime15(tid)||400;await new Promise(r=>setTimeout(r,ms));env15(tid);let enR='';
+ {const o=document.getElementById('pa13');if(o)o.style.display='none'}unlock17();sess22('playback');await acUp22();const ms=chime15(tid)||400;await new Promise(r=>setTimeout(r,ms));env15(tid);let enR='';
  if(buf){await play18(buf,tid);enR='your recording'}else if(en&&en!=='(not transcribed)'){const r=await say22(en,'en-GB',lvl15(tid).v);enR=r.ok?'iPhone EN voice':'EN failed ('+r.why+')'}
  if(id!==PA24.n)return;if(!gr){plog22({...L,step:'English only',voice:enR});return}
  await new Promise(r=>setTimeout(r,450));chime15(tid);await new Promise(r=>setTimeout(r,700));const v=await grSpeak24(gr,tid);
@@ -5583,5 +5583,11 @@ NEW4.push(['🧳','v9.0 B3: baggage hall, staffed security, fire station, OASTH 
 TK28.push(function keep28(){try{if(W3.on&&typeof SCN!=='undefined'&&SCN){if(!FS28.g)fireBuild28();if(!TX28.g)busBuild28()}}catch(e){}});
 TK28.push(function rb28(){try{if(!W3.on)return;if(FS28.g&&FS28.tr.length&&!FS28.tr[0].g.children.length&&(FS28.rb=(FS28.rb||0)+1)<4){SCN.remove(FS28.g);FS28.g=null;FS28.tr=[];W3.items=W3.items.filter(i=>i.k!=='fsd28');const st=FS28.st;fireBuild28();if(st==='out')fireGo28('again')}
  if(TX28.g&&TX28.bus.length&&!TX28.bus[0].g.children.length&&(TX28.rb=(TX28.rb||0)+1)<4){SCN.remove(TX28.g);TX28.g=null;TX28.bus=[];W3.items=W3.items.filter(i=>i.k!=='bsr28'&&i.k!=='txd28');busBuild28()}}catch(e){}});
+
+/* v9.0.1: always-visible 2D/3D toggle · no on-screen captions of his own announcements (PA log only) */
+{const _s=st15;st15=function(t){if(typeof t==='string'&&/^🔴 /.test(t)&&t.length>3)t='🔴 Ηχογράφηση… · Recording…';return _s(t)}}
+(function(){const s=document.createElement('style');s.textContent='#tg29{position:fixed;top:max(8px,env(safe-area-inset-top));right:8px;z-index:63;min-width:56px;height:50px;border-radius:16px;border:2px solid #ffd21f;background:#0a1f44;color:#fff;font:800 18px system-ui;box-shadow:0 4px 14px rgba(0,0,0,.3)}#tg29 small{display:block;font:600 9px system-ui;color:#ffd21f}body.eink #tg29{background:#fff;color:#000;border:3px solid #000;box-shadow:none}body.eink #tg29 small{color:#000}#ui25bar{right:72px!important}';document.head.appendChild(s)})();
+function tg29(){let b=$('#tg29');if(!b){b=document.createElement('button');b.id='tg29';b.onclick=e=>{e.stopPropagation();const w=$('#w3b');if(w)w.click();else if(W3.on&&typeof w3Off==='function')w3Off();else w3On()};document.body.appendChild(b)}const h=W3.on?'2D<small>Επίπεδο</small>':'3D<small>Τρισδιάστατο</small>';if(b._h!==h){b.innerHTML=h;b._h=h}const md=$('#modal');b.style.display=(md&&md.offsetParent!==null&&md.innerHTML.trim())?'none':''}
+setInterval(()=>{try{tg29()}catch(e){}},400);
 
 </script></body></html>

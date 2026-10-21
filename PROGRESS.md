@@ -204,3 +204,7 @@ Greek translates actual transcript (fuzzy script match ≥ threshold, protected 
 8. 🏆 Trophies tab in the SKG app (13 new achievements, bronze/silver/gold tiers, progress) plus a trophy cabinet in T7.
 - Hotel polish: wood-floor lobby, patterned red-gold carpet, warm walls and wainscot, chandeliers, a showcase room (headboard, duvet, pillows, lamps, window, art, rug). The status bar shows "Ξενοδοχείο Makedonia Palace / Makedonia Palace hotel".
 - Evacuation is faster and time-based (one-terminal REAL reaches about 87% at 60 s even at 5 fps in headless tests).
+
+## v9.0.1 – quick fixes (LIVE)
+- An always-visible 3D/2D toggle button at the top right in both modes (large touch target, e-ink variant).
+- His own announcements no longer show any on-screen subtitle or caption, and the live transcript in the PA room shows only "Recording…". The text stays in the PA log only.

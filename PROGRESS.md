@@ -192,3 +192,15 @@ Greek translates actual transcript (fuzzy script match ≥ threshold, protected 
 - Makedonia Palace hotel interior (3D, built on entry and freed on exit; enter at the hotel tower door): lobby and reception, sofas, 3 lifts (floors G–8), a corridor with 12 rooms per floor (bed, TV, window, doors), restaurant and bar. 2D: hot27, hot27c, hot27r. Booking, resting and dining all work.
 - SKG app tabs: 🚨 Alerts (live evacuation status, start a drill, latest PA in GR/EN), 🏨 Hotel (book, go to the hotel), 🗺️ Terminal maps (per-terminal zones + go), 📡 PA control (type an announcement, then All/Only this terminal; drill; PA rooms; log).
 - Evacuation: crowds follow waypoints to the nearest doors. Landside goes out through the front doors to the forecourt; airside goes out to the apron between the piers. 2D shows small figures walking to the exit. The objective pill is folded into the status bar, and the dock hides while a modal or the app is open.
+
+## v9.0 Part B3 – the 8 extras (LIVE)
+1. Baggage reclaim hall (3D, built on entry and freed on exit; 2D area bag28): 3 working belts with moving bags, flight screens, crowds; find-the-bag and lost-luggage desk claims.
+2. Staffable security checkpoint (3D; 2D sec28): 4 lanes with x-ray tunnels, arches, moving trays and queues that grow and shrink. Open/close lanes, x-ray screen, bag-search mini-game, live wait times in a HUD.
+3. Fire station by T1 with 3 trucks. They drive to the runway on any drill or evacuation, storm event or manual dispatch, with flashing lights, and return on all clear (2D fire28 with animated trucks).
+4. Bus station with OASTH 01X/01N buses (they arrive and leave) and a taxi rank with Thessaloniki blue-and-white taxis you dispatch (2D bus28); ride the bus to the city.
+5. Gate boarding sequence at any gate: Greek and English boarding PA (asks the scope), a queue, scanned passes, a jet bridge, doors close, pushback (3D); same flow in 2D gate areas.
+6. Seasonal events: Christmas trees, lights and banner; Easter red eggs and candles; summer peak with umbrellas, +40% crowds and income. Auto by date or chosen in Ops → 🎄 Seasons (2D overlay banners).
+7. SKG FM 98.1 airport radio (PA flyout 📻) with generative music and flight/weather bulletins; music in shops in both modes, fading with distance.
+8. 🏆 Trophies tab in the SKG app (13 new achievements, bronze/silver/gold tiers, progress) plus a trophy cabinet in T7.
+- Hotel polish: wood-floor lobby, patterned red-gold carpet, warm walls and wainscot, chandeliers, a showcase room (headboard, duvet, pillows, lamps, window, art, rug). The status bar shows "Ξενοδοχείο Makedonia Palace / Makedonia Palace hotel".
+- Evacuation is faster and time-based (one-terminal REAL reaches about 87% at 60 s even at 5 fps in headless tests).

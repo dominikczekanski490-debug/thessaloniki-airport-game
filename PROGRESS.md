@@ -165,3 +165,9 @@ Greek translates actual transcript (fuzzy script match ≥ threshold, protected 
 - T7/T1A teleport buttons in travel and the map; PA rooms: T7 ×4, T1A ×1 (picker and nearest-room logic, in 2D and 3D).
 - Signs never show mirrored text (unmirrored back faces). Gate screens and flight boards can be read from both sides (seating and walkway).
 - T7 gate lounges filled: 6 seat rows, carpet, gate desk, screens, seated and standing passengers.
+
+## v9.0 Part A – Greek PA says exactly what you said + bigger T7 (LIVE)
+- PA: your actual transcript gets a fresh translation each time (Google, then MyMemory). There is no script or template substitution unless nothing was transcribed, and no cached or reused Greek. Older announcements are cancelled by a session id. The log shows transcript and translation.
+- Voice: natural neural Greek audio (Google TTS), split into sentences with pauses, plus delayed "terminal speaker" echoes and hall ambience. Fallbacks: the best iPhone Greek voice (Premium/Enhanced Melina first), then the built-in offline voice. Lighter muffling.
+- T7: 500 m wide, 16 gates, 16 shops/restaurants/lounge, food court and lounge & art garden (2D areas t7f, t7l), olive-tree planters, sculptures and art walls, sofas, 4 extra double-sided board pairs, more passengers.
+- Teleports: Terminal 7 and T7 PA1–PA4 (plus T1A PA) in the PA picker, travel menu and 2D map, in both modes. Keycard from the first frame.

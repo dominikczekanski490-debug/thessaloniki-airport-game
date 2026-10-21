@@ -3852,7 +3852,7 @@ function city8(){if(!C7.root)return;const S=PL(),Lt=[];for(let x=-2450;x<-920;x+
  plMesh(S,C7.root,false);C7.root.add(new T3.Mesh(mergeC(Lt),litm6()))}
 // ---------- staff discoverability: free keycard, hints, hub, map markers
 const _b78=build7;build7=function(){_b78();try{stM8();fra8();trafficW8();city8();TERMS.forEach(T=>{if(!T.sat)W3.items.push({k:'key8',x:T.cx+(T.x1-T.x0)*.25,z:56,fy:0,y:2.6,t:'🔑 Info desk · free staff keycard',ic:'🔑',area3:''})});W3.items.push({k:'key8',x:70,z:116,fy:0,y:2.6,t:'🔑 Free staff keycard',ic:'🔑',area3:''})}catch(e){console.warn('b78',e)}};
-const _t78=tick7;tick7=function(dt){_t78(dt);try{twTick8(dt);if(!W3.h8&&W3.on){W3.h8=1;setTimeout(()=>annE4('🔒 NEW: yellow/red STAFF ONLY doors in Makedonia & every terminal. Grab a FREE keycard at any 🔑 info desk.',250,136),8000)}}catch(e){}};
+const _t78=tick7;tick7=function(dt){_t78(dt);try{twTick8(dt);if(!W3.h8&&W3.on){W3.h8=1;setTimeout(()=>annE4('🔒 NEW: yellow/red STAFF ONLY doors in Makedonia & every terminal. Your staff keycard 🔑 is already in your pocket.',250,136),8000)}}catch(e){}};
 const _wAct78=wAct;wAct=function(){if(W3.on&&W3.mode!=='cab'&&!W3.drv){const i=W.near;if(i){if(i.k==='key8'){if(V74().key)return toast('🔑 You already have a staff keycard');V74().key=1;cnt4('key');chime();save();return annE4('🔑 Staff keycard activated! Yellow/red STAFF ONLY doors now open: walk straight in.',250,136)}if(i.k==='door8M')return toast(V74().key?'🔓 Door open · walk in':'🔒 Keycard needed · free at any 🔑 info desk')}}return _wAct78()};
 function staffHub8(){MD4('🔒 Staff zones',`<p>${V74().key?'✅ Keycard active: doors open.':'Free keycard at any 🔑 info desk (or tap below).'}</p>${V74().key?'':'<button class="g" style="width:100%" onclick="V74().key=1;save();staffHub8();toast(\'🔑 Keycard activated\')">🔑 Get free keycard</button>'}<div class="ft7">${[['🗼 Control tower & crew room (Makedonia)',250,134],...TERMS.map(T=>[T.sat?'T6 staff area':'🧳 '+T.name+' back-of-house',T.sat?T.x1-4:T.x1-4,T.sat?-410:40]),...TERMS.filter(T=>!T.sat).map(T=>['🚧 '+T.name+' ramp access',T.x1+3,-30])].map(([n,x,z])=>`<button class="ghost" onclick="close_();w5Tp(${x},${z},0,'📍 ${n.replace(/'/g,'')}')">${n}</button>`).join('')}</div>`)}
 const _hub78=hub4;hub4=function(){_hub78();const d=document.querySelector('#sheet .ft7');if(d)d.insertAdjacentHTML('afterbegin','<button class="g" onclick="staffHub8()">🔒 STAFF ONLY zones</button>')};
@@ -4724,7 +4724,7 @@ const RT22={8:[['aee','ATH'],['aee','HER'],['aee','RHO'],['oly','KGS'],['sky','C
  7:[['uae','DXB'],['qtr','DOH'],['baw','LHR'],['dlh','FRA'],['afr','CDG'],['aee','ATH'],['thy','IST'],['klm','AMS'],['swr','ZRH'],['ita','FCO'],['jet2','MAN'],['ryr','STN'],['aee','JFK'],['qtr','SIN']]};
 /* ---------- 3) pseudo-terminals T1A (id 8) and T7 (id 7) ---------- */
 const XT22=[{id:8,L:'D',name:'Terminal 1A',short:'T1A',sub:'Domestic · Εσωτερικού + Balkans/Türkiye',x0:262,x1:358,z0:10,z1:86,col:'#0d4f8b',ng:6,al:['aee','oly','sky','lz','thy','pgt','ajet','wzz']},
- {id:7,L:'G',name:'Terminal 7',short:'T7',sub:'Fraport Greece flagship · biggest terminal',x0:1960,x1:2340,z0:-40,z1:110,col:'#00897b',ng:12,al:['uae','qtr','baw','dlh','afr','aee','thy','klm']}];
+ {id:7,L:'G',name:'Terminal 7',short:'T7',sub:'Fraport Greece flagship · biggest terminal',x0:1960,x1:2460,z0:-40,z1:130,col:'#00897b',ng:16,al:['uae','qtr','baw','dlh','afr','aee','thy','klm']}];
 XT22.forEach(X=>{X.cx=(X.x0+X.x1)/2;X.gates=Array.from({length:X.ng},(_,i)=>({n:X.L+(i+1)}));X.sat=0});
 function tn22(t){return t==8?'T1A':'T'+t}
 function nf22(X,g,t){const r=pick(RT22[X.id]);const al=AL[r[0]]?r[0]:'aee',A=AL[al],d=DEST[r[1]]||['Αθήνα','Athens'];return{fn:(A.code||'GQ')+ri(100,9899),al,g,gr:d[0],en:d[1],t:Math.round(t)%1440,st:'Auto'}}
@@ -4760,7 +4760,7 @@ function term22(X){const S=PL(),Gl=[],Lt=[],grp=new T3.Group();SCN.add(grp);cons
  bd.rotation.y=ba.rotation.y=0;bd.position.z=ba.position.z=bz-.4;bd.position.x=cx-bw/2-.15;ba.position.x=cx+bw/2+.15;
  W3.items.push({k:'brd7',T:X,x:cx,z:bz-5,fy:0,y:2.6,t:'📋 '+X.short+' departures & arrivals · edit',ic:'📋',area3:'t'+X.id});
  // shops airside
- const SHN=big?[['Hellenic Duty Free','df','#6a1b9a'],['Mikel Coffee','cafe','#4e342e'],['Folli Follie','sh','#c2185b'],['Jumbo Toys','sh','#f9a825'],['Public','sh','#e65100'],['Mastiha Shop','sh','#2e7d32']]:[['Hellenic Duty Free','df','#6a1b9a'],['Everest','cafe','#c62828']];
+ const SHN=big?[['Hellenic Duty Free','df','#6a1b9a'],['Mikel Coffee','cafe','#4e342e'],['Folli Follie','sh','#c2185b'],['Jumbo Toys','sh','#f9a825'],['Public','sh','#e65100'],['Mastiha Shop','sh','#2e7d32'],['Starbucks','cafe','#00704a'],['Goody\'s Burger House','cafe','#d32f2f'],['Everest','cafe','#c62828'],['Ouzeri Thessaloniki','cafe','#0d47a1'],['Coffee Island','cafe','#5d4037'],['Kotsovolos','sh','#1565c0'],['Pharmacy · Φαρμακείο','sh','#43a047'],['Hondos Center','sh','#ad1457'],['Bookshop Ianos','sh','#37474f'],['Aegean Business Lounge','cafe','#0d4f8b']]:[['Hellenic Duty Free','df','#6a1b9a'],['Everest','cafe','#c62828']];
  SHN.forEach(([n,k,c],i)=>{const sx=x0+8+i*14+7,sz=z0+34,w=12;S.box(w,4,.2,c,sx,6.2,sz+6).box(.2,4.4,10,'#eceff1',sx-w/2,2.2,sz).box(.2,4.4,10,'#eceff1',sx+w/2,2.2,sz).box(w,.2,10,'#fafafa',sx,4.4,sz);
   const P=['#d4af37','#b71c1c','#263238','#f8bbd0','#90caf9','#fff','#6d4c41','#2e7d32'];for(let r=0;r<2;r++){S.box(w-3,1.8,.6,'#eceff1',sx,.9,sz-3+r*3);for(let q=0;q<8;q++)for(let lv=0;lv<3;lv++)S.box(.5,.35,.3,P[(q+lv+r+i)%8],sx-4+q*1.1,.45+lv*.55,sz-3.35+r*3)}
   S.box(3,1,1,'#37474f',sx+3,.5,sz+3.5).box(.5,.9,.3,'#263238',sx+3,.45,sz+4.5).box(.6,.75,.35,c,sx+3,1.3,sz+4.5).box(.3,.3,.3,'#e0b48c',sx+3,1.85,sz+4.5);
@@ -4777,11 +4777,15 @@ function term22(X){const S=PL(),Gl=[],Lt=[],grp=new T3.Group();SCN.add(grp);cons
   S.box(W+30,1.2,26,'#20262e',cx,H+4,z1+10,0);S.box(W+28,.2,24,'#4b3fa8',cx,H+3.3,z1+10);for(let x=x0-10;x<x1+10;x+=6)Lt.push([UB7(),'#c9c2ff',MX(x,H+3.15,z1+10,0,0,0,.25,.05,22)]);
   for(let x=x0-12;x<=x1+12;x+=24)S.box(.8,H+4,.8,'#20262e',x,(H+4)/2,z1+22);
   for(let z=z0+4;z<z1;z+=6)Lt.push([UB7(),'#ffffff',MX(cx,H-.3,z,0,0,0,W-10,.06,.3)]);
-  const W2=[['Αναχωρήσεις','Departures ↑'],['Πύλες G1–G12','Gates G1–G12 ↓'],['Έλεγχος ασφαλείας','Security →'],['Αποσκευές','Baggage reclaim ←'],['Μονοτρόχιος','Monorail ↑']];
+  const W2=[['Αναχωρήσεις','Departures ↑'],['Πύλες G1–G16','Gates G1–G16 ↓'],['Έλεγχος ασφαλείας','Security →'],['Αποσκευές','Baggage reclaim ←'],['Μονοτρόχιος','Monorail ↑']];
   W2.forEach((w,i)=>{const m=sg22(w[0],w[1],9,2.2,'#ffd21f','#0a1f44');m.position.set(x0+40+i*75,6.5,z1-30);grp.add(m);const m2=m.clone();m2.rotation.y=Math.PI;m2.position.z-=.05;grp.add(m2)});
   const AD=[['Visit Halkidiki','Χαλκιδική','#0277bd'],['Mastiha Chios','Μαστίχα','#2e7d32'],['Aegean · Star Alliance','Fly Greece','#0d4f8b'],['Thessaloniki 2026','Θεσσαλονίκη','#6a1b9a'],['Ouzo Plomari','Ούζο','#00838f'],['Fraport Greece','14 airports','#0a1f44']];
   AD.forEach((d,i)=>{const m=sg22(d[0],d[1],5,2.6,d[2],'#fff');m.position.set(x0+25+i*62,3,z0+30);grp.add(m)});
-  const st=[];for(let k=0;k<(MOB9?140:320);k++)st.push([rnd(x0+8,x1-8),0,rnd(z0+20,z1-8),rnd(0,6.3)]);
+  for(let x=x0+20;x<x1-10;x+=28){[z1-50,z0+60].forEach(z=>{S.box(3,1,3,'#8d6e63',x,.5,z).box(2.6,.3,2.6,'#3e2723',x,1.05,z).box(.35,3,.35,'#5d4037',x,2.6,z).box(2.6,2,2.6,'#2e7d32',x,4.6,z).box(1.8,1.4,1.8,'#43a047',x,6,z)})}
+  [[x0+120,'#ffd21f'],[x0+260,'#e53935'],[x0+400,'#1e88e5']].forEach(([x,c],i)=>{S.box(5,.6,5,'#eceff1',x,.3,z0+75).box(1.2,6,1.2,c,x,3.6,z0+75,i*.6).box(3.5,1.2,1.2,c,x,6.4,z0+75,i*.9).box(.15,9,14,c,x0+1.2,6,z0+60+i*22)});
+  for(let k=0;k<4;k++){const bx=x0+70+k*110;[[X.c7.m.d,-3.7],[X.c7.m.a,3.7]].forEach(([m,o])=>{[0,Math.PI].forEach(r=>{const q=new T3.Mesh(new T3.PlaneGeometry(7,3.5),m);q.position.set(bx+(r?-o:o),7.5,z0+45+(r?-.25:.25));q.rotation.y=r;grp.add(q)})});S.box(15.2,3.9,.3,'#0a0f1a',bx,7.5,z0+45)}
+  for(let k=0;k<4;k++){const lx=x1-60+k*12;S.box(4,.7,1.6,'#1a237e',lx,.35,z0+95).box(4,1,.4,'#283593',lx,.9,z0+95.8).box(1.4,.5,1.4,'#b0bec5',lx,.25,z0+93)}
+  const st=[];for(let k=0;k<(MOB9?190:440);k++)st.push([rnd(x0+8,x1-8),0,rnd(z0+20,z1-8),rnd(0,6.3)]);
   for(let k=0;k<8;k++){const ix=x0+W*(k+.5)/8;for(let q=0;q<12;q++)[-1,1].forEach(s=>st.push([ix+s*(5+(q%2)),0,z1-30+q*1.6,s>0?-Math.PI/2:Math.PI/2]))}
   const se=[];X.gates.forEach((G_,i)=>{const gx=x0+W*(i+.5)/X.gates.length;for(let r=0;r<6;r++)for(let q=0;q<8;q++)if(Math.random()<(MOB9?.45:.7))se.push([gx-4.5+q*1.25,0,z0+5+r*1.8,Math.PI])});
   X.gates.forEach((G_,i)=>{const gx=x0+W*(i+.5)/X.gates.length;for(let q=0;q<(MOB9?3:6);q++)st.push([gx+rnd(-6,8),0,z0+rnd(17,22),rnd(0,6.3)])});try{X.crowd=crowd7(grp,st,false);X.seat=crowd7(grp,se,true)}catch(e){console.warn('crowd22',e)}}
@@ -4799,7 +4803,7 @@ function open22(){const X=XT22[1];if(X7().t7op){toast('🎉 T7 is already open')
  G.money+=25000;G.sat=Math.min(100,G.sat+5);cnt4('t7open');rew4(2000,40,'🎉 T7 Grand Opening');
  try{annc22({tid:0,tn:'Terminal 7 · Grand opening'},'Ladies and gentlemen, welcome to the grand opening of Terminal 7, the new flagship of Thessaloniki Airport Makedonia.','Κυρίες και κύριοι, καλώς ήρθατε στα εγκαίνια του Τερματικού 7, της νέας ναυαρχίδας του Αερολιμένα Θεσσαλονίκης Μακεδονία.',null,'🎉 Grand opening')}catch(e){}
  if(W3.on&&window.T3){const N=500,pos=new Float32Array(N*3),col=new Float32Array(N*3),vel=[];for(let i=0;i<N;i++){pos.set([X.cx,20,X.z1+10],i*3);const c=new T3.Color().setHSL(Math.random(),1,.6);col.set([c.r,c.g,c.b],i*3);vel.push([(Math.random()-.5)*30,Math.random()*25+5,(Math.random()-.5)*30])}const geo=new T3.BufferGeometry();geo.setAttribute('position',new T3.BufferAttribute(pos,3));geo.setAttribute('color',new T3.BufferAttribute(col,3));const pts=new T3.Points(geo,new T3.PointsMaterial({size:.8,vertexColors:true}));SCN.add(pts);FW22.p={pts,vel,t:0}}
- modal(`<div class="rep6"><h3>🎉 Terminal 7 is open!</h3><p>Fireworks, confetti and the first passengers are arriving. 12 gates (G1–G12), 6 shops, monorail station <b>Terminal 7</b>.</p><p>+€25,000 · +5 satisfaction</p><button class="g" onclick="close_()">OK</button></div>`)}
+ modal(`<div class="rep6"><h3>🎉 Terminal 7 is open!</h3><p>Fireworks, confetti and the first passengers are arriving. 16 gates (G1–G16), 6 shops, monorail station <b>Terminal 7</b>.</p><p>+€25,000 · +5 satisfaction</p><button class="g" onclick="close_()">OK</button></div>`)}
 const FW22={};
 const _wAct22=wAct;wAct=function(){const it=W3.on?W.near:null;if(it&&it.k==='open22'){open22();return}return _wAct22.apply(this,arguments)};
 /* T1A built with the airport */
@@ -4811,9 +4815,11 @@ const _st22=stations18;stations18=function(){const S=_st22();S.forEach(s=>{if(s.
 /* ---------- 4) 2D: T1A + finished T7 ---------- */
 try{na14('t8',{name:'Terminal 1A · Domestic',gr:'Τερματικός 1Α · Εσωτερικού',en:'T1A · Domestic & Balkans · Check-in',sty:'hall',win:'park',L:'t1f',R:'t8g',Lt:'T1 forecourt',Rt:'Gates D1–D6',props:['ckdesk','boards','people'],tn:8},[FN('📋 T1A boards · edit','📋',()=>brdEd7(XT22[0],'d'),.5,1),FN('🛂 Security','🛂',()=>ST12.xray(),.75),FN('🙋 Passenger needs help','🙋',()=>talk12(),.3),FN('🚝 Monorail · Hotel · T1A','🚝',()=>monoPick18(),.1)],8);
  na14('t8g',{name:'Terminal 1A · Gates D1–D6',gr:'Πύλες D1–D6',en:'T1A · Gates · Athens · Islands · Sofia · Istanbul',sty:'hall',win:'apron',L:'t8',R:'t8',Lt:'Check-in',Rt:'Check-in',props:['gates2','people','column'],tn:8},[FN('🛫 Gate desks · board flights','🛫',()=>brdEd7(XT22[0],'d'),.5,1),FN('☕ Everest café','☕',()=>shop19({s:'Everest',sk:'cafe'}),.25),FN('🛍️ Duty free','🛍️',()=>shop19({s:'Hellenic Duty Free',sk:'df'}),.75)],8);
- na14('t7',{name:'Terminal 7 · Check-in',gr:'Τερματικός 7',en:'TERMINAL 7 · Fraport Greece flagship',sty:'hall',win:'park',L:'t5f',R:'t7g',Lt:'Terminal 5',Rt:'Gates G1–G12',props:['ckdesk','boards','people'],tn:7},[FN('✂️ Grand opening · cut the ribbon','✂️',()=>open22(),.12),FN('📋 T7 boards · edit','📋',()=>brdEd7(XT22[1],'d'),.4,1),FN('🛂 Security','🛂',()=>ST12.xray(),.6),FN('🚝 Monorail · Terminal 7','🚝',()=>monoPick18(),.85)],7);
- na14('t7g',{name:'Terminal 7 · Gates G1–G12',gr:'Πύλες G1–G12',en:'T7 · Gates · Duty free · Shops',sty:'hall',win:'apron',L:'t7',R:'t7s',Lt:'Check-in',Rt:'Shops',props:['gates2','dfshop','people','column'],tn:7},[FN('🛫 Gate desks','🛫',()=>brdEd7(XT22[1],'d'),.45,1),FN('🛍️ Hellenic Duty Free','🛍️',()=>shop19({s:'Hellenic Duty Free',sk:'df'}),.2),FN('☕ Mikel Coffee','☕',()=>shop19({s:'Mikel Coffee',sk:'cafe'}),.7)],7);
- na14('t7s',{name:'Terminal 7 · Shops',gr:'Καταστήματα',en:'T7 · Folli Follie · Jumbo · Public · Mastiha',sty:'hall',L:'t7g',R:'t7g',Lt:'Gates',Rt:'Gates',props:['shop19','people']},[FN('🧾 Till · serve customers','🧾',()=>shop19({s:'T7 shops',sk:'sh'}),.5)],7);
+ na14('t7',{name:'Terminal 7 · Check-in',gr:'Τερματικός 7',en:'TERMINAL 7 · Fraport Greece flagship',sty:'hall',win:'park',L:'t5f',R:'t7g',Lt:'Terminal 5',Rt:'Gates G1–G16',props:['ckdesk','boards','people'],tn:7},[FN('✂️ Grand opening · cut the ribbon','✂️',()=>open22(),.12),FN('📋 T7 boards · edit','📋',()=>brdEd7(XT22[1],'d'),.4,1),FN('🛂 Security','🛂',()=>ST12.xray(),.6),FN('🚝 Monorail · Terminal 7','🚝',()=>monoPick18(),.85)],7);
+ na14('t7g',{name:'Terminal 7 · Gates G1–G16',gr:'Πύλες G1–G16',en:'T7 · Gates · Duty free · Shops',sty:'hall',win:'apron',L:'t7',R:'t7s',Lt:'Check-in',Rt:'Shops',props:['gates2','dfshop','people','column'],tn:7},[FN('🛫 Gate desks','🛫',()=>brdEd7(XT22[1],'d'),.45,1),FN('🛍️ Hellenic Duty Free','🛍️',()=>shop19({s:'Hellenic Duty Free',sk:'df'}),.2),FN('☕ Mikel Coffee','☕',()=>shop19({s:'Mikel Coffee',sk:'cafe'}),.7)],7);
+ na14('t7s',{name:'Terminal 7 · Shops',gr:'Καταστήματα',en:'T7 · Folli Follie · Jumbo · Public · Mastiha',sty:'hall',L:'t7g',R:'t7f',Lt:'Gates',Rt:'Food court',props:['shop19','people']},[FN('🧾 Till · serve customers','🧾',()=>shop19({s:'T7 shops',sk:'sh'}),.5)],7);
+ na14('t7f',{name:'Terminal 7 · Food court',gr:'Εστιατόρια',en:'T7 · Starbucks · Goody\'s · Everest · Ouzeri · Coffee Island',sty:'hall',win:'apron',L:'t7s',R:'t7l',Lt:'Shops',Rt:'Lounge & art garden',props:['shop19','people','column']},[FN('☕ Starbucks','☕',()=>shop19({s:'Starbucks',sk:'cafe'}),.15),FN('🍔 Goody\'s Burger House','🍔',()=>shop19({s:"Goody's Burger House",sk:'cafe'}),.35),FN('🥙 Everest','🥙',()=>shop19({s:'Everest',sk:'cafe'}),.55),FN('🐙 Ouzeri Thessaloniki','🐙',()=>shop19({s:'Ouzeri Thessaloniki',sk:'cafe'}),.75),FN('☕ Coffee Island','☕',()=>shop19({s:'Coffee Island',sk:'cafe'}),.9)],7);
+ na14('t7l',{name:'Terminal 7 · Lounge & art garden',gr:'Σαλόνι & κήπος τέχνης',en:'T7 · Aegean Business Lounge · Art · Greenery · Gates G13–G16',sty:'hall',win:'apron',L:'t7f',R:'t7g',Lt:'Food court',Rt:'Gates',props:['gates2','people','column','dfshop']},[FN('🛋️ Aegean Business Lounge','🛋️',()=>shop19({s:'Aegean Business Lounge',sk:'cafe'}),.2),FN('🎨 Art: "Thermaikos" sculptures','🎨',()=>toast('🎨 Three sculptures by Thessaloniki artists · Θερμαϊκός'),.45),FN('🌿 Olive-tree garden','🌿',()=>toast('🌿 Olive trees & planters · Fraport Greece green terminal'),.65),FN('💊 Pharmacy · Φαρμακείο','💊',()=>shop19({s:'Pharmacy',sk:'sh'}),.85)],7);
  WA.t1f&&WA.t1f.it.push(DR('t8','🇬🇷 Terminal 1A · Domestic →',.04,'🇬🇷'));
  const tf=WA.t5f&&WA.t5f.it.find(i=>/T7/.test(i.t||i.n||i.label||''));if(tf){tf.t&&(tf.t='Terminal 7 →');tf.n&&(tf.n='Terminal 7 →')}
 }catch(e){console.warn('2D22',e)}
@@ -5096,5 +5102,55 @@ function ds23(g){if(DSG23.has(g))return DSG23.get(g);let r=g;try{const P=g.attri
  const ix=[];for(let k=0;k<I.count;k++)ix.push(I.getX(k));for(let k=0;k<I.count;k+=3)ix.push(n+I.getX(k),n+I.getX(k+2),n+I.getX(k+1));r=new T3.BufferGeometry();r.setAttribute('position',new T3.BufferAttribute(pos,3));r.setAttribute('uv',new T3.BufferAttribute(uv,2));r.setIndex(ix);r.computeVertexNormals();r.userData.ds23=1}}catch(e){r=g}DSG23.set(g,r);return r}
 function dsPass23(root){(root||SCN).traverse(o=>{if(!o.isMesh||o.isInstancedMesh||o.userData.ds23)return;o.userData.ds23=1;const m=o.material;if(!m||Array.isArray(m)||!m.map||m.side!==T3.DoubleSide)return;const g2=ds23(o.geometry);if(g2!==o.geometry){o.geometry=g2;o.userData.dsM=m}});SCN.traverse(o=>{if(o.userData.dsM)o.userData.dsM.side=T3.FrontSide})}
 {let dsT=0;const _u=w3Update;w3Update=function(dt){const r=_u.apply(this,arguments);dsT-=dt||0;if(dsT<=0&&typeof SCN!=='undefined'&&SCN){dsT=2;try{dsPass23()}catch(e){}}return r}}
+
+// v9.0 — natural Greek PA of YOUR actual words
+const PA24={n:0,au:null};
+const IOS24=/iPhone|iPad|iPod/.test(navigator.userAgent);PA24.ec=[];
+function ec24(){if(!PA24.ec.length)for(let i=0;i<(IOS24?1:2);i++){const a=new Audio();a.playsInline=true;a.setAttribute('playsinline','');PA24.ec.push(a)}return PA24.ec}
+function au24(){if(!PA24.au){const a=new Audio();a.preload='auto';a.playsInline=true;a.setAttribute('playsinline','');PA24.au=a}return PA24.au}
+// unlock the audio element inside the push-to-talk gesture (iOS)
+function unl24(){try{const a=au24();a.src='data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQxAADB8AhSmxhIIEVCSiJrDCQBTcu3UrAIwUdkRgQbFAZC1CQEwTJ9mjRvBA4UOLD8nKVOWfh+UlK3z/177OXrfOdKl7pyn3Xf//WreyTRUoAWgBgkOAGbZHBgG1OF6zM82DWbZaUmMBptgQhGjsyYqc9ae9XFz280948NMBWInljyzsNRFLPWdnZGWrddDsjK1unuSrVN9jJsK8KuQtQCtMBjCEtImISdNKJOopIpBFpNSMbIHCSRpRR5iakjTiyzLhchUUBwCgyKiweBv/7UsQbg8isVNoMPMjAAAA0gAAABEVFGmgqK////9bP/6XCykxBTUUzLjEwMKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq';a.volume=0;const p=a.play();if(p&&p.catch)p.catch(()=>{});ec24().forEach(e=>{e.src=a.src;e.volume=0;const q=e.play();if(q&&q.catch)q.catch(()=>{})});PA24.ok=1}catch(e){}}
+{const _r24=rec15;rec15=function(){PA24.n++;PA15.txt='';PA15.lastGr=null;PA15.lastEn=null;unl24();try{speechSynthesis.cancel()}catch(e){}return _r24.apply(this,arguments)}}
+// best Greek voice: iOS premium/enhanced Melina first
+function elBest24(){let V=[];try{V=speechSynthesis.getVoices().filter(v=>/^el/i.test(v.lang)||/melina|greek|ελλην/i.test(v.name))}catch(e){}const sc=v=>(/premium/i.test(v.name)?40:0)+(/enhanced|βελτιωμ/i.test(v.name)?30:0)+(/siri|natural|neural|online/i.test(v.name)?20:0)+(/melina/i.test(v.name)?5:0)+(v.localService?0:3);V.sort((a,b)=>sc(b)-sc(a));return V[0]?{v:V[0],q:sc(V[0])}:null}
+elV17=function(){const b=elBest24();return b?b.v:null};
+{const _u24=utt17;utt17=function(t,l,vol){const u=_u24(t,l,vol);if(l.startsWith('el')){u.rate=1.0;u.pitch=1.0}else{u.rate=.97;u.pitch=1.0}return u}}
+// fresh translation (no cache, no template): Google gtx, then MyMemory
+async function trFresh24(en){const g=await gtx22(en+' ');if(g)return{gr:g,how:'Google Translate'};try{const ctl=new AbortController();setTimeout(()=>ctl.abort(),6000);const r=await fetch('https://api.mymemory.translated.net/get?langpair=en|el&q='+encodeURIComponent(en.slice(0,450))+'&_='+Date.now(),{signal:ctl.signal});const j=await r.json();const t=j&&j.responseData&&j.responseData.translatedText;if(t&&/[α-ωΑ-Ω]/.test(t))return{gr:t,how:'MyMemory'}}catch(e){}return null}
+// natural neural Greek audio (Google translate_tts) played via an unlocked <audio>; chunked with pauses
+function ttsUrl24(t){return 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=el&ttsspeed=0.95&q='+encodeURIComponent(t)}
+function play24(url,vol){return new Promise(res=>{const a=au24();let done=0;const fin=ok=>{if(done)return;done=1;a.onended=a.onerror=null;res(ok)};a.onended=()=>fin(true);a.onerror=()=>fin(false);a.volume=Math.max(.3,Math.min(1,vol||1));a.playbackRate=1;a.src=url;const p=a.play();ec24().forEach((e,i)=>{e.src=url;e.volume=IOS24?1:[.32,.16][i];e.playbackRate=1;setTimeout(()=>{try{const q=e.play();if(q&&q.catch)q.catch(()=>{})}catch(x){}},[IOS24?170:130,290][i])});if(p&&p.catch)p.catch(()=>fin(false));setTimeout(()=>{if(a.paused&&!a.ended)fin(false)},4500);setTimeout(()=>fin(!a.paused||a.ended),60000)})}
+async function neural24(gr,tid){const cs=chunks22(gr).flatMap(c=>c.length>180?c.match(/.{1,180}(\s|$)/g):[c]);for(let i=0;i<cs.length;i++){const ok=await play24(ttsUrl24(cs[i].trim()),lvl15(tid).v);if(!ok)return i>0;await new Promise(r=>setTimeout(r,280))}return true}
+async function grSpeak24(gr,tid){const b=elBest24();try{amb18(gr.length*85+2500)}catch(e){}
+ if(await neural24(gr,tid))return 'natural neural Greek (Google TTS) + terminal speaker echoes';
+ if(b&&b.q>=20){const r=await say22(gr,'el-GR',lvl15(tid).v);if(r.ok)return 'iPhone '+b.v.name}
+ if(b){const r=await say22(gr,'el-GR',lvl15(tid).v);if(r.ok)return 'iPhone '+b.v.name}
+ const up=await acUp22();if(up){const gb=await grBuf22(gr);if(gb){await play18(gb,tid,1.3);return 'built-in Greek voice (offline fallback)'}}return null}
+// light PA colour: less muffling, short chimes; keep hall reverb from the existing chain
+{const _e24=env15;env15=function(tid){const L=_e24(tid);try{PA15.muf.frequency.setTargetAtTime(L&&L.muf?3200:20000,PA15.ac.currentTime,.05)}catch(e){}return L}}
+annc22=async function(c,en,gr,buf,note,src){const tid=c.tid,id=PA24.n;const L={tr:src?src.tr:'',gr,note};
+ sub15(c.tn,gr||'',en,note||'');unlock17();sess22('playback');await acUp22();const ms=chime15(tid)||400;await new Promise(r=>setTimeout(r,ms));env15(tid);let enR='';
+ if(buf){await play18(buf,tid);enR='your recording'}else if(en&&en!=='(not transcribed)'){const r=await say22(en,'en-GB',lvl15(tid).v);enR=r.ok?'iPhone EN voice':'EN failed ('+r.why+')'}
+ if(id!==PA24.n)return;if(!gr){plog22({...L,step:'English only',voice:enR});return}
+ await new Promise(r=>setTimeout(r,450));chime15(tid);await new Promise(r=>setTimeout(r,700));const v=await grSpeak24(gr,tid);
+ plog22({...L,step:v?'Greek spoken':'Greek FAILED',ok:!!v,voice:'EN: '+(enR||'—')+' · GR: '+(v||'no voice')})};
+annc18=function(c,en,gr,buf,note){annc22(c,en,gr,buf,note);return Promise.resolve()};
+done15=async function(mt){const s=PA15.script,st=PA15.stream,id=PA24.n;PA15.rec=null;if(st)st.getTracks().forEach(t=>t.stop());if((Date.now()-PA15.t0)/1000<.6){st15('Hold the button longer while speaking');return}
+ st15('⏳ Processing…');sess22('playback');await new Promise(r=>setTimeout(r,900));let buf=null;try{buf=await PA15.ac.decodeAudioData(await new Blob(PA15.chunks,{type:mt||'audio/mp4'}).arrayBuffer())}catch(e){}
+ const c=J12.pa13;const en=(PA15.txt||'').trim();PA15.txt='';let gr=null,note='';
+ if(!en){if(s){gr=s.gr;note='⚠️ Nothing transcribed — used the selected script Greek'}else note='⚠️ Nothing transcribed — English recording only. Type your words for Greek.'}
+ else{st15('🌐 Translating what you said…');const r=await trFresh24(en);if(r){gr=r.gr;note='🌐 Greek = fresh translation of YOUR words ('+r.how+')'}else note='⚠️ Translation offline — English only (no canned Greek)'}
+ if(id!==PA24.n)return;close_();cnt4('pa13');cnt4('pa15');rew4(400,8,'🎙️ Live announcement');plog22({step:en?'Heard you':'Nothing transcribed',tr:en||'(empty)',gr:gr||'—',note,ok:!!en});annc22(c,en||'(not transcribed)',gr,buf,note,{tr:en})};
+typed15=async function(){const en=(($('#tx15')||{}).value||'').trim();if(!en)return st15('Type something first');PA24.n++;unl24();ac15();const c=J12.pa13,id=PA24.n;st15('🌐 Translating…');const r=await trFresh24(en);if(id!==PA24.n)return;const gr=r?r.gr:null,note=r?'🌐 Greek = fresh translation of your typed words ('+r.how+')':'⚠️ Translation offline — English only';close_();cnt4('pa13');plog22({step:'Typed',tr:en,gr:gr||'—',note,ok:!!gr});annc22(c,en,gr,null,note,{tr:en})};
+
+// keycard from the very first frame (2D + 3D)
+try{V74().key=1;save()}catch(e){}
+{const _we24=wEnter;wEnter=function(){try{V74().key=1}catch(e){}return _we24.apply(this,arguments)};const _w324=w3On;w3On=function(){try{V74().key=1}catch(e){}return _w324.apply(this,arguments)}}
+// T7 + PA1–PA4 teleports in the PA picker, travel menu and 2D map (both modes via paGo16 / phGo17)
+function t7tp24(){return `<div class="ft7" style="margin:6px 0"><button class="y" onclick="close_();phGo17(7)">🛬 Terminal 7</button>${[0,1,2,3].map(r=>`<button class="r" onclick="paGo16(7,${r})">📢 T7 PA${r+1}</button>`).join('')}<button class="ghost" onclick="paGo16(8,0)">📢 T1A PA</button></div>`}
+{const _pp24=paPick16;paPick16=function(){_pp24.apply(this,arguments);const m=$('#modal h3')||$('#modal');if(m)m.insertAdjacentHTML('afterend',t7tp24())}
+ const _ft24=fastTravel;fastTravel=function(){const r=_ft24.apply(this,arguments);const m=$('#modal h3');if(m)m.insertAdjacentHTML('afterend',t7tp24());return r}
+ const _mp24=map14;map14=function(){const r=_mp24.apply(this,arguments);const m=$('#modal h3');if(m)m.insertAdjacentHTML('afterend',t7tp24());return r}}
+NEW4.push(['🎙️','v9.0: Greek PA = fresh translation of exactly what you said, natural neural voice with terminal echoes · bigger T7 (16 gates, food court, lounge, art garden) · T7 PA1–PA4 teleports']);
 
 </script></body></html>

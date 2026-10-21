@@ -176,3 +176,13 @@ Greek translates actual transcript (fuzzy script match ≥ threshold, protected 
 - Navy, white and gold glass UI in 2D and 3D. A bottom dock groups everything into 5 categories (Κίνηση/Move, Ανακοιν./PA, Επιχειρ./Ops, Εφαρμογή/App, Χάρτης/Map). Each one opens a flyout of large buttons (60px or more). RUN, JUMP and Action stay in the right-hand cluster.
 - Top status bar (Greek above English): terminal or area, time, day, weather. In 3D, a mini-map with a compass rotates with the camera (T7 in gold).
 - Smooth modal and flyout transitions. E-ink: high-contrast black and white, no blur, no animation, no mini-map.
+
+## v9.0 Part B1 – scope on every announcement, synced broadcast, drills & evacuations (LIVE)
+- Every announcement, whether live, typed, script or alarm, asks "📡 All terminals" or "📍 Only this terminal". There is no default, and Cancel stops it. "All" plays one shared audio buffer on one clock for all 9 terminals, and the PA log records the synced start, the end, the terminal list and the duration.
+- Drills and REAL evacuations: from Ops (🚨 in the Ops flyout), the Ops centre, and the PA room. The scope is asked each time, including for the all-clear. Effects:
+  - Siren, red screen pulse, flashing red beacons, green ΕΞΟΔΟΣ/EMERGENCY EXIT signs and floor arrows (3D).
+  - Crowds walk out to the landside assembly points, with an evacuated % and a timer.
+  - Alarm PA in Greek first, then English.
+  - All clear restores everything. Drills are scored.
+  - 2D: an exit arrow banner, a "Guide passengers" action and the same panel.
+- UI: the old info card and task pill are folded into the status bar. 👤 moved to the App flyout, flyout buttons have Greek and English labels, weather is shown in Greek and English, the old mini-map is hidden in 3D, and PA subtitles show Greek above English.

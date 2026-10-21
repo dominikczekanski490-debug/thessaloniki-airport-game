@@ -208,3 +208,8 @@ Greek translates actual transcript (fuzzy script match ≥ threshold, protected 
 ## v9.0.1 – quick fixes (LIVE)
 - An always-visible 3D/2D toggle button at the top right in both modes (large touch target, e-ink variant).
 - His own announcements no longer show any on-screen subtitle or caption, and the live transcript in the PA room shows only "Recording…". The text stays in the PA log only.
+
+## v9.0.2 – iPhone PA audio + no covered buttons (LIVE)
+- Audio is unlocked inside the All/Only-this-terminal tap itself (AudioContext resume + silent buffer, silent speech warm-up, silent <audio> play) and no longer cancels the new utterance.
+- English always plays first: his recording, then iPhone en-GB speech, then the offline voice. Greek follows: Google neural TTS, then iPhone Melina, then the offline voice. Every step has a timeout, and the step list goes into the PA log.
+- The A, Run and Jump buttons plus a new 📢 PA quick button sit on top (z 72) in a reserved row above the dock in portrait. In landscape the dock moves left and the buttons sit bottom-right. Flyouts open above them. Checked at 393x852 and 852x393 in 2D and 3D.

@@ -171,3 +171,8 @@ Greek translates actual transcript (fuzzy script match ≥ threshold, protected 
 - Voice: natural neural Greek audio (Google TTS), split into sentences with pauses, plus delayed "terminal speaker" echoes and hall ambience. Fallbacks: the best iPhone Greek voice (Premium/Enhanced Melina first), then the built-in offline voice. Lighter muffling.
 - T7: 500 m wide, 16 gates, 16 shops/restaurants/lounge, food court and lounge & art garden (2D areas t7f, t7l), olive-tree planters, sculptures and art walls, sofas, 4 extra double-sided board pairs, more passengers.
 - Teleports: Terminal 7 and T7 PA1–PA4 (plus T1A PA) in the PA picker, travel menu and 2D map, in both modes. Keycard from the first frame.
+
+## v9.0 Part A2 – new SKG/Fraport UI (LIVE)
+- Navy, white and gold glass UI in 2D and 3D. A bottom dock groups everything into 5 categories (Κίνηση/Move, Ανακοιν./PA, Επιχειρ./Ops, Εφαρμογή/App, Χάρτης/Map). Each one opens a flyout of large buttons (60px or more). RUN, JUMP and Action stay in the right-hand cluster.
+- Top status bar (Greek above English): terminal or area, time, day, weather. In 3D, a mini-map with a compass rotates with the camera (T7 in gold).
+- Smooth modal and flyout transitions. E-ink: high-contrast black and white, no blur, no animation, no mini-map.

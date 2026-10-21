@@ -1979,7 +1979,7 @@ function w3Render(){if(!REN)return;V1=V1||_v3();V2=V2||_v3();const P=W3.p,cab=W3
  const s=$('#w3say');const n=W.near;if(n){const p=_v3().set(n.x,n.k==='npc'?2.9:3.4,n.z).project(CAM);if(p.z<1){s.style.display='block';s.style.left=((p.x+1)/2*W.W)+'px';s.style.top=((1-p.y)/2*W.H)+'px';s.textContent=n.k==='npc'?n.n.req.ic+' '+n.n.req.say:'Ⓐ '+n.t}else s.style.display='none'}else s.style.display='none'}
 
 /* ===== v5.1: 3D looks like Dominik's pictures (ceilings, materials, props, collisions) ===== */
-const VER='v8.9';
+const VER='v9.0';
 let COL=[];function col(x,z,w,d){COL.push({x0:x-w/2,x1:x+w/2,z0:z-d/2,z1:z+d/2})}
 const _wk4=w3Walkable;w3Walkable=function(x,z){if(!_wk4(x,z))return false;if(W3.mode==='cab')return true;const ins=(a,b)=>COL.some(c=>a>c.x0-.28&&a<c.x1+.28&&b>c.z0-.28&&b<c.z1+.28);return !ins(x,z)||ins(W3.p.x,W3.p.z)};
 const INST={};function inst(key,geo,m,x,y,z,ry,sx,sy,sz,rz){(INST[key]=INST[key]||{geo,m,a:[]}).a.push([x,y,z,ry||0,sx||1,sy||1,sz||1,rz||0])}
@@ -5152,5 +5152,55 @@ function t7tp24(){return `<div class="ft7" style="margin:6px 0"><button class="y
  const _ft24=fastTravel;fastTravel=function(){const r=_ft24.apply(this,arguments);const m=$('#modal h3');if(m)m.insertAdjacentHTML('afterend',t7tp24());return r}
  const _mp24=map14;map14=function(){const r=_mp24.apply(this,arguments);const m=$('#modal h3');if(m)m.insertAdjacentHTML('afterend',t7tp24());return r}}
 NEW4.push(['🎙️','v9.0: Greek PA = fresh translation of exactly what you said, natural neural voice with terminal echoes · bigger T7 (16 gates, food court, lounge, art garden) · T7 PA1–PA4 teleports']);
+
+// v9.0 UI: Fraport/SKG navy-white-gold glass UI · grouped dock (Move/PA/Ops/App/Map) · status bar · compass + mini-map · e-ink high contrast
+(function(){const css=`
+#ui25bar{position:fixed;top:max(6px,env(safe-area-inset-top));right:64px;z-index:60;display:flex;gap:10px;align-items:center;padding:6px 14px;border-radius:18px;background:rgba(10,31,68,.78);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#fff;border:1px solid rgba(255,210,31,.55);font:600 13px system-ui;pointer-events:none;max-width:70vw}
+#ui25bar .gr{font-size:14px;color:#fff}#ui25bar .en{font-size:11px;color:#ffd21f;font-weight:500}#ui25bar .sep{width:1px;height:26px;background:rgba(255,255,255,.3)}
+#ui25dock{position:fixed;left:50%;bottom:max(8px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:61;display:flex;gap:6px;padding:6px;border-radius:22px;background:rgba(10,31,68,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,210,31,.5);box-shadow:0 6px 24px rgba(0,0,0,.3)}
+#ui25dock>button{min-width:62px;min-height:58px;border:0;border-radius:16px;background:transparent;color:#fff;font:700 11px system-ui;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;transition:background .2s,transform .15s}
+#ui25dock>button b{font-size:22px;line-height:1}#ui25dock>button small{font-size:9px;color:#ffd21f;font-weight:500}
+#ui25dock>button.on{background:#ffd21f;color:#0a1f44}#ui25dock>button.on small{color:#0a1f44}
+.ui25fly{position:fixed;left:50%;bottom:calc(max(8px,env(safe-area-inset-bottom)) + 80px);transform:translateX(-50%) translateY(12px);opacity:0;pointer-events:none;z-index:62;display:grid;grid-template-columns:repeat(4,minmax(64px,1fr));gap:8px;padding:12px;border-radius:20px;background:rgba(255,255,255,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(10,31,68,.15);box-shadow:0 10px 30px rgba(10,31,68,.35);transition:opacity .22s,transform .22s;max-width:94vw}
+.ui25fly.on{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
+.ui25fly h4{grid-column:1/-1;margin:0 0 2px;font:700 13px system-ui;color:#0a1f44}.ui25fly h4 small{display:block;color:#8a6d00;font-weight:500}
+.ui25fly button{position:static!important;inset:auto!important;transform:none!important;min-width:64px!important;min-height:60px!important;width:auto!important;height:auto!important;margin:0!important;border-radius:14px!important;background:#0a1f44!important;color:#fff!important;border:2px solid #ffd21f!important;font:700 20px system-ui!important;line-height:1.1!important;display:flex!important;padding:4px!important;flex-direction:column;align-items:center;justify-content:center;opacity:1!important}
+#ui25mm{position:fixed;right:10px;top:max(64px,calc(env(safe-area-inset-top) + 58px));z-index:59;width:112px;height:112px;border-radius:50%;background:rgba(10,31,68,.78);border:2px solid #ffd21f;overflow:hidden;pointer-events:none}
+#ui25mm canvas{width:100%;height:100%}
+#wAct,#wRun,#jmp16{min-width:64px;min-height:64px}
+body.eink #ui25bar,body.eink #ui25dock,body.eink .ui25fly,body.eink #ui25mm{background:#fff!important;color:#000!important;border:3px solid #000!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;box-shadow:none!important;transition:none!important}
+body.eink #ui25bar .en,body.eink #ui25dock small{color:#000!important}body.eink #ui25dock>button{color:#000}body.eink #ui25dock>button.on{background:#000;color:#fff}body.eink #ui25dock>button.on small{color:#fff!important}
+body.eink .ui25fly button{background:#fff!important;color:#000!important;border:3px solid #000!important}body.eink .ui25fly h4,body.eink .ui25fly h4 small{color:#000}
+body.eink #ui25mm{display:none}
+#ui25bar>div{white-space:nowrap}@media (max-width:520px){#ui25bar{right:60px;left:auto;gap:6px;padding:4px 8px;font-size:11px;max-width:calc(100vw - 130px)}#ui25bar .gr{font-size:12px}#ui25bar .en{font-size:9px}#ui25bar>div:first-child{overflow:hidden;text-overflow:ellipsis;max-width:110px}#ui25dock{gap:2px;padding:4px}#ui25dock>button{min-width:56px;min-height:56px;font-size:10px;padding:0 2px}.ui25fly{grid-template-columns:repeat(3,64px)}}
+.ui25fly button *{font-size:inherit!important;color:inherit!important;display:inline!important;position:static!important}.ui25fly button small,.ui25fly button span{font-size:11px!important;display:block!important}
+.wtop .ui25hide,#w6bar.ui25hide{display:none!important}`;
+const st=document.createElement('style');st.textContent=css;document.head.appendChild(st)})();
+const UI25={cats:[['move','🚶','Κίνηση','Move',['w6ride','w6fp','bWalk','bSpeed','w6sh','wRun','jmp16']],['pa','📢','Ανακοινώσεις','PA',['pa16','bAnn','w6rad','bSnd']],['ops','🎮','Επιχειρήσεις','Ops',['ops23','w7hub','hb12','brd10','tm11','spt23']],['app','📲','Εφαρμογή SKG','App',['ph17','wPhone','w6set','bInk','w3b']],['map','🗺️','Χάρτης','Map',['w7ft','map25']]],open:null,keep:{wRun:1,jmp16:1}};
+function ui25(){if($('#ui25dock'))return;const d=document.createElement('div');d.id='ui25dock';document.body.appendChild(d);
+ UI25.cats.forEach(([k,ic,gr,en])=>{const b=document.createElement('button');b.id='ui25_'+k;b.innerHTML=`<b>${ic}</b>${({move:'Κίνηση',pa:'Ανακοιν.',ops:'Επιχειρ.',app:'Εφαρμογή',map:'Χάρτης'})[k]}<small>${en}</small>`;b.onclick=()=>ui25tog(k);d.appendChild(b);
+  const f=document.createElement('div');f.className='ui25fly';f.id='ui25f_'+k;f.innerHTML=`<h4>${gr}<small>${en}</small></h4>`;document.body.appendChild(f)});
+ const m=document.createElement('button');m.id='map25';m.innerHTML='🗺️<br>Χάρτης / Map';m.onclick=()=>{ui25tog(null);map14()};$('#ui25f_map').appendChild(m);
+ const bar=document.createElement('div');bar.id='ui25bar';document.body.appendChild(bar);
+ const mm=document.createElement('div');mm.id='ui25mm';mm.style.display='none';mm.innerHTML='<canvas width="224" height="224"></canvas>';document.body.appendChild(mm);
+ document.addEventListener('pointerdown',e=>{if(UI25.open&&!e.target.closest('.ui25fly,#ui25dock'))ui25tog(null)},true)}
+function ui25tog(k){UI25.open=UI25.open===k?null:k;UI25.cats.forEach(([c])=>{$('#ui25f_'+c).classList.toggle('on',c===UI25.open);$('#ui25_'+c).classList.toggle('on',c===UI25.open)})}
+// move existing buttons into their category (keeps their handlers); RUN/JUMP stay in the action cluster too in 3D
+function sweep25(){ui25();UI25.cats.forEach(([k,,,,ids])=>{const f=$('#ui25f_'+k);ids.forEach(id=>{if(UI25.keep[id])return;const e=document.getElementById(id);if(e&&e.parentElement!==f)f.appendChild(e)})});
+ const w=$('#w6bar');if(w)w.classList.toggle('ui25hide',!w.querySelector('button'));
+ // big touch targets everywhere
+ ['wAct','wRun','jmp16'].forEach(id=>{const e=document.getElementById(id);if(e){e.style.minWidth='64px';e.style.minHeight='64px'}})}
+const WXI25={clear:'☀️',sun:'☀️',cloud:'⛅',rain:'🌧️',storm:'⛈️',fog:'🌫️',snow:'❄️',wind:'💨'};
+function bar25(){const b=$('#ui25bar');if(!b)return;let gr='',en='';try{if(W3.on){const t=typeof curT16==='function'?curT16():null;const X=t?TT22(t):null;en=X?X.name:(t===0?'Makedonia terminal':'Airport · outside');gr=X?(X.id===8?'Τερματικός 1A':'Τερματικός '+X.id):(t===0?'Τερματικός Μακεδονία':'Αεροδρόμιο')}else{const A=WA[W.area]||{};en=A.name||'';gr=A.gr||''}}catch(e){}
+ const k=(G.wx&&G.wx.k)||'clear',wi=Object.keys(WXI25).find(x=>String(k).includes(x));const h=b.dataset.h=`<div><div class="gr">${gr}</div><div class="en">${en}</div></div><div class="sep"></div><div><div class="gr">🕒 ${hm(G.min)}</div><div class="en">Ημέρα ${G.day} · Day ${G.day}</div></div><div class="sep"></div><div><div class="gr">${WXI25[wi]||'🌤️'}</div><div class="en">${String(k)}</div></div>`;if(b._h!==h){b.innerHTML=h;b._h=h}}
+function mm25(){const w=$('#ui25mm');if(!w)return;w.style.display=W3.on?'':'none';if(!W3.on)return;const c=w.firstChild,g=c.getContext('2d'),s=.35,px=W3.p.x,pz=W3.p.z;g.clearRect(0,0,224,224);g.save();g.translate(112,112);g.rotate(W3.yaw||0);
+ const R=(x0,z0,x1,z1,col)=>{g.fillStyle=col;g.fillRect((x0-px)*s,(z0-pz)*s,(x1-x0)*s,(z1-z0)*s)};
+ try{(TERMS||[]).forEach(T=>{if(T.x0!==undefined)R(T.x0,T.z0,T.x1,T.z1,'rgba(255,255,255,.55)')});(XT22||[]).forEach(X=>R(X.x0,X.z0,X.x1,X.z1,X.id===7?'rgba(255,210,31,.8)':'rgba(144,202,249,.8)'));R(-200,-400,3000,-330,'rgba(120,120,120,.6)')}catch(e){}
+ g.restore();g.fillStyle='#ffd21f';g.beginPath();g.moveTo(112,98);g.lineTo(104,122);g.lineTo(120,122);g.fill();
+ const a=(W3.yaw||0);g.fillStyle='#fff';g.font='bold 22px system-ui';g.textAlign='center';g.fillText('N',112+Math.sin(-a)*-92,112-Math.cos(-a)*92+8)}
+setInterval(()=>{try{sweep25();bar25();if(!W3.on&&$('#ui25mm'))$('#ui25mm').style.display='none'}catch(e){}},700);
+{let t=0;const _u=w3Update;w3Update=function(dt){const r=_u.apply(this,arguments);t-=dt||0;if(t<=0){t=.15;try{mm25()}catch(e){}}return r}}
+// smooth area/modal transitions (off on e-ink)
+(function(){const s=document.createElement('style');s.textContent='body:not(.eink) #modal .box,body:not(.eink) #modal>div{animation:ui25in .22s ease-out}@keyframes ui25in{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}';document.head.appendChild(s)})();
 
 </script></body></html>

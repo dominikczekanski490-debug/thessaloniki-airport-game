@@ -1979,7 +1979,7 @@ function w3Render(){if(!REN)return;V1=V1||_v3();V2=V2||_v3();const P=W3.p,cab=W3
  const s=$('#w3say');const n=W.near;if(n){const p=_v3().set(n.x,n.k==='npc'?2.9:3.4,n.z).project(CAM);if(p.z<1){s.style.display='block';s.style.left=((p.x+1)/2*W.W)+'px';s.style.top=((1-p.y)/2*W.H)+'px';s.textContent=n.k==='npc'?n.n.req.ic+' '+n.n.req.say:'Ⓐ '+n.t}else s.style.display='none'}else s.style.display='none'}
 
 /* ===== v5.1: 3D looks like Dominik's pictures (ceilings, materials, props, collisions) ===== */
-const VER='v9.0.2';
+const VER='v9.0.3';
 let COL=[];function col(x,z,w,d){COL.push({x0:x-w/2,x1:x+w/2,z0:z-d/2,z1:z+d/2})}
 const _wk4=w3Walkable;w3Walkable=function(x,z){if(!_wk4(x,z))return false;if(W3.mode==='cab')return true;const ins=(a,b)=>COL.some(c=>a>c.x0-.28&&a<c.x1+.28&&b>c.z0-.28&&b<c.z1+.28);return !ins(x,z)||ins(W3.p.x,W3.p.z)};
 const INST={};function inst(key,geo,m,x,y,z,ry,sx,sy,sz,rz){(INST[key]=INST[key]||{geo,m,a:[]}).a.push([x,y,z,ry||0,sx||1,sy||1,sz||1,rz||0])}
@@ -5664,5 +5664,22 @@ setInterval(()=>{try{pa30()}catch(e){}},600);
 try{NEW4.push(['🔊','v9.0.2: iPhone PA audio fixed (unlock on tap, English first, Google→Melina→offline with timeouts, every step logged) · A/Run/Jump/📢PA never covered'])}catch(e){}
 canJ16=function(){if(W3.on)return !W3.drv&&!W3.fly&&W3.mode!=='cab';const r=$('#wRun');return !!(r&&r.getClientRects().length&&getComputedStyle(r).visibility!=='hidden')&&!W3.drv};
 try{UI25.keep=UI25.keep||{};UI25.keep.wRun=1;UI25.keep.jmp16=1}catch(e){}
+
+// v9.0.3 — silent screen during/after HIS announcements: only "🔴 Recording…" while recording; all else → PA log
+const Q31={n:0,until:0};function q31(){return Q31.n>0||Date.now()<Q31.until}
+function qOn31(){Q31.n++;Q31.safety=setTimeout(()=>{Q31.n=0},120000)}function qOff31(){Q31.n=Math.max(0,Q31.n-1);Q31.until=Date.now()+2500}
+{const _t=toast;toast=function(m){if(q31()){try{plog22({step:'(hidden toast)',note:String(m),ok:true})}catch(e){}return}return _t.apply(this,arguments)}}
+{const _s=sub15;sub15=function(){if(q31())return;return _s.apply(this,arguments)}}
+st15=function(t){const s=$('#st15');if(!s)return;t=String(t||'');s.textContent=/^🔴/.test(t)?'🔴 Ηχογράφηση… · Recording…':''};
+{const _r=rec15;rec15=function(){qOn31();Q31.rec=1;return _r.apply(this,arguments)}}
+{const _d=done15;done15=async function(){if(!Q31.rec)qOn31();Q31.rec=0;try{return await _d.apply(this,arguments)}finally{qOff31()}}}
+{const _y=typed15;typed15=async function(){qOn31();try{return await _y.apply(this,arguments)}finally{qOff31()}}}
+if(typeof bcSend27==='function'){const _b=bcSend27;bcSend27=async function(){qOn31();try{return await _b.apply(this,arguments)}finally{qOff31()}}}
+{const _a=annc22;annc22=async function(c,en,gr,buf,note,src){const mine=!(src&&src.alarm)&&!/Boarding call/.test(note||'');if(mine)qOn31();try{return await _a.apply(this,arguments)}finally{if(mine)qOff31()}};annc18=function(c,en,gr,buf,note){annc22(c,en,gr,buf,note);return Promise.resolve()}}
+// hard guard: hide any overlay that pops up while quiet
+setInterval(()=>{if(!q31())return;['#pa13','#toast'].forEach(s=>{const e=$(s);if(e){if(s==='#toast')e.innerHTML='';else e.style.display='none'}})},250);
+try{NEW4.push(['🤫','v9.0.3: no subtitles/translations/toasts on screen during or after your announcements — PA log only'])}catch(e){}
+// the PA log pill shows no words/steps — just a button to open the log
+{const _p=plog22;plog22=function(o){const r=_p.apply(this,arguments);const b=$('#plg22');if(b&&b.textContent!=='📋 PA log')b.textContent='📋 PA log';return r}}
 
 </script></body></html>

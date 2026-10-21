@@ -213,3 +213,6 @@ Greek translates actual transcript (fuzzy script match ≥ threshold, protected 
 - Audio is unlocked inside the All/Only-this-terminal tap itself (AudioContext resume + silent buffer, silent speech warm-up, silent <audio> play) and no longer cancels the new utterance.
 - English always plays first: his recording, then iPhone en-GB speech, then the offline voice. Greek follows: Google neural TTS, then iPhone Melina, then the offline voice. Every step has a timeout, and the step list goes into the PA log.
 - The A, Run and Jump buttons plus a new 📢 PA quick button sit on top (z 72) in a reserved row above the dock in portrait. In landscape the dock moves left and the buttons sit bottom-right. Flyouts open above them. Checked at 393x852 and 852x393 in 2D and 3D.
+
+## v9.0.3 – silent screen for his announcements (LIVE)
+- While he records, only "🔴 Recording…" shows. During and after his announcement there are no toasts, subtitles, translations or status text; anything hidden is written to the PA log instead. The PA log pill now only says "📋 PA log". This applies to the mic, typed and staff broadcast announcements in 2D and 3D. Alarms and game boarding calls are unchanged.
